@@ -6,7 +6,7 @@ Only the homepage is implemented. There are no About, Projects, Experience, Cont
 
 ## Personal photographs
 
-All six supplied photographs are used in the portrait selector. The photograph at the laptop (#2) is the initial portrait. The originals are copied to `dist/assets/photos/`; no face is generated or replaced. The monochrome point-cloud effect and approximate background suppression are rendered live by the browser. The photographs themselves remain unedited.
+All six separately saved transparent cutouts are used in the portrait selector. The front-facing school portrait (#5) is the initial portrait. The files are copied unchanged to `dist/assets/cutouts/`; no face is generated or replaced. The particle renderer uses the files’ actual alpha channels and preserves their original aspect ratios. There are no hand-drawn silhouette masks, CSS edge masks, or further background-removal steps. Wide poses are scaled to contain both hands.
 
 Edit their order, file paths, descriptions, and initial selection in `dist/content.js`. `initialPhoto` is zero-based. Every photo can be selected with its thumbnail, the Next photo button, or the arrow keys while a thumbnail is focused.
 

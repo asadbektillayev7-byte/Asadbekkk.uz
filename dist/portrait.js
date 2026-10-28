@@ -6,24 +6,8 @@
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const smooth = v => { v = clamp(v); return v * v * (3 - 2 * v); };
   const hash = n => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
-  const inside = (x, y, poly) => {
-    let hit = false;
-    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-      const a = poly[i], b = poly[j];
-      if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) hit = !hit;
-    }
-    return hit;
-  };
-  // Loose silhouettes remove rooms and backgrounds while preserving the actual
-  // face, hair, clothing, and pose. Coordinates refer to the original files.
-  const presets = {
-    portrait: { face: [.52, .43, .24, .30], crop: [.03, 0, .97, 1], polygon: [[.49,.038],[.65,.052],[.74,.12],[.77,.24],[.75,.38],[.72,.55],[.65,.67],[.67,.74],[.83,.80],[.99,.95],[1,1],[0,1],[.03,.91],[.26,.80],[.35,.73],[.35,.65],[.29,.52],[.29,.30],[.30,.14],[.37,.07]] },
-    laptop: { face: [.62, .58, .24, .23], crop: [0, .10, 1, .98], polygon: [[.41,.145],[.61,.12],[.80,.14],[.94,.19],[.98,.30],[.96,.43],[.87,.57],[.79,.585],[.76,.66],[.69,.75],[.64,.80],[.60,.85],[.61,.98],[.13,.99],[0,.92],[0,.67],[.14,.61],[.31,.57],[.34,.48],[.34,.37],[.34,.25]] },
-    statue: { face: [.74, .39, .16, .20], crop: [.19,.13,1,1], polygon: [[.68,.25],[.78,.23],[.86,.27],[.89,.35],[.85,.44],[.85,.51],[1,.56],[1,1],[.66,1],[.55,.75],[.55,.59],[.35,.55],[.28,.50],[.30,.45],[.46,.49],[.58,.49],[.58,.44],[.61,.40],[.62,.34]] },
-    school: { face: [.51,.35,.20,.24], crop: [.05,.07,.96,1], polygon: [[.44,.13],[.59,.14],[.67,.20],[.70,.30],[.68,.43],[.62,.52],[.62,.58],[.77,.63],[.90,.75],[.98,1],[.05,1],[.12,.76],[.27,.64],[.39,.59],[.39,.52],[.33,.41],[.32,.28],[.35,.19]] },
-    outdoors: { face: [.55,.53,.23,.27], crop: [.03,.24,.99,1], polygon: [[.45,.26],[.60,.26],[.71,.31],[.76,.40],[.77,.54],[.73,.66],[.66,.75],[.66,.80],[.81,.82],[1,.86],[1,1],[0,1],[0,.91],[.23,.85],[.39,.81],[.39,.75],[.35,.63],[.33,.47],[.36,.34]] },
-    selfie: { face: [.59,.48,.14,.24], crop: [.17,.20,.97,1], polygon: [[.53,.25],[.63,.25],[.69,.29],[.72,.39],[.70,.54],[.67,.63],[.67,.70],[.83,.78],[1,.87],[1,1],[.20,1],[.27,.85],[.48,.72],[.50,.66],[.46,.53],[.46,.38],[.49,.29]] }
-  };
+  // The supplied cutout's alpha channel is its complete silhouette.
+  // No polygon, inferred outline, or background removal is applied.
 
   class PortraitParticles {
     constructor({ canvas, photos = [], initialIndex = 1, reducedMotion = false } = {}) {
@@ -62,8 +46,6 @@
         if (this.destroyed) return false;
         this.particles = result.particles;
         this.photoAspect = result.aspect;
-        this.photoAnchor = result.anchor;
-        this.photoKey = result.key;
         this.ready = true;
         this._render(performance.now());
         this._requestFrame();
@@ -97,8 +79,6 @@
         } else {
           this.particles = result.particles;
           this.photoAspect = result.aspect;
-        this.photoAnchor = result.anchor;
-        this.photoKey = result.key;
           this.transition = null;
         }
         this.ready = true;
@@ -166,34 +146,31 @@
     }
 
     _sample(img, source, index) {
-      const key = Object.keys(presets).find(name => source.src.includes(name)) || 'portrait';
-      const config = presets[key];
       const sample = document.createElement('canvas');
       const aspect = img.naturalWidth / img.naturalHeight;
-      sample.height = 440;
-      sample.width = Math.round(440 * aspect);
+      sample.height = Math.min(512, img.naturalHeight);
+      sample.width = Math.round(sample.height * aspect);
       const context = sample.getContext('2d', { willReadFrequently: true });
       context.drawImage(img, 0, 0, sample.width, sample.height);
       const pixels = context.getImageData(0, 0, sample.width, sample.height).data;
-      const [cx, cy, cw, ch] = config.crop;
       const candidates = [];
       const max = this.mobile ? 16000 : 32000;
-      const face = config.face;
-      for (let y = 0; y < sample.height; y += 1) {
+      // Focus adds facial detail only; it never crops or masks the cutout.
+      const face = source.focus || [.5, .33, .28, .28];
+      for (let y = 0; y < sample.height; y++) {
         const v = y / sample.height;
-        for (let x = 0; x < sample.width; x += 1) {
-          const u = x / sample.width;
-          if (u < cx || u > cw || v < cy || v > ch || !inside(u, v, config.polygon)) continue;
+        for (let x = 0; x < sample.width; x++) {
           const pixel = (y * sample.width + x) * 4;
+          const alpha = pixels[pixel + 3] / 255;
+          if (alpha === 0) continue;
+          const u = x / sample.width;
           const raw = (pixels[pixel] * .2126 + pixels[pixel + 1] * .7152 + pixels[pixel + 2] * .0722) / 255;
           const f = Math.exp(-(((u - face[0]) / face[2]) ** 2 * 1.8 + ((v - face[1]) / face[3]) ** 2 * 1.8));
-          // Portrait edges and dark eyes remain dark, rather than losing the
-          // identity in a uniformly bright particle silhouette.
           let luma = Math.pow(clamp((raw - .028) / .972), .68);
           luma = clamp(.025 + luma * .975 + f * smooth((raw - .12) / .35) * .12);
           const seed = x * 157 + y * 311 + index * 173;
-          const priority = hash(seed) / (.28 + Math.pow(luma, .55) * .72 + f * 1.30);
-          candidates.push({ u: (u - cx) / (cw - cx), v: (v - cy) / (ch - cy), luma, priority, seed });
+          const priority = hash(seed) / ((.28 + Math.pow(luma, .55) * .72 + f * 1.30) * Math.max(.01, alpha));
+          candidates.push({ u, v, alpha, luma, priority, seed });
         }
       }
       candidates.sort((a, b) => a.priority - b.priority);
@@ -202,20 +179,18 @@
         const z = hash(p.seed + 20) * 2 - 1;
         const radial = Math.sqrt(1 - z * z);
         const shell = .65 + hash(p.seed + 30) * .35;
-        const luma = p.luma;
         return {
-          u: p.u, v: p.v, luma, seed: p.seed,
+          u: p.u, v: p.v, alpha: p.alpha, luma: p.luma, seed: p.seed,
           sx: Math.cos(azimuth) * radial * shell,
           sy: Math.sin(azimuth) * radial * shell,
           sz: z * shell,
-          tone: clamp(Math.round(Math.pow(luma, .72) * 23), 0, 23),
-          size: .78 + luma * .62 + hash(p.seed + 40) * .32,
+          tone: clamp(Math.round(Math.pow(p.luma, .72) * 23), 0, 23),
+          size: .78 + p.luma * .62 + hash(p.seed + 40) * .32,
           delay: hash(p.seed + 50) * .16
         };
       });
-      // Grouping by tone avoids thousands of context state changes per frame.
       particles.sort((a, b) => a.tone - b.tone);
-      return { particles, aspect: aspect * (cw - cx) / (ch - cy), anchor: (face[0] - cx) / (cw - cx), key };
+      return { particles, aspect };
     }
 
     _requestFrame() {
@@ -260,8 +235,6 @@
           if (!this.transition.switched) {
             this.particles = this.transition.next.particles;
             this.photoAspect = this.transition.next.aspect;
-            this.photoAnchor = this.transition.next.anchor;
-            this.photoKey = this.transition.next.key;
             this.transition.switched = true;
           }
           progress = smooth((t - .38) / .62);
@@ -272,10 +245,12 @@
       this.pointerSmoothed.y += (this.pointer.y - this.pointerSmoothed.y) * .055;
       const px = this.reducedMotion ? 0 : this.pointerSmoothed.x;
       const py = this.reducedMotion ? 0 : this.pointerSmoothed.y;
-      const ph = this.mobile ? Math.min(h * .72, w * 1.15) : h * (this.photoKey === 'laptop' ? .80 : .87);
-      const pw = ph * (this.photoAspect || .75);
-      const x0 = w * .50 - pw * (this.photoAnchor || .5);
-      const y0 = this.mobile ? h * .14 : h * (this.photoKey === 'laptop' ? .025 : .085);
+      // Contain the full cutout so even the widest pose keeps both hands.
+      const aspect = this.photoAspect || 1;
+      const ph = Math.min(h * (this.mobile ? .65 : .80), w * (this.mobile ? .92 : .76) / aspect);
+      const pw = ph * aspect;
+      const x0 = (w - pw) * .5;
+      const y0 = h * (this.mobile ? .71 : .87) - ph;
       const radius = Math.min(w * .35, h * .36);
       const angle = time * .10;
       const cos = Math.cos(angle), sin = Math.sin(angle);
@@ -300,7 +275,7 @@
         const size = point.size * (this.mobile ? .90 : 1.05) * (1 + scatter * .2);
         if (point.tone !== lastTone) { lastTone = point.tone; ctx.fillStyle = this.palette[lastTone]; }
         const spark = Math.sin(point.seed + time * .7) * shimmer;
-        ctx.globalAlpha = clamp((.80 + point.luma * .20 + spark * .5) * (.68 + t * .32));
+        ctx.globalAlpha = point.alpha * clamp((.80 + point.luma * .20 + spark * .5) * (.68 + t * .32));
         ctx.fillRect(x, y, size, size);
       }
       // A few very fine glints share the same sampled positions, adding depth
@@ -312,7 +287,7 @@
           const p = this.particles[i];
           if (p.luma < .3) continue;
           const x = x0 + p.u * pw + px * 7, y = y0 + p.v * ph + py * 5;
-          const a = this.reducedMotion ? .12 : Math.max(0, Math.sin(time * .55 + p.seed) - .76) * .9;
+          const a = p.alpha * (this.reducedMotion ? .12 : Math.max(0, Math.sin(time * .55 + p.seed) - .76) * .9);
           ctx.globalAlpha = a;
           ctx.fillRect(x - 2, y, 5, .45);
           ctx.fillRect(x, y - 2, .45, 5);
