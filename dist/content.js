@@ -6,6 +6,8 @@
 window.CV_CONTENT = {
   profile: {
     name: "Asadbek",
+    heroTitle: "Asadbek.",
+    heroLine: "Mechanical engineering. Software. A little of everything else.",
     headline: "Mechanical Engineering • Software Engineering",
     subheadline: "Projects • Research • Leadership",
     intro: "I’m interested in mechanical engineering, software, and the ideas that connect them. This is a place for my projects, experiences, photography, and the people and communities that shape my story.",
@@ -20,6 +22,17 @@ window.CV_CONTENT = {
     linkedinUrl: "",
     telegramUrl: "",
     instagramUrl: ""
+  },
+  aboutPost: {
+    eyebrow: "A little more personal",
+    title: "About me",
+    lead: "I’m interested in mechanical engineering, software, and the ideas that connect them. This is a place for my projects, experiences, photography, and the people and communities that shape my story.",
+    paragraphs: [
+      "I’m applying to undergraduate mechanical engineering programs, with an interest in software alongside the physical side of engineering. I’ll share my projects, research, and experiences here as I add their details.",
+      "Photography is another part of my life. My own photographs and the stories behind them will join this site, along with a more personal introduction."
+    ],
+    portraitSrc: "",
+    portraitAlt: "Portrait of Asadbek"
   },
   roles: [
     {
@@ -139,7 +152,7 @@ window.CV_CONTENT = {
   ],
   experiences: [
     {
-      title: "Your internship",
+      title: "Internship",
       organization: "Organization to be added",
       type: "Placeholder",
       dates: "Dates to be added",
@@ -147,7 +160,7 @@ window.CV_CONTENT = {
       bullets: ["Add your role, responsibilities, and the work you contributed.", "Describe one real outcome or lesson from the experience."]
     },
     {
-      title: "Your work experience",
+      title: "Work experience",
       organization: "Organization to be added",
       type: "Placeholder",
       dates: "Dates to be added",
@@ -155,7 +168,7 @@ window.CV_CONTENT = {
       bullets: ["Introduce the organization and explain your responsibilities.", "Add a specific contribution and supporting context."]
     },
     {
-      title: "Your research experience",
+      title: "Research",
       organization: "Organization to be added",
       type: "Placeholder",
       dates: "Dates to be added",
@@ -196,10 +209,10 @@ window.CV_CONTENT = {
   projects: [
     {
       id: "mechanical-project",
-      title: "Your mechanical engineering project",
+      title: "Mechanical project",
       category: "Mechanical",
       description: "Placeholder: introduce a mechanism, model, or prototype and the question behind it.",
-      status: "Placeholder",
+      status: "Content to add",
       imageSrc: "",
       role: "To be added",
       process: "Add your design constraints, sketches, models, iterations, and tests. Explain your own contribution.",
@@ -207,10 +220,10 @@ window.CV_CONTENT = {
     },
     {
       id: "software-project",
-      title: "Your software engineering project",
+      title: "Software project",
       category: "Software",
       description: "Placeholder: introduce a tool, application, or experiment and who it helps.",
-      status: "Placeholder",
+      status: "Content to add",
       imageSrc: "",
       role: "To be added",
       process: "Explain the important decisions, your implementation, and how you checked that it worked.",
@@ -218,10 +231,10 @@ window.CV_CONTENT = {
     },
     {
       id: "integrated-project",
-      title: "Your hardware and software project",
+      title: "Hardware × software",
       category: "Integrated systems",
       description: "Placeholder: show a project connecting physical design with software, simulation, or control.",
-      status: "Placeholder",
+      status: "Content to add",
       imageSrc: "",
       role: "To be added",
       process: "Explain how the mechanical and software parts connect. Include your own work, tests, and iterations.",
@@ -238,7 +251,7 @@ window.CV_CONTENT = {
   ],
   communities: [
     {
-      title: "Your volunteering experience",
+      title: "Volunteering",
       role: "Role to be added",
       date: "Dates to be added",
       description: "Placeholder: introduce the cause, the people involved, and the contribution you made.",
@@ -247,7 +260,7 @@ window.CV_CONTENT = {
       links: []
     },
     {
-      title: "Your leadership experience",
+      title: "Leadership",
       role: "Role to be added",
       date: "Dates to be added",
       description: "Placeholder: introduce a team or initiative and explain your responsibility.",
@@ -256,7 +269,7 @@ window.CV_CONTENT = {
       links: []
     },
     {
-      title: "Your extracurricular activity",
+      title: "Extracurricular activity",
       role: "Role to be added",
       date: "Dates to be added",
       description: "Placeholder: share an activity you care about and what you do within it.",
@@ -265,7 +278,7 @@ window.CV_CONTENT = {
       links: []
     },
     {
-      title: "Your community or collaboration",
+      title: "Community & collaboration",
       role: "Role to be added",
       date: "Dates to be added",
       description: "Placeholder: add a group, collaboration, or shared experience that belongs in your story.",
@@ -333,6 +346,29 @@ window.CV_CONTENT = {
     { title: "Something that inspires you", description: "Placeholder: share a person, object, or idea and why it matters to you." },
     { title: "A detail people might not know", description: "Placeholder: add a personal detail you are comfortable making public." },
     { title: "Something you want to explore", description: "Placeholder: share a question, place, or experience you are curious about." }
+  ],
+  photography: [
+    {
+      id: "photograph-01",
+      title: "Your photograph 01",
+      caption: "A place, a detail, a moment — your photograph and its story go here.",
+      imageSrc: "",
+      imageAlt: "Photograph to be added"
+    },
+    {
+      id: "photograph-02",
+      title: "Your photograph 02",
+      caption: "A place, a detail, a moment — your photograph and its story go here.",
+      imageSrc: "",
+      imageAlt: "Photograph to be added"
+    },
+    {
+      id: "photograph-03",
+      title: "Your photograph 03",
+      caption: "A place, a detail, a moment — your photograph and its story go here.",
+      imageSrc: "",
+      imageAlt: "Photograph to be added"
+    }
   ],
   availability: ["Details to be added"]
 };

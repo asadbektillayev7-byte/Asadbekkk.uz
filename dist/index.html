@@ -1,37 +1,81 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0284c5">
-  <meta name="description" content="Get to know Asadbek. A personal CV bringing together mechanical engineering, software, experience, community, and life beyond the work. Content draft.">
-  <title>Asadbek | Personal CV</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171C27">
+  <meta name="description" content="Asadbek’s personal space for mechanical engineering, software, photography, and everything in between. A portfolio in progress.">
+  <title>Asadbek — Engineering & Everything Else</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"><script defer src="content.js"></script><script defer src="app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="content.js"></script>
+  <script defer src="app.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#about">Skip to content</a>
-  <nav class="navigation" id="navigation" aria-label="Main navigation"><div class="nav-inner"><a href="#top" class="brand" data-profile-name>Asadbek</a><div class="nav-links" id="nav-links"><a href="#about">About</a><a href="#achievements">Achievements</a><a href="#experience">Experience</a><a href="#community">Community</a><a href="#media">Media</a><a href="#personal">Personal</a><a href="#contact">Contact</a></div><button class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><span></span><span></span><span></span></button></div></nav>
+  <a class="skip-link" href="#work">Skip to content</a>
+  <nav class="navigation" id="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <button class="brand" data-about-open aria-label="Asadbek — read About me" aria-haspopup="dialog"><span class="brand-mark" aria-hidden="true">a.</span><span data-profile-name>Asadbek</span><span class="brand-arrow" aria-hidden="true">↗</span></button>
+      <div class="nav-links" id="nav-links">
+        <a href="#work">Work</a><a href="#experience">Experience</a><a href="#photography">Photography</a><a href="#contact">Contact</a>
+        <button class="nav-cv" data-cv-open>View CV <span aria-hidden="true">↗</span></button>
+      </div>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><span></span><span></span></button>
+    </div>
+  </nav>
   <main>
-    <section class="hero" id="top" aria-labelledby="hero-title"><div class="hero-background"><img src="assets/hero-collage-v2.png" alt="Temporary engineering photo collage, to be replaced with Asadbek’s photographs" fetchpriority="high"><div class="hero-shade"></div></div><div class="hero-content"><p class="hero-location">A PERSONAL PORTFOLIO</p><h1 id="hero-title">WHO IS<br><span class="gradient-name" id="hero-name">ASADBEK?</span></h1><div class="hero-description"><p id="profile-headline">Mechanical Engineering • Software Engineering</p><p id="profile-subheadline">Projects • Research • Leadership</p></div><div class="hero-actions"><a class="button primary-button" href="#about">Discover My Journey <span aria-hidden="true">↓</span></a><a class="button glass-button" href="#contact">Get in Touch</a></div></div><a class="scroll-cue" href="#about"><span>Scroll</span><span class="mouse-outline" aria-hidden="true"><i></i></span></a><span class="hero-draft">Sample collage · your photos to come</span></section>
-
-    <section class="section background" id="about" aria-labelledby="about-title"><div class="container"><header class="section-header"><span class="section-badge">🌟 About My Journey</span><h2 id="about-title">A Curious Mind in Engineering.</h2><p>Exploring Mechanical Design, Software & the World Around Me</p></header><div class="about-grid"><div class="about-copy"><h3>Who Am I?</h3><p class="about-intro" id="profile-intro">I’m Asadbek, interested in mechanical engineering, software, and how the two can work together. This is where my personal story will go.</p><div class="role-grid" id="about-roles"></div><blockquote class="mission-quote">“My story, what motivates me, and what I hope to build next — a personal mission to be added.”</blockquote></div><div class="intro-video-column"><button class="intro-video media-button" id="intro-video" aria-label="Open introduction video placeholder"><div class="video-sample"></div><span class="play-circle" aria-hidden="true">▶</span><span class="video-placeholder-label">YOUR INTRODUCTION VIDEO</span></button><p class="video-caption">📺 A space for a short introduction — your voice, your story, your perspective.</p></div></div><div class="stats-grid six-stats" id="about-stats"></div></div></section>
-
-    <section class="section card-background" id="achievements" aria-labelledby="achievements-title"><div class="container"><header class="section-header"><span class="section-badge">🏆 Achievements & Awards</span><h2 id="achievements-title">Milestones That Define My Journey</h2><p>A place for achievements, recognitions, and the moments that matter</p></header><div class="achievement-grid" id="achievements-grid"></div></div></section>
-
-    <section class="section background" id="experience" aria-labelledby="experience-title"><div class="container"><header class="section-header"><span class="section-badge">💼 Experience & Education</span><h2 id="experience-title">Building Expertise Through Diverse Roles</h2></header><div class="experience-columns"><div><h3 class="column-title"><span data-icon="briefcase"></span> Professional Experience</h3><div class="experience-list" id="experience-list"></div></div><div><h3 class="column-title"><span data-icon="graduation"></span> Education</h3><div class="education-list" id="education-list"></div><h3 class="column-title skills-heading">🛠️ Technical Skills</h3><div class="skills-list" id="skills-list"></div><div class="languages-card"><h4>🌍 Languages</h4><div id="languages-list"></div></div></div></div><div class="projects-block"><h3 class="column-title"><span data-icon="code"></span> Projects & Experiments</h3><p class="subsection-description">Spaces reserved for your mechanical builds, software, and projects connecting the two.</p><div class="projects-grid" id="projects-grid"></div></div></div></section>
-
-    <section class="section background" id="community" aria-labelledby="community-title"><div class="container"><header class="section-header"><span class="section-badge">🌍 Community & Impact</span><h2 id="community-title">Building Communities, Empowering People</h2><p>A place for the teams, causes, and communities I’m part of — and the contributions I make along the way.</p></header><div class="stats-grid six-stats community-stats" id="community-stats"></div><div class="community-grid" id="community-grid"></div><div class="places-panel"><h3 class="column-title"><span data-icon="map"></span> People, Places & Experiences</h3><div class="places-grid" id="community-places"></div></div><div class="community-photo sample-photo"><span class="sample-tag">YOUR COMMUNITY PHOTO</span><span class="photo-center-label">A moment with your community</span></div><p class="centered-caption">🌍 Your team, event, volunteering, or community photographs will live here.</p></div></section>
-
-    <section class="section card-background" id="media" aria-labelledby="media-title"><div class="container"><header class="section-header"><span class="section-badge">📺 Featured in Media</span><h2 id="media-title">Sharing My Story</h2><p>A space for interviews, presentations, features, and other moments worth sharing</p></header><div class="stats-grid four-stats" id="media-stats"></div><h3 class="column-title media-heading">🎥 Videos & Presentations</h3><div class="video-grid" id="video-grid"></div><div class="media-links" id="media-links"></div><h3 class="column-title media-heading">📰 Features & Articles</h3><div id="article-card"></div><div class="outlets-panel"><h3>Also Featured In</h3><div id="media-outlets"></div></div><p class="media-note">A record of conversations, ideas, and experiences — ready for your own content.</p></div></section>
-
-    <section class="section background" id="personal" aria-labelledby="personal-title"><div class="container"><header class="section-header"><span class="section-badge">🎨 Beyond the Work</span><h2 id="personal-title">Life, Hobbies & Fun Facts</h2><p>There’s more to a person than their projects. Here’s a place for the interests and stories that make me, me.</p></header><div class="personal-columns"><div><h3 class="column-title">📷 My Hobbies</h3><div class="hobbies-list" id="hobbies-list"></div></div><div><h3 class="column-title">🎉 A Little More About Me</h3><div class="facts-list" id="facts-list"></div></div></div></div></section>
-
-    <section class="section contact-section" id="contact" aria-labelledby="contact-title"><div class="contact-container"><header class="section-header"><span class="section-badge">📬 Let’s Connect</span><h2 id="contact-title">Let’s Build Something Together</h2><p>To talk about engineering, software, shared interests, or something new — this will be the place to get in touch.</p></header><div class="contact-columns"><div><div class="contact-methods" id="contact-methods"></div><h3 class="contact-subtitle">Connect on Social Media</h3><div class="social-links" id="social-links"></div><div class="availability-panel"><h3>I’m Interested In</h3><div class="availability-tags" id="availability-tags"></div></div></div><div><div class="contact-portrait" id="contact-portrait"><span data-icon="user"></span><strong>Your portrait goes here</strong><span>A photograph that feels like you.</span></div><div class="contact-quote">“A personal note, a thought, or a reason to connect — your own words will go here.”<br><span>Let’s connect! 🚀</span></div></div></div></div></section>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Engineering & everything in between</p>
+          <h1 class="hero-title" id="hero-title"><button class="hero-name" id="hero-name" data-about-open aria-label="Asadbek — read About me" aria-haspopup="dialog">Asadbek<span>.</span></button></h1>
+          <p class="hero-summary" id="hero-line">Mechanical engineering. Software.<br>A little of everything else.</p>
+          <button class="hero-about-hint text-link" data-about-open>The person behind the projects <span aria-hidden="true">↗</span></button>
+          <div class="hero-actions"><a class="button primary-button" href="#work">Explore my work <span aria-hidden="true">↘</span></a><a class="text-link" href="#contact">Say hello <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="hero-visual" aria-label="Temporary visual collage. Personal photographs will replace these samples.">
+          <div class="collage-underlay" aria-hidden="true"></div>
+          <div class="hero-photo hero-photo--work sample-image"><span class="photo-label">01 / Making things</span></div>
+          <div class="hero-portrait"><span class="portrait-initials" aria-hidden="true">a.</span><div class="portrait-caption"><span>Your portrait here</span><small>A face to the name.</small></div></div>
+          <div class="hero-photo hero-photo--world sample-image"><span class="photo-label">02 / Looking closer</span></div>
+          <span class="collage-stamp">Sample imagery<br>Personal photos to come</span>
+        </div>
+      </div>
+      <div class="container hero-bottom"><span>Mechanics / Code / People / Places</span><a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a></div>
+    </section>
+    <section class="section work-section" id="work" aria-labelledby="work-title">
+      <div class="container">
+        <header class="section-heading"><p class="section-kicker">01 / Selected work</p><div class="heading-row"><h2 id="work-title">Ideas, taking shape<span class="accent-dot">.</span></h2><p>A space for the things I build, test, and learn along the way.</p></div></header>
+        <div class="projects-grid" id="projects-grid"></div>
+        <p class="section-footnote"><span class="status-dot" aria-hidden="true"></span> Project spaces reserved. Real builds, process, and results to come.</p>
+      </div>
+    </section>
+    <section class="section experience-section" id="experience" aria-labelledby="experience-title">
+      <div class="container">
+        <header class="section-heading"><p class="section-kicker">02 / Along the way</p><div class="heading-row"><h2 id="experience-title">Learning by doing<span class="accent-dot">.</span></h2><p>Work, research, learning, and the people I do it with.</p></div></header>
+        <div class="experience-layout"><div><h3 class="subsection-label">Experience</h3><div class="timeline" id="experience-list"></div></div><aside class="education-panel"><h3 class="subsection-label">Education & toolkit</h3><div id="education-list"></div><div class="skills-list" id="skills-list"></div><div class="languages-list" id="languages-list"></div></aside></div>
+        <div class="community-block"><div class="subsection-heading"><h3>With people, for people.</h3><p>Volunteering, leadership, and life beyond individual projects.</p></div><div class="community-grid" id="community-grid"></div></div>
+        <div class="recognition-block"><details class="recognition-disclosure"><summary><span>Milestones & recognition</span><span class="recognition-toggle" aria-hidden="true">+</span></summary><div class="recognition-list" id="achievements-list"></div></details></div>
+      </div>
+    </section>
+    <section class="section photography-section" id="photography" aria-labelledby="photography-title">
+      <div class="container">
+        <header class="section-heading"><p class="section-kicker">03 / Through my lens</p><div class="heading-row"><h2 id="photography-title">A different kind<br>of focus<span class="accent-dot">.</span></h2><p>Places, details, and moments that make me stop and look.</p></div></header>
+        <div class="photo-gallery" id="photo-gallery"></div>
+        <div class="photography-footer"><span>Photography / A personal collection</span><p>Sample imagery for now. My own photographs and their stories will live here.</p></div>
+      </div>
+    </section>
+    <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <header class="contact-heading"><p class="section-kicker">04 / A conversation starts here</p><h2 id="contact-title">Say hello<span>.</span></h2><p>Engineering, software, photography, or a good idea.<br>I’d like to hear about it.</p></header>
+        <div class="contact-layout"><div class="contact-methods" id="contact-methods"></div><div class="contact-aside"><p class="subsection-label">Elsewhere</p><div class="social-links" id="social-links"></div><button class="button lime-button" data-cv-open>View my CV <span aria-hidden="true">↗</span></button><small>Personal details and links to be added.</small></div></div>
+      </div>
+    </section>
   </main>
-  <footer class="footer"><div class="container"><div class="footer-grid"><div><h3 data-profile-name>Asadbek</h3><p>Mechanical Engineering • Software Engineering<br>A personal story, still being written.</p></div><div><h4>Quick Links</h4><div class="footer-links"><a href="#about">About</a><a href="#achievements">Achievements</a><a href="#experience">Experience</a><a href="#community">Community</a><a href="#media">Media</a><a href="#contact">Contact</a></div></div><div><h4>Connect</h4><div class="footer-socials" id="footer-socials"></div><button class="cv-link" id="cv-link">View My CV <span aria-hidden="true">↗</span></button></div></div><div class="footer-bottom"><span>Made with <span class="heart">♡</span> by <span data-profile-name>Asadbek</span></span><span>© 2026 All rights reserved.</span><span class="draft-label">Personal content draft</span></div></div></footer>
-  <a href="#top" class="back-to-top" aria-label="Back to top">⌃</a>
-  <dialog id="detail-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Close details">×</button><div class="dialog-content" id="dialog-content"></div></dialog>
+  <footer class="footer"><div class="container footer-inner"><button class="footer-name" data-about-open aria-label="Asadbek — read About me" aria-haspopup="dialog">Asadbek<span>.</span></button><span>© 2026 Asadbek · Always a work in progress.</span><a href="#top">Back to top <span aria-hidden="true">↑</span></a></div></footer>
+  <dialog id="detail-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Close post">×</button><article class="dialog-content" id="dialog-content"></article></dialog>
 </body>
 </html>

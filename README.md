@@ -1,8 +1,10 @@
-# Asadbek’s CV website
+# Asadbek’s personal website
 
-A personal CV and portfolio website with a spacious introduction, section navigation, achievement cards, experience and education, projects, community work, media, and personal interests. The layout follows the visual direction of the Dilafruza reference, with Asadbek’s mechanical engineering and software interests.
+A personal portfolio for Asadbek’s mechanical engineering interests, software, experiences, and photography. The design uses bold sans-serif typography, graphite, cobalt, and lime accents, with varied layouts for projects, a timeline, community work, and photographs.
 
-Credentials and personal material that have not been supplied are clearly marked placeholders. No awards, statistics, skills, schools, employers, or project outcomes are invented.
+The navigation name **Asadbek** opens an **About me** post in a dialog. There is no separate About section. The page moves from the introduction to selected projects, experience and community, recognition, photography, and contact. Media and statistics are not standalone sections in this version.
+
+Credentials and personal material that have not been supplied remain clearly marked placeholders. No awards, statistics, skills, schools, employers, project outcomes, or personal photographs are invented.
 
 ## Preview locally
 
@@ -16,19 +18,26 @@ Open <http://localhost:8000> in your browser. Stop the preview with Control+C. T
 
 ## Edit your content
 
-All editable content is in `dist/content.js`, in the `window.CV_CONTENT` object. Keep its field names, commas, and quotation marks intact. Change the text and replace placeholder entries with your real information; remove unused entries from their arrays.
+All editable content is in `dist/content.js`, in the `window.CV_CONTENT` object. Keep its field names, commas, and quotation marks intact. Replace placeholder entries with your real information; remove unused entries from their arrays.
 
-- `profile`: name, headline, introduction, portrait, location, contact details, CV, introduction video, and social links. Empty links remain unavailable until you provide a real destination.
-- `roles` and `aboutStats`: the four introduction roles and six summary figures. Keep the em dash while a figure is unknown; add only verified numbers.
-- `achievements`: eight reserved cards for awards, competitions, qualifications, or milestones. Update the title, organization, date, description, tags, and optional image. Links use objects with `label` and `url` fields, for example `{ label: "View certificate", url: "https://example.com/certificate" }`.
-- `experiences` and `education`: roles, organizations, dates, locations, and brief explanations of your contribution or learning.
-- `skillGroups` and `languages`: add only skills and language levels that accurately describe you.
-- `projects`: three reserved project entries for mechanical, software, and integrated work. Describe your actual role, process, and result. State clearly when work is a simulation, planned, or in progress. Replace the `Placeholder` status after adding real content.
-- `communityStats`, `communities`, and `places`: volunteering, leadership, activities, and places connected to your story. Community links use the same `label` and `url` objects as achievement links.
-- `mediaStats`, `videos`, `mediaLinks`, `article`, and `outlets`: real interviews, presentations, appearances, and published features. Leave URLs empty until ready; remove sections or entries that do not apply.
-- `hobbies`, `facts`, and `availability`: photography, other interests, personal stories, and current availability.
+- `profile`: name, `heroTitle`, `heroLine`, introduction, portrait, location, contact details, CV, and social links. Empty links stay unavailable until a real destination is added.
+- `aboutPost`: the post opened by clicking the navigation name. Edit its `eyebrow`, `title`, `lead`, and `paragraphs`. Add your own portrait with `portraitSrc` and descriptive `portraitAlt`.
+- `projects`: mechanical, software, and integrated work. Give each project an accurate title, category, description, and current `status`. Replace `Content to add` when real information is present. Describe your role, process, and result. State clearly whether work is planned, in progress, a simulation, or working hardware/software.
+- `experiences` and `education`: roles, organizations, dates, locations, and short explanations of your contribution or learning.
+- `communities`: volunteering, leadership, extracurricular activities, and collaboration. Explain your own role and contribution.
+- `achievements`: real awards, competitions, qualifications, or milestones for the recognition area. Add the organization, date, description, and an optional image. Only include entries that apply to you.
+- `photography`: your own photographs and captions. Each entry has `id`, `title`, `caption`, `imageSrc`, and `imageAlt`. Empty image paths display designed placeholders. Captions can explain the place, subject, or reason you took the photograph.
+- `skillGroups` and `languages`: supporting information shown in the education and toolkit panel. Add only details that accurately describe you.
 
-## Add images and your CV
+Older fields such as `roles`, `aboutStats`, `communityStats`, `places`, `mediaStats`, `videos`, `mediaLinks`, `article`, `outlets`, `hobbies`, `facts`, and `availability` are retained for compatibility. They are not rendered in the current page. You can keep them for future use; unknown figures should remain an em dash.
+
+Optional achievement and community links use objects with `label` and `url` fields, for example:
+
+```js
+links: [{ label: "View certificate", url: "https://example.com/certificate" }]
+```
+
+## Add photographs, project images, and your CV
 
 Place files in `dist/assets/` and use paths relative to the public website root:
 
@@ -38,9 +47,21 @@ portraitAlt: "Portrait of Asadbek",
 cvUrl: "assets/asadbek-cv.pdf"
 ```
 
-Set a card’s `imageSrc` to a path such as `assets/project-prototype.jpg`. Empty image paths display designed placeholders. Use your own photographs or images you have permission to publish, and keep the portrait’s alternative text descriptive. Do not use another person’s portrait, certificates, or achievements as your own.
+Set a project’s `imageSrc` to a path such as `assets/project-prototype.jpg`. For photography, use an entry like:
 
-The layout is in `dist/index.html`, the styling in `dist/styles.css`, and the rendering and interactive behavior in `dist/app.js`.
+```js
+{
+  id: "photograph-01",
+  title: "A title for your photograph",
+  caption: "Your own short description of this photograph.",
+  imageSrc: "assets/photograph-01.jpg",
+  imageAlt: "A clear description of what the photograph shows"
+}
+```
+
+Replace the temporary collage and empty portrait/photo slots with your own images when ready. Use images you own or have permission to publish. Keep alternative text descriptive, and review crops on desktop and mobile.
+
+The layout is in `dist/index.html`, styling in `dist/styles.css`, and rendering and interactions in `dist/app.js`.
 
 ## Hosted version
 
@@ -52,6 +73,6 @@ Before sharing with universities, replace or remove placeholders, add your actua
 
 ## Temporary generated imagery
 
-The placeholder collage is `dist/assets/hero-collage-v2.png`, created with the built-in image generation tool. It is sample imagery, not photographs of Asadbek or documentation of his work. The visible website labels it as a sample. Replace it with a personal photo collage when available.
+The placeholder collage is `dist/assets/hero-collage-v2.png`, created with the built-in image generation tool. It is sample imagery, not photographs of Asadbek or documentation of his work. The visible website labels it as a sample. Replace it with personal photographs when available.
 
 Generation prompt: Wide 16:9 documentary contact-sheet collage, three irregular rows of workshop, gears, mechanism, code, notebook, camera, campus, landscape, and electronics photographs; thin white gutters, off-white backing, narrow Uzbek ikat textile corners, cool blue/yellow neutrals, no typography or identifiable faces. Temporary placeholder imagery.

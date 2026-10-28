@@ -6,110 +6,158 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const url = value => {
     if (!value || typeof value !== 'string') return '';
-    try { const parsed = new URL(value, location.href); return ['https:','http:'].includes(parsed.protocol) ? parsed.href : ''; } catch { return ''; }
+    try {
+      const parsed = new URL(value, location.href);
+      return ['https:', 'http:'].includes(parsed.protocol) ? parsed.href : '';
+    } catch { return ''; }
   };
-  const paths = {
-    gear:'<path d="m9 3 1-1h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 8l2-4 3 1 3-1Z"/><circle cx="12" cy="12" r="3"/>',
-    code:'<path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-14-2 18"/>',
-    book:'<path d="M12 5v16M2 3h5a5 5 0 0 1 5 3 5 5 0 0 1 5-3h5v17h-5a5 5 0 0 0-5 2 5 5 0 0 0-5-2H2Z"/>',
-    users:'<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m2-17a3 3 0 0 1 0 6m4 11v-3a6 6 0 0 0-4-5"/>',
-    award:'<circle cx="12" cy="8" r="6"/><path d="m8 13-2 9 6-3 6 3-2-9"/>',
-    briefcase:'<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12a20 20 0 0 0 18 0m-9 0v3"/>',
-    graduation:'<path d="m2 8 10-5 10 5-10 5Zm4 3v6c4 3 8 3 12 0v-6m4-3v8"/>',
-    calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/>',
-    pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
-    map:'<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16"/>',
-    globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a17 17 0 0 0 0 20 17 17 0 0 0 0-20Z"/>',
-    camera:'<path d="m7 5 2-3h6l2 3h4v15H3V5Z"/><circle cx="12" cy="12" r="4"/>',
-    lightbulb:'<path d="M9 18h6m-6 3h6M8 14a7 7 0 1 1 8 0c-1 1-1 2-1 3H9c0-1 0-2-1-3Z"/>',
-    heart:'<path d="M20 5a5 5 0 0 0-8 1 5 5 0 0 0-8-1c-5 5 1 10 8 16 7-6 13-11 8-16Z"/>',
-    user:'<circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/>',
-    mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/>',
-    phone:'<path d="m6 3 4 5-3 3a15 15 0 0 0 6 6l3-3 5 4c-1 4-3 5-7 3C7 18 2 12 2 6c0-2 1-3 4-3Z"/>',
-    linkedin:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7m0-11v1m4 10v-7m0 3c0-4 6-4 6 0v4"/>',
-    github:'<path d="M9 20c-5 1-5-2-7-2m15 5v-4c0-1-.4-2-1-2 4-.5 6-2 6-6a5 5 0 0 0-1-3c.5-1 .5-3 0-4-2 0-3 1-4 2a15 15 0 0 0-8 0C8 5 7 4 5 4c-.5 1-.5 3 0 4a5 5 0 0 0-1 3c0 4 2 6 6 6-.6 0-1 1-1 2v4"/>',
-    telegram:'<path d="m22 2-7 20-5-8-8-5Zm-12 12L22 2"/>',
-    instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5"/>',
-    article:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 11h8m-8 4h8m-8 4h5"/>',
-    external:'<path d="M14 3h7v7m0-7L10 14m0-10H3v17h17v-7"/>',
-    trophy:'<path d="M7 3h10v7a5 5 0 0 1-10 0Zm0 2H3v3a4 4 0 0 0 4 4m10-7h4v3a4 4 0 0 1-4 4m-5 3v6m-4 0h8"/>'
-  };
-  const icon = name => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${paths[name] || paths.lightbulb}</svg>`;
-  const tags = values => `<div class="tags">${(values||[]).map(value=>`<span class="tag">${esc(value)}</span>`).join('')}</div>`;
+  const numbered = i => String(i + 1).padStart(2, '0');
+  const tagList = values => `<div class="tags">${(values || []).map(value => `<span class="tag">${esc(value)}</span>`).join('')}</div>`;
   const dialog = $('#detail-dialog');
+  const nav = $('#navigation');
+  const menu = $('.menu-toggle');
   let lastFocus;
-  function showDialog(title, body, badge='CONTENT TO BE ADDED') {
-    lastFocus = document.activeElement;
-    $('#dialog-content').innerHTML=`<div class="dialog-badge">${esc(badge)}</div><h2 id="dialog-title">${esc(title)}</h2>${body}`;
-    dialog.showModal();dialog.scrollTop=0;document.body.style.overflow='hidden';
+  let previousOverflow = '';
+  function closeMenu() {
+    nav.classList.remove('menu-open');
+    menu.setAttribute('aria-expanded', 'false');
+    menu.setAttribute('aria-label', 'Open navigation');
   }
-  function placeholder(title,description) {showDialog(title,`<p>${esc(description || 'This space is reserved for your own content. The details will be added here when they are ready.')}</p>`);}
-  $('.dialog-close').addEventListener('click',()=>dialog.close());
-  dialog.addEventListener('close',()=>{document.body.style.overflow='';lastFocus?.focus({preventScroll:true});});
-  dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
-  function linksMarkup(links,fallbackLabel) {
-    const valid=(links||[]).filter(link=>url(link.url));
-    return `<div class="card-links">${valid.length?valid.map(link=>`<a class="outline-link" href="${esc(url(link.url))}" target="_blank" rel="noopener noreferrer">${icon('external')}${esc(link.label)}</a>`).join(''):`<button class="outline-link placeholder-link" data-placeholder-title="${esc(fallbackLabel)}">${icon('external')} Details to be added</button>`}</div>`;
+  function showDialog(title, body, badge = 'CONTENT TO ADD', type = '') {
+    const activeElement = document.activeElement;
+    const focusWasInMobileMenu = nav.classList.contains('menu-open') && activeElement?.closest('.nav-links');
+    closeMenu();
+    if (!dialog.open) {
+      lastFocus = focusWasInMobileMenu ? menu : activeElement;
+      previousOverflow = document.body.style.overflow;
+    }
+    dialog.classList.toggle('about-post', type === 'about');
+    $('#dialog-content').innerHTML = `<p class="post-meta">${esc(badge)}</p><h2 id="dialog-title">${esc(title)}</h2>${body}`;
+    if (!dialog.open) dialog.showModal();
+    dialog.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    $('.dialog-close').focus({ preventScroll: true });
   }
-  function thumb(item,index,community=false) {
-    const src=url(item.imageSrc);
-    const positions=['18% 5%','90% 7%','42% 48%','88% 50%','10% 95%','78% 95%','50% 10%','10% 50%'];
-    return `<div class="card-image${src?'':' sample-photo'}"${!src?` style="background-position:center,${positions[index%positions.length]}"`:''}>${src?`<img src="${esc(src)}" alt="${esc(item.imageAlt||item.title)}" loading="lazy">`:'<span class="sample-tag">PHOTO TO ADD · SAMPLE IMAGE</span>'}<div class="card-image-meta"><span class="card-icon">${icon(community?'users':'award')}</span><span class="card-date">${esc(item.date)}</span></div></div>`;
+  function placeholder(title, description) {
+    showDialog(title, `<p>${esc(description || 'This space is reserved for my own content. The details will be added when they are ready.')}</p>`);
   }
-  function renderStats(selector,items) {
-    const names=['code','briefcase','trophy','users','book','globe'];
-    $(selector).innerHTML=items.map((item,i)=>`<div class="stat-card">${icon(names[i%names.length])}<strong>${esc(item.value)}</strong><p>${esc(item.label)}</p></div>`).join('');
+  $('.dialog-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => {
+    document.body.style.overflow = previousOverflow;
+    dialog.classList.remove('about-post');
+    lastFocus?.focus({ preventScroll: true });
+  });
+  dialog.addEventListener('click', event => {
+    if (event.target !== dialog) return;
+    const rect = dialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+  });
+  function externalLinks(links) {
+    const valid = (links || []).filter(link => url(link.url));
+    return valid.length ? `<div class="post-links">${valid.map(link => `<a class="text-link" href="${esc(url(link.url))}" target="_blank" rel="noopener noreferrer">${esc(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
   }
-  document.querySelectorAll('[data-profile-name]').forEach(el=>el.textContent=data.profile.name);
-  $('#hero-name').textContent=data.profile.name.toUpperCase()+'?';
-  $('#profile-headline').textContent=data.profile.headline;
-  $('#profile-subheadline').textContent=data.profile.subheadline;
-  $('#profile-intro').textContent=data.profile.intro;
-  document.title=`${data.profile.name} | Personal CV`;
-  $('#about-roles').innerHTML=data.roles.map((item,i)=>`<div class="role-card"><div class="role-title">${icon(['gear','code','book','users'][i])}<h4>${esc(item.title)}</h4></div><p>${esc(item.description)}</p></div>`).join('');
-  renderStats('#about-stats',data.aboutStats);
-  if(url(data.profile.introVideoUrl)) { $('#intro-video').setAttribute('aria-label','Play introduction video'); $('.video-placeholder-label').textContent='WATCH MY INTRODUCTION'; }
-  $('#intro-video').addEventListener('click',()=>{const destination=url(data.profile.introVideoUrl);if(destination)window.open(destination,'_blank','noopener,noreferrer');else placeholder('Your introduction video','A short introduction will appear here. This is a place for your voice, your interests, and the story you want to share.');});
-  $('#achievements-grid').innerHTML=data.achievements.map((item,i)=>`<article class="achievement-card">${thumb(item,i)}<div class="card-body"><h3>${esc(item.title)}</h3><p class="card-subtitle">${esc(item.subtitle)}</p><p class="card-organization">${esc(item.organization)}</p><p class="card-description">${esc(item.description)}</p>${tags(item.tags)}${linksMarkup(item.links,item.title)}</div></article>`).join('');
-  $('#experience-list').innerHTML=data.experiences.map(item=>`<article class="experience-card"><h4>${esc(item.title)}</h4><div class="experience-org-row">${esc(item.organization)}<span class="type-tag">${esc(item.type)}</span></div><div class="experience-meta">${icon('calendar')}${esc(item.dates)}</div><div class="experience-meta">${icon('pin')}${esc(item.location)}</div><ul class="experience-bullets">${item.bullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul></article>`).join('');
-  $('#education-list').innerHTML=data.education.map(item=>`<article class="education-card"><h4>${esc(item.title)}<span class="education-date">${esc(item.dates)}</span></h4><p>${esc(item.organization)}</p><p>${esc(item.description)}</p></article>`).join('');
-  $('#skills-list').innerHTML=data.skillGroups.map(item=>`<div class="skill-group"><h4>${esc(item.title)}</h4>${tags(item.items)}</div>`).join('');
-  $('#languages-list').innerHTML=data.languages.map(item=>`<div class="language-row"><span>${esc(item.name)}</span><span>${esc(item.level)}</span></div>`).join('');
-  $('#projects-grid').innerHTML=data.projects.map((item,i)=>`<button class="project-card" data-project="${i}">${url(item.imageSrc)?`<img class="project-image" src="${esc(url(item.imageSrc))}" alt="${esc(item.imageAlt||item.title)}" loading="lazy">`:""}${icon(['gear','code','lightbulb'][i])}<span class="tag">${esc(item.category)} · ${esc(item.status)}</span><h4>${esc(item.title)}</h4><p>${esc(item.description)}</p><span class="project-open">Explore this project space ↗</span></button>`).join('');
-  document.querySelectorAll('[data-project]').forEach(button=>button.addEventListener('click',()=>{const project=data.projects[Number(button.dataset.project)];showDialog(project.title,`<p>${esc(project.description)}</p><div class="dialog-meta"><div><strong>MY ROLE</strong><span>${esc(project.role)}</span></div><div><strong>STATUS</strong><span>${esc(project.status)}</span></div></div><h3>Design & Development</h3><p>${esc(project.process)}</p><h3>Testing & Outcome</h3><p>${esc(project.result)}</p>`,project.category.toUpperCase()+' · '+project.status.toUpperCase());}));
-  renderStats('#community-stats',data.communityStats);
-  $('#community-grid').innerHTML=data.communities.map((item,i)=>`<article class="community-card">${thumb(item,i+2,true)}<div class="card-body"><h3>${esc(item.title)}</h3><div class="community-role">${icon('users')}${esc(item.role)}</div><p class="card-description">${esc(item.description)}</p>${tags(item.tags)}${linksMarkup(item.links,item.title)}</div></article>`).join('');
-  $('#community-places').innerHTML=data.places.map(item=>`<div class="place-card"><h4>${icon('globe')}${esc(item.title)}</h4><p>${esc(item.description)}</p></div>`).join('');
-  renderStats('#media-stats',data.mediaStats);
-  $('#video-grid').innerHTML=data.videos.map((item,i)=>`<button class="video-card media-button" data-video="${i}"><div class="video-thumbnail sample-photo" style="background-position:center,${i?'right bottom':'left top'}">${url(item.imageSrc)?`<img src="${esc(url(item.imageSrc))}" alt="${esc(item.title)}" loading="lazy">`:''}${url(item.url)?"":'<span class="sample-tag">VIDEO TO ADD</span>'}<span class="play-circle" aria-hidden="true">▶</span></div><div class="video-body"><p class="video-platform">${esc(item.outlet)}</p><h4>${esc(item.title)}</h4><p>${esc(item.description)}</p></div></button>`).join('');
-  document.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',()=>{const item=data.videos[Number(button.dataset.video)];if(url(item.url))window.open(url(item.url),'_blank','noopener,noreferrer');else placeholder(item.title,item.description);}));
-  $('#media-links').innerHTML=data.mediaLinks.map(item=>url(item.url)?`<a class="small-media-link" href="${esc(url(item.url))}" target="_blank" rel="noopener noreferrer"><strong>${esc(item.title)} ↗</strong><span>${esc(item.outlet)}</span></a>`:`<button class="small-media-link" data-placeholder-title="${esc(item.title)}"><strong>${esc(item.title)}</strong><span>${esc(item.outlet)} · Link to add</span></button>`).join('');
-  const article=data.article;
-  $('#article-card').innerHTML=`<${url(article.url)?'a':'button'} class="article-card" ${url(article.url)?`href="${esc(url(article.url))}" target="_blank" rel="noopener noreferrer"`:`data-placeholder-title="${esc(article.title)}"`}>${icon('article')}<div><h4>${esc(article.title)}</h4><p>${esc(article.description)}</p><span>${esc(article.outlet)}${url(article.url)?' ↗':' · Link to add'}</span></div></${url(article.url)?'a':'button'}>`;
-  $('#media-outlets').innerHTML=tags(data.outlets);
-  $('#hobbies-list').innerHTML=data.hobbies.map((item,i)=>`<article class="personal-card"><div class="personal-title"><span class="personal-icon">${icon(['camera','book','heart'][i])}</span><h4>${esc(item.title)}</h4></div><p>${esc(item.description)}</p></article>`).join('');
-  $('#facts-list').innerHTML=data.facts.map((item,i)=>`<article class="personal-card"><div class="personal-title"><span class="personal-icon">${icon(['lightbulb','heart','user','globe'][i])}</span><h4>${esc(item.title)}</h4></div><p>${esc(item.description)}</p></article>`).join('');
-  const email=data.profile.email,phone=data.profile.phone;
-  const emailValid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const phoneDigits=String(phone||'').replace(/[^\d+]/g,'');
-  function contactCard(type,title,text,caption,href,extra='') {return `<${href?'a':'div'} class="contact-card ${extra}"${href?` href="${esc(href)}"`:''}>${icon(type)}<h3>${title}</h3><strong>${esc(text)}</strong><small>${caption}</small></${href?'a':'div'}>`;}
-  $('#contact-methods').innerHTML=contactCard('mail','Email',emailValid?email:'Email to be added','For conversations and collaboration',emailValid?'mailto:'+encodeURIComponent(email):'')+contactCard('phone','Mobile Number',phoneDigits||'Number to be added','Your preferred way to connect',phoneDigits?'tel:'+phoneDigits:'')+contactCard('pin','Location',data.profile.location||'Location to be added','A little context about where I’m based.','','location-card');
-  const socials=[['linkedin','LinkedIn','linkedinUrl'],['telegram','Telegram','telegramUrl'],['instagram','Instagram','instagramUrl'],['github','GitHub','githubUrl']];
-  $('#social-links').innerHTML=socials.map(([type,label,key])=>`<${url(data.profile[key])?'a':'button'} class="social-link" ${url(data.profile[key])?`href="${esc(url(data.profile[key]))}" target="_blank" rel="noopener noreferrer"`:`data-placeholder-title="${label} profile"`}>${icon(type)}<div>${label}<small>${url(data.profile[key])?'Visit my profile ↗':'Profile to be added'}</small></div></${url(data.profile[key])?'a':'button'}>`).join('');
-  $('#availability-tags').innerHTML=data.availability.map(item=>`<span>✓ ${esc(item)}</span>`).join('');
-  $('#footer-socials').innerHTML=socials.map(([type,label,key])=>`<${url(data.profile[key])?'a':'button'} class="footer-social-button" aria-label="${label}${url(data.profile[key])?'':' profile to be added'}" ${url(data.profile[key])?`href="${esc(url(data.profile[key]))}" target="_blank" rel="noopener noreferrer"`:`data-placeholder-title="${label} profile"`}>${icon(type)}</${url(data.profile[key])?'a':'button'}>`).join('');
-  $('#cv-link').addEventListener('click',()=>{if(url(data.profile.cvUrl))window.open(url(data.profile.cvUrl),'_blank','noopener,noreferrer');else placeholder('My CV, coming soon','A downloadable CV will be available here once it is ready.');});
-  if(url(data.profile.portraitSrc))$('#contact-portrait').innerHTML=`<img src="${esc(url(data.profile.portraitSrc))}" alt="${esc(data.profile.portraitAlt)}" loading="lazy">`;
-  document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
-  document.querySelectorAll('[data-placeholder-title]').forEach(button=>button.addEventListener('click',()=>placeholder(button.dataset.placeholderTitle)));
-  const nav=$('#navigation'),menu=$('.menu-toggle');
-  function closeMenu(){nav.classList.remove('menu-open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open navigation');}
-  menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';nav.classList.toggle('menu-open',open);menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');});
-  document.querySelectorAll('.nav-links a').forEach(link=>link.addEventListener('click',closeMenu));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav.classList.contains('menu-open')){closeMenu();menu.focus();}});
-  const media=window.matchMedia('(min-width:768px)');media.addEventListener('change',event=>{if(event.matches)closeMenu();});
-  let queued=false;
-  function navScroll(){nav.classList.toggle('scrolled',scrollY>50);queued=false;}
-  window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(navScroll);}},{passive:true});navScroll();
-  if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){document.querySelectorAll('.nav-links a').forEach(link=>{const active=link.hash==='#'+entry.target.id;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});}});},{rootMargin:'-10% 0px -65% 0px'});document.querySelectorAll('main section[id]').forEach(section=>observer.observe(section));}
+  function imageMarkup(item, className = '') {
+    const src = url(item.imageSrc);
+    return src ? `<img class="${className}" src="${esc(src)}" alt="${esc(item.imageAlt || item.title)}" loading="lazy">` : '';
+  }
+  const profile = data.profile;
+  document.querySelectorAll('[data-profile-name]').forEach(el => el.textContent = profile.name);
+  const heroTitle = profile.heroTitle || profile.name + '.';
+  $('#hero-name').innerHTML = esc(heroTitle.replace(/\.$/, '')) + (heroTitle.endsWith('.') ? '<span>.</span>' : '');
+  $('#hero-line').textContent = profile.heroLine || 'Mechanical engineering. Software. A little of everything else.';
+  document.title = `${profile.name} — Engineering & Everything Else`;
+  const about = data.aboutPost || { title: 'About me', lead: profile.intro, paragraphs: [] };
+  function openAbout() {
+    const portrait = url(about.portraitSrc || profile.portraitSrc);
+    const image = portrait ? `<img class="post-portrait" src="${esc(portrait)}" alt="${esc(about.portraitAlt || profile.portraitAlt || 'Portrait')}" loading="lazy">` : `<div class="post-photo-placeholder"><span aria-hidden="true">a.</span><p>A personal photograph to come.</p></div>`;
+    const introVideo = url(profile.introVideoUrl);
+    showDialog(about.title || 'About me', `<p class="post-lead">${esc(about.lead || profile.intro)}</p>${image}${(about.paragraphs || []).map(p => `<p>${esc(p)}</p>`).join('')}<div class="post-section"><h3>Still adding to the story.</h3><p>My background, the moments that shaped me, and what I hope to explore next will live here.</p></div>${introVideo ? `<a class="text-link" href="${esc(introVideo)}" target="_blank" rel="noopener noreferrer">Watch my introduction ↗</a>` : ''}`, about.eyebrow || 'A LITTLE MORE PERSONAL', 'about');
+  }
+  document.querySelectorAll('[data-about-open]').forEach(button => {
+    if (!button.classList.contains('hero-about-hint')) button.setAttribute('aria-label', `${profile.name} — read About me`);
+    button.addEventListener('click', openAbout);
+  });
+  function projectVisual(project, i) {
+    const image = imageMarkup(project, 'project-image');
+    const graphic = i === 0
+      ? '<span class="visual-graphic mechanism-graphic" aria-hidden="true"><span class="orbital-ring ring-one"></span><span class="orbital-ring ring-two"></span><span class="orbital-ring ring-three"></span><span class="measure-line"></span><span class="mechanism-core">↗</span></span>'
+      : i === 1
+        ? '<span class="visual-graphic code-graphic" aria-hidden="true"><span class="code-comment">// a place for an idea</span><span class="code-main">think<span> → </span>build</span><span class="code-comment">details coming soon_</span></span>'
+        : '<span class="visual-graphic systems-graphic" aria-hidden="true"><span class="system-circle"></span><span class="system-circle"></span><span class="system-symbol">×</span></span>';
+    return `<span class="project-visual project-visual--${['mechanical', 'software', 'systems'][i % 3]}${image ? ' has-project-image' : ''}">${image || graphic}<span class="visual-index">PROJECT / ${numbered(i)}</span><span class="visual-caption">${image ? esc(project.category) : ['Design / Model / Test', 'Logic / Code / Iterate', 'Mechanics / Code / Connection'][i % 3]}</span>${image ? '' : '<span class="project-sample">Concept visual · project to add</span>'}</span>`;
+  }
+  $('#projects-grid').innerHTML = data.projects.map((project, i) => `<button class="project-card ${i === 0 ? 'project-featured' : 'project-secondary'}" data-project="${i}" aria-haspopup="dialog">${projectVisual(project, i)}<span class="project-body"><span class="project-meta"><span class="project-category">${esc(project.category)}</span><span class="project-status">${esc(project.status)}</span></span><span class="project-title" role="heading" aria-level="3">${esc(project.title)}</span><span class="project-description">${esc(project.description)}</span><span class="project-open">Open project <span aria-hidden="true">↗</span></span></span></button>`).join('');
+  document.querySelectorAll('[data-project]').forEach(button => button.addEventListener('click', () => {
+    const project = data.projects[Number(button.dataset.project)];
+    showDialog(project.title, `${imageMarkup(project, 'post-project-image')}<p class="post-lead">${esc(project.description)}</p><div class="dialog-meta"><div><strong>My role</strong><span>${esc(project.role)}</span></div><div><strong>Status</strong><span>${esc(project.status)}</span></div></div><div class="post-section"><h3>The problem</h3><p>${esc(project.problem || 'The project question, who it is for, and the constraints will go here.')}</p></div><div class="post-section"><h3>What I did</h3><p>${esc(project.process)}</p></div><div class="post-section"><h3>What happened</h3><p>${esc(project.result)}</p></div>${externalLinks(project.links)}`, project.category);
+  }));
+  $('#experience-list').innerHTML = data.experiences.map((item, i) => `<article class="timeline-entry"><div class="timeline-date"><span>${esc(item.dates)}</span><small>${numbered(i)}</small></div><div class="timeline-content"><span class="entry-type">${esc(item.type)}</span><h3>${esc(item.title)}</h3><p class="entry-organization">${esc(item.organization)}</p><ul>${(item.bullets || []).map(bullet => `<li>${esc(bullet)}</li>`).join('')}</ul></div></article>`).join('');
+  $('#education-list').innerHTML = data.education.map(item => `<article class="education-entry"><p class="entry-date">${esc(item.dates)}</p><h4>${esc(item.title)}</h4><p>${esc(item.organization)}</p><p class="education-description">${esc(item.description)}</p></article>`).join('');
+  $('#skills-list').innerHTML = `<h4 class="toolkit-heading">My toolkit</h4>${data.skillGroups.map(group => `<div class="skill-group"><h5>${esc(group.title)}</h5>${tagList(group.items)}</div>`).join('')}`;
+  $('#languages-list').innerHTML = `<h4 class="toolkit-heading">Languages</h4>${data.languages.map(item => `<div class="language-row"><span>${esc(item.name)}</span><span>${esc(item.level)}</span></div>`).join('')}`;
+  $('#community-grid').innerHTML = data.communities.map((item, i) => `<article class="community-card"><div class="community-image ${url(item.imageSrc) ? '' : 'sample-image sample-community-' + i}">${imageMarkup(item)}${url(item.imageSrc) ? '' : '<span class="sample-label">Sample image / Your photo here</span>'}</div><div class="community-body"><p class="entry-date">${esc(item.date)}</p><h4>${esc(item.title)}</h4><p class="community-role">${esc(item.role)}</p><p>${esc(item.description)}</p>${(item.links || []).some(link => url(link.url)) ? externalLinks(item.links) : `<button class="text-link" data-community="${i}">Read more <span aria-hidden="true">↗</span></button>`}</div></article>`).join('');
+  document.querySelectorAll('[data-community]').forEach(button => button.addEventListener('click', () => {
+    const item = data.communities[Number(button.dataset.community)];
+    showDialog(item.title, `${imageMarkup(item)}<p class="post-lead">${esc(item.description)}</p><div class="dialog-meta"><div><strong>My role</strong><span>${esc(item.role)}</span></div><div><strong>When</strong><span>${esc(item.date)}</span></div></div>${externalLinks(item.links)}`, 'COMMUNITY');
+  }));
+  $('#achievements-list').innerHTML = data.achievements.map((item, i) => `<article class="recognition-item"><span class="recognition-number">${numbered(i)}</span><div><h4>${esc(item.title)}</h4><p>${esc(item.organization)}</p></div><button class="recognition-open" data-achievement="${i}" aria-label="Read about ${esc(item.title)}">Details <span aria-hidden="true">↗</span></button></article>`).join('');
+  document.querySelectorAll('[data-achievement]').forEach(button => button.addEventListener('click', () => {
+    const item = data.achievements[Number(button.dataset.achievement)];
+    showDialog(item.title, `${imageMarkup(item)}<p class="post-lead">${esc(item.description)}</p><p>${esc(item.organization)} · ${esc(item.date)}</p>${externalLinks(item.links)}`, 'MILESTONE TO ADD');
+  }));
+  const photographs = data.photography || [];
+  $('#photo-gallery').innerHTML = photographs.map((item, i) => `<figure class="photo-tile${i === 0 ? ' photo-featured' : ''}"><button class="photo-open" data-photo="${i}" aria-label="Open ${esc(item.title)}" aria-haspopup="dialog"><span class="gallery-image${url(item.imageSrc) ? '' : ' sample-image sample-gallery-' + i}">${imageMarkup(item)}${url(item.imageSrc) ? '' : '<span class="gallery-placeholder">Sample image / Your photograph here</span>'}<span class="photo-view" aria-hidden="true">↗</span></span></button><figcaption><span class="photo-number">${numbered(i)} /</span><div><h3>${esc(item.title)}</h3><p>${esc(item.caption)}</p></div></figcaption></figure>`).join('');
+  document.querySelectorAll('[data-photo]').forEach(button => button.addEventListener('click', () => {
+    const item = photographs[Number(button.dataset.photo)];
+    showDialog(item.title, `${url(item.imageSrc) ? imageMarkup(item, 'post-photograph') : '<div class="post-image-placeholder"><p>Your photograph will appear here.</p></div>'}<p class="post-lead">${esc(item.caption)}</p>`, url(item.imageSrc) ? 'THROUGH MY LENS' : 'PHOTOGRAPH TO ADD');
+  }));
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email || '');
+  const phone = String(profile.phone || '').replace(/[^\d+]/g, '');
+  const contacts = [
+    ['Email', emailValid ? profile.email : 'Email to be added', emailValid ? 'mailto:' + encodeURIComponent(profile.email) : ''],
+    ['Phone', phone || 'Number to be added', phone ? 'tel:' + phone : ''],
+    ['Based in', profile.location || 'Location to be added', '']
+  ];
+  $('#contact-methods').innerHTML = contacts.map(([label, value, href]) => `<div class="contact-row"><span class="contact-label">${label}</span>${href ? `<a href="${esc(href)}">${esc(value)} <span aria-hidden="true">↗</span></a>` : `<span class="contact-value">${esc(value)}</span>`}</div>`).join('');
+  const socials = [['GitHub', 'githubUrl'], ['LinkedIn', 'linkedinUrl'], ['Instagram', 'instagramUrl'], ['Telegram', 'telegramUrl']];
+  $('#social-links').innerHTML = socials.map(([label, key]) => url(profile[key]) ? `<a href="${esc(url(profile[key]))}" target="_blank" rel="noopener noreferrer">${label} <span aria-hidden="true">↗</span></a>` : `<button data-social="${label}">${label} <span aria-hidden="true">↗</span></button>`).join('');
+  document.querySelectorAll('[data-social]').forEach(button => button.addEventListener('click', () => placeholder(button.dataset.social, 'My profile link will be added here.')));
+  document.querySelectorAll('[data-cv-open]').forEach(button => button.addEventListener('click', () => {
+    if (url(profile.cvUrl)) { closeMenu(); window.open(url(profile.cvUrl), '_blank', 'noopener,noreferrer'); }
+    else placeholder('My CV', 'A downloadable CV will be available here once it is ready.');
+  }));
+  if (url(profile.portraitSrc)) {
+    $('.hero-portrait').innerHTML = `<img src="${esc(url(profile.portraitSrc))}" alt="${esc(profile.portraitAlt || 'Portrait of ' + profile.name)}"><div class="portrait-caption"><span>${esc(profile.name)}</span></div>`;
+  }
+  menu.addEventListener('click', () => {
+    const open = menu.getAttribute('aria-expanded') !== 'true';
+    nav.classList.toggle('menu-open', open);
+    menu.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  });
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && nav.classList.contains('menu-open') && !dialog.open) {
+      closeMenu(); menu.focus();
+    }
+  });
+  const desktop = window.matchMedia('(min-width: 768px)');
+  desktop.addEventListener('change', event => { if (event.matches) closeMenu(); });
+  let scrollQueued = false;
+  function updateNav() { nav.classList.toggle('scrolled', window.scrollY > 32); scrollQueued = false; }
+  window.addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(updateNav); } }, { passive: true });
+  updateNav();
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        document.querySelectorAll('.nav-links a').forEach(link => {
+          const active = link.hash === '#' + entry.target.id;
+          link.classList.toggle('active', active);
+          if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-15% 0px -65% 0px' });
+    document.querySelectorAll('main section[id]').forEach(section => observer.observe(section));
+  }
 })();
