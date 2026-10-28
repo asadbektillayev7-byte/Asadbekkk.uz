@@ -16,3 +16,5 @@
 /* Supplied alpha edges are the silhouette; no CSS mask is applied. */
 .portrait-fallback{left:12%;top:7%;bottom:auto;width:76%;height:80%;max-width:none;transform:none;object-fit:contain;object-position:center bottom;mask-image:none;-webkit-mask-image:none}
 @media(max-width:699px){.portrait-fallback{left:4%;top:6%;width:92%;height:65%;bottom:auto}}
+
+.photo-thumbnails{justify-content:center}

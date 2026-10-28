@@ -18,6 +18,7 @@
       this.index = clamp(initialIndex, 0, Math.max(0, photos.length - 1));
       this.reducedMotion = !!reducedMotion;
       this.progress = this.reducedMotion ? 1 : 0;
+      this.formation = 'tumble';
       this.pointer = { x: 0, y: 0 };
       this.pointerSmoothed = { x: 0, y: 0 };
       this.paused = false;
@@ -89,6 +90,11 @@
         this.error = error;
         return false;
       }
+    }
+
+    setFormation(value) {
+      this.formation = ['tumble', 'rise', 'scatter'].includes(value) ? value : 'tumble';
+      if (this.ready) this._requestFrame();
     }
 
     setPointer(x, y) {
@@ -260,13 +266,23 @@
       const stride = this.particles.length / Math.max(1, drawCount);
       for (let i = 0; i < drawCount; i++) {
         const point = this.particles[Math.floor(i * stride)];
-        const t = this.reducedMotion ? 1 : smooth(clamp((progress - point.delay * (1 - progress)) / (1 - point.delay)));
+        const delay = this.formation === 'rise' ? (1 - point.v) * .18 : point.delay;
+        const t = this.reducedMotion ? 1 : smooth(clamp((progress - delay * (1 - progress)) / (1 - delay)));
         const scatter = 1 - t;
         const rx = point.sx * cos + point.sz * sin;
         const rz = point.sz * cos - point.sx * sin;
         const perspective = 1 + rz * .16;
-        const cloudX = w * .5 + rx * radius * perspective;
-        const cloudY = h * .47 + point.sy * radius * perspective;
+        let cloudX = w * .5 + rx * radius * perspective;
+        let cloudY = h * .47 + point.sy * radius * perspective;
+        if (this.formation === 'rise') {
+          cloudX = x0 + point.u * pw + point.sx * radius * .45;
+          cloudY = h * (1.05 + Math.abs(point.sy) * .20);
+        } else if (this.formation === 'scatter') {
+          const spiralAngle = Math.atan2(point.sy, point.sx) + scatter * 2.7;
+          const spiralRadius = radius * (1.4 + Math.abs(point.sz));
+          cloudX = w * .5 + Math.cos(spiralAngle) * spiralRadius;
+          cloudY = h * .45 + Math.sin(spiralAngle) * spiralRadius;
+        }
         const portraitX = x0 + point.u * pw + px * 7;
         const portraitY = y0 + point.v * ph + py * 5;
         const float = this.reducedMotion ? 0 : Math.sin(time * .7 + point.seed) * .15;
