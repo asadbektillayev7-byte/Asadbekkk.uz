@@ -1,163 +1,179 @@
 (() => {
   'use strict';
-  const data = window.CV_CONTENT;
-  if (!data) return;
-  const $ = selector => document.querySelector(selector);
-  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const url = value => {
-    if (!value || typeof value !== 'string') return '';
+  const data = window.HOME_CONTENT;
+  if (!data?.photos?.length) return;
+  const body = document.body;
+  const stage = document.querySelector('#title-stage');
+  const nameWord = document.querySelector('#name-word');
+  const portfolioWord = document.querySelector('#portfolio-word');
+  const introControl = document.querySelector('#intro-control');
+  const mark = document.querySelector('.opening-mark');
+  const canvas = document.querySelector('#portrait-canvas');
+  const fallback = document.querySelector('#portrait-fallback');
+  const thumbnails = document.querySelector('#photo-thumbnails');
+  const footer = document.querySelector('.home-footer');
+  const status = document.querySelector('#photo-status');
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+  const clamp = value => Math.min(1, Math.max(0, value));
+  let currentPhoto = Math.max(0, Math.min(data.photos.length - 1, data.initialPhoto || 0));
+  let scene = null;
+  let sceneReady = Promise.resolve(false);
+  let openingFrame = null;
+  let openingStarted = 0;
+  let openingFinished = false;
+  let animations = [];
+  let photoRequest = 0;
+  let resizeFrame = null;
+  function setSceneFallback(active) {
+    body.classList.toggle('scene-fallback', active);
+    canvas.setAttribute('aria-hidden', String(active));
+    fallback.setAttribute('aria-hidden', String(!active));
+  }
+  function letters(element, text) {
+    element.innerHTML = Array.from(text).map(char => `<span class="letter" data-letter="${esc(char)}" aria-hidden="true">${esc(char)}</span>`).join('');
+    return Array.from(element.children);
+  }
+  const nameLetters = letters(nameWord, data.introName || data.name.toUpperCase());
+  const portfolioLetters = letters(portfolioWord, data.title || 'PORTFOLIO');
+  function animate(element, keyframes, options) {
+    const animation = element.animate(keyframes, { fill: 'forwards', ...options });
+    animations.push(animation);
+    return animation;
+  }
+  function cancelOpeningAnimations() {
+    if (openingFrame !== null) cancelAnimationFrame(openingFrame);
+    openingFrame = null;
+    animations.forEach(animation => animation.cancel());
+    animations = [];
+  }
+  function finalTop() { return window.matchMedia('(max-width: 900px), (max-height: 650px)').matches ? '67%' : '72%'; }
+  function finishOpening() {
+    cancelOpeningAnimations();
+    openingFinished = true;
+    footer.inert = false;
+    body.classList.remove('is-loading', 'is-opening');
+    body.classList.add('is-revealing', 'is-ready');
+    nameWord.style.display = 'none';
+    portfolioWord.style.opacity = '1';
+    portfolioLetters.forEach(letter => { letter.style.opacity = '1'; letter.style.transform = 'none'; });
+    stage.style.top = finalTop();
+    mark.style.opacity = '0';
+    scene?.setProgress(1);
+    introControl.innerHTML = motionPreference.matches ? 'Motion reduced' : 'Replay intro <span aria-hidden="true">↻</span>';
+    introControl.disabled = motionPreference.matches;
+  }
+  function startOpening() {
+    if (motionPreference.matches) { finishOpening(); return; }
+    cancelOpeningAnimations();
+    openingFinished = false;
+    footer.inert = true;
+    body.classList.remove('is-loading', 'is-revealing', 'is-ready');
+    body.classList.add('is-opening');
+    nameWord.style.display = 'flex';
+    portfolioWord.style.opacity = '1';
+    stage.style.top = '50%';
+    mark.style.opacity = '0';
+    scene?.setProgress(0);
+    introControl.innerHTML = 'Skip intro <span aria-hidden="true">↗</span>';
+    introControl.disabled = false;
+    animate(mark, [{ opacity: 0, transform: 'translate(-50%,-50%) scale(.1)' }, { opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .35 }, { opacity: 1, offset: .65 }, { opacity: 0, transform: 'translate(-50%,-50%) scale(.1)' }], { duration: 900, easing: 'ease-in-out' });
+    nameLetters.forEach((letter, index) => {
+      letter.style.opacity = '0';
+      const sign = index % 2 ? -1 : 1;
+      animate(letter, [
+        { opacity: 0, transform: `translate3d(${sign * 110}px,${index % 3 ? -90 : 100}px,260px) rotateX(${sign * 110}deg) rotateY(${-sign * 120}deg) rotateZ(${sign * 15}deg)` },
+        { opacity: 1, transform: 'translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0)' }
+      ], { delay: 430 + index * 84, duration: 850, easing: 'cubic-bezier(.16,.8,.23,1)' });
+      animate(letter, [{ opacity: 1, transform: 'rotateY(0) translateY(0)' }, { opacity: 0, transform: `rotateY(${sign * 90}deg) rotateX(35deg) translateY(-25px)` }], { delay: 1990 + index * 30, duration: 370, easing: 'cubic-bezier(.6,0,.9,.6)' });
+    });
+    portfolioLetters.forEach((letter, index) => {
+      letter.style.opacity = '0';
+      animate(letter, [
+        { opacity: 0, transform: `translate3d(${index % 2 ? -28 : 28}px,60px,140px) rotateX(85deg) rotateY(${index % 2 ? -85 : 85}deg)` },
+        { opacity: 1, transform: 'translate3d(0,0,0) rotateX(0) rotateY(0)' }
+      ], { delay: 2260 + index * 55, duration: 650, easing: 'cubic-bezier(.16,.8,.23,1)' });
+    });
+    animate(stage, [{ top: '50%' }, { top: finalTop() }], { delay: 3270, duration: 1000, easing: 'cubic-bezier(.22,.65,.2,1)' });
+    openingStarted = performance.now();
+    function tick(now) {
+      if (openingFinished) return;
+      const elapsed = now - openingStarted;
+      const progress = clamp((elapsed - 3480) / 2200);
+      scene?.setProgress(progress);
+      if (elapsed > 3570) { body.classList.add('is-revealing'); footer.inert = false; }
+      if (elapsed >= 5900) { finishOpening(); return; }
+      openingFrame = requestAnimationFrame(tick);
+    }
+    openingFrame = requestAnimationFrame(tick);
+  }
+  function updatePicker(index, announce = true) {
+    const photo = data.photos[index];
+    document.querySelectorAll('.photo-thumb').forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+    document.querySelector('#photo-count').textContent = `${String(index + 1).padStart(2, '0')} / ${String(data.photos.length).padStart(2, '0')}`;
+    fallback.src = photo.src;
+    fallback.alt = photo.alt;
+    canvas.setAttribute('aria-label', `${photo.alt}, rendered as a portrait made of light particles`);
+    if (announce) status.textContent = `${photo.label}. Photo ${index + 1} of ${data.photos.length}.`;
+  }
+  async function choosePhoto(index) {
+    if (!openingFinished) finishOpening();
+    const request = ++photoRequest;
+    currentPhoto = (index + data.photos.length) % data.photos.length;
+    updatePicker(currentPhoto);
+    const target = currentPhoto;
+    await sceneReady;
+    if (request !== photoRequest) return;
+    if (scene?.ready) {
+      const success = await scene.setPhoto(target, { animate: !motionPreference.matches });
+      if (request !== photoRequest) return;
+      setSceneFallback(!success);
+    } else setSceneFallback(true);
+  }
+  thumbnails.innerHTML = data.photos.map((photo, index) => `<button class="photo-thumb" data-photo="${index}" aria-label="Show photo ${index + 1}: ${esc(photo.label)}" aria-pressed="${index === currentPhoto}"><img src="${esc(photo.src)}" alt="${esc(photo.alt)}" draggable="false"></button>`).join('');
+  thumbnails.addEventListener('click', event => {
+    const button = event.target.closest('[data-photo]');
+    if (button) choosePhoto(Number(button.dataset.photo));
+  });
+  thumbnails.addEventListener('keydown', event => {
+    if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    let next = currentPhoto;
+    if (event.key === 'ArrowRight') next = (currentPhoto + 1) % data.photos.length;
+    if (event.key === 'ArrowLeft') next = (currentPhoto - 1 + data.photos.length) % data.photos.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = data.photos.length - 1;
+    choosePhoto(next);
+    thumbnails.children[next].focus();
+  });
+  document.querySelector('#next-photo').addEventListener('click', () => choosePhoto(currentPhoto + 1));
+  introControl.addEventListener('click', () => openingFinished ? startOpening() : finishOpening());
+  updatePicker(currentPhoto, false);
+  function createScene() {
+    scene?.destroy();
     try {
-      const parsed = new URL(value, location.href);
-      return ['https:', 'http:'].includes(parsed.protocol) ? parsed.href : '';
-    } catch { return ''; }
-  };
-  const numbered = i => String(i + 1).padStart(2, '0');
-  const tagList = values => `<div class="tags">${(values || []).map(value => `<span class="tag">${esc(value)}</span>`).join('')}</div>`;
-  const dialog = $('#detail-dialog');
-  const nav = $('#navigation');
-  const menu = $('.menu-toggle');
-  let lastFocus;
-  let previousOverflow = '';
-  function closeMenu() {
-    nav.classList.remove('menu-open');
-    menu.setAttribute('aria-expanded', 'false');
-    menu.setAttribute('aria-label', 'Open navigation');
-  }
-  function showDialog(title, body, badge = 'CONTENT TO ADD', type = '') {
-    const activeElement = document.activeElement;
-    const focusWasInMobileMenu = nav.classList.contains('menu-open') && activeElement?.closest('.nav-links');
-    closeMenu();
-    if (!dialog.open) {
-      lastFocus = focusWasInMobileMenu ? menu : activeElement;
-      previousOverflow = document.body.style.overflow;
+      scene = new window.PortraitParticles({ canvas, photos: data.photos, initialIndex: currentPhoto, reducedMotion: motionPreference.matches });
+      if (openingFinished) scene.setProgress(1);
+      sceneReady = scene.init().then(success => { setSceneFallback(!success); return success; }).catch(() => { setSceneFallback(true); return false; });
+    } catch {
+      scene = null;
+      sceneReady = Promise.resolve(false);
+      setSceneFallback(true);
     }
-    dialog.classList.toggle('about-post', type === 'about');
-    $('#dialog-content').innerHTML = `<p class="post-meta">${esc(badge)}</p><h2 id="dialog-title">${esc(title)}</h2>${body}`;
-    if (!dialog.open) dialog.showModal();
-    dialog.scrollTop = 0;
-    document.body.style.overflow = 'hidden';
-    $('.dialog-close').focus({ preventScroll: true });
   }
-  function placeholder(title, description) {
-    showDialog(title, `<p>${esc(description || 'This space is reserved for my own content. The details will be added when they are ready.')}</p>`);
-  }
-  $('.dialog-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => {
-    document.body.style.overflow = previousOverflow;
-    dialog.classList.remove('about-post');
-    lastFocus?.focus({ preventScroll: true });
+  createScene();
+  startOpening();
+  window.addEventListener('pointermove', event => {
+    if (event.pointerType !== 'mouse' || motionPreference.matches) return;
+    scene?.setPointer(event.clientX / innerWidth * 2 - 1, event.clientY / innerHeight * 2 - 1);
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => scene?.setPointer(0, 0));
+  window.addEventListener('resize', () => {
+    if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => { scene?.resize(); if (openingFinished) stage.style.top = finalTop(); });
   });
-  dialog.addEventListener('click', event => {
-    if (event.target !== dialog) return;
-    const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
-  });
-  function externalLinks(links) {
-    const valid = (links || []).filter(link => url(link.url));
-    return valid.length ? `<div class="post-links">${valid.map(link => `<a class="text-link" href="${esc(url(link.url))}" target="_blank" rel="noopener noreferrer">${esc(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
-  }
-  function imageMarkup(item, className = '') {
-    const src = url(item.imageSrc);
-    return src ? `<img class="${className}" src="${esc(src)}" alt="${esc(item.imageAlt || item.title)}" loading="lazy">` : '';
-  }
-  const profile = data.profile;
-  document.querySelectorAll('[data-profile-name]').forEach(el => el.textContent = profile.name);
-  const heroTitle = profile.heroTitle || profile.name + '.';
-  $('#hero-name').innerHTML = esc(heroTitle.replace(/\.$/, '')) + (heroTitle.endsWith('.') ? '<span>.</span>' : '');
-  $('#hero-line').textContent = profile.heroLine || 'Mechanical engineering. Software. A little of everything else.';
-  document.title = `${profile.name} — Engineering & Everything Else`;
-  const about = data.aboutPost || { title: 'About me', lead: profile.intro, paragraphs: [] };
-  function openAbout() {
-    const portrait = url(about.portraitSrc || profile.portraitSrc);
-    const image = portrait ? `<img class="post-portrait" src="${esc(portrait)}" alt="${esc(about.portraitAlt || profile.portraitAlt || 'Portrait')}" loading="lazy">` : `<div class="post-photo-placeholder"><span aria-hidden="true">a.</span><p>A personal photograph to come.</p></div>`;
-    const introVideo = url(profile.introVideoUrl);
-    showDialog(about.title || 'About me', `<p class="post-lead">${esc(about.lead || profile.intro)}</p>${image}${(about.paragraphs || []).map(p => `<p>${esc(p)}</p>`).join('')}<div class="post-section"><h3>Still adding to the story.</h3><p>My background, the moments that shaped me, and what I hope to explore next will live here.</p></div>${introVideo ? `<a class="text-link" href="${esc(introVideo)}" target="_blank" rel="noopener noreferrer">Watch my introduction ↗</a>` : ''}`, about.eyebrow || 'A LITTLE MORE PERSONAL', 'about');
-  }
-  document.querySelectorAll('[data-about-open]').forEach(button => {
-    if (!button.classList.contains('hero-about-hint')) button.setAttribute('aria-label', `${profile.name} — read About me`);
-    button.addEventListener('click', openAbout);
-  });
-  function projectVisual(project, i) {
-    const image = imageMarkup(project, 'project-image');
-    const graphic = i === 0
-      ? '<span class="visual-graphic mechanism-graphic" aria-hidden="true"><span class="orbital-ring ring-one"></span><span class="orbital-ring ring-two"></span><span class="orbital-ring ring-three"></span><span class="measure-line"></span><span class="mechanism-core">↗</span></span>'
-      : i === 1
-        ? '<span class="visual-graphic code-graphic" aria-hidden="true"><span class="code-comment">// a place for an idea</span><span class="code-main">think<span> → </span>build</span><span class="code-comment">details coming soon_</span></span>'
-        : '<span class="visual-graphic systems-graphic" aria-hidden="true"><span class="system-circle"></span><span class="system-circle"></span><span class="system-symbol">×</span></span>';
-    return `<span class="project-visual project-visual--${['mechanical', 'software', 'systems'][i % 3]}${image ? ' has-project-image' : ''}">${image || graphic}<span class="visual-index">PROJECT / ${numbered(i)}</span><span class="visual-caption">${image ? esc(project.category) : ['Design / Model / Test', 'Logic / Code / Iterate', 'Mechanics / Code / Connection'][i % 3]}</span>${image ? '' : '<span class="project-sample">Concept visual · project to add</span>'}</span>`;
-  }
-  $('#projects-grid').innerHTML = data.projects.map((project, i) => `<button class="project-card ${i === 0 ? 'project-featured' : 'project-secondary'}" data-project="${i}" aria-haspopup="dialog">${projectVisual(project, i)}<span class="project-body"><span class="project-meta"><span class="project-category">${esc(project.category)}</span><span class="project-status">${esc(project.status)}</span></span><span class="project-title" role="heading" aria-level="3">${esc(project.title)}</span><span class="project-description">${esc(project.description)}</span><span class="project-open">Open project <span aria-hidden="true">↗</span></span></span></button>`).join('');
-  document.querySelectorAll('[data-project]').forEach(button => button.addEventListener('click', () => {
-    const project = data.projects[Number(button.dataset.project)];
-    showDialog(project.title, `${imageMarkup(project, 'post-project-image')}<p class="post-lead">${esc(project.description)}</p><div class="dialog-meta"><div><strong>My role</strong><span>${esc(project.role)}</span></div><div><strong>Status</strong><span>${esc(project.status)}</span></div></div><div class="post-section"><h3>The problem</h3><p>${esc(project.problem || 'The project question, who it is for, and the constraints will go here.')}</p></div><div class="post-section"><h3>What I did</h3><p>${esc(project.process)}</p></div><div class="post-section"><h3>What happened</h3><p>${esc(project.result)}</p></div>${externalLinks(project.links)}`, project.category);
-  }));
-  $('#experience-list').innerHTML = data.experiences.map((item, i) => `<article class="timeline-entry"><div class="timeline-date"><span>${esc(item.dates)}</span><small>${numbered(i)}</small></div><div class="timeline-content"><span class="entry-type">${esc(item.type)}</span><h3>${esc(item.title)}</h3><p class="entry-organization">${esc(item.organization)}</p><ul>${(item.bullets || []).map(bullet => `<li>${esc(bullet)}</li>`).join('')}</ul></div></article>`).join('');
-  $('#education-list').innerHTML = data.education.map(item => `<article class="education-entry"><p class="entry-date">${esc(item.dates)}</p><h4>${esc(item.title)}</h4><p>${esc(item.organization)}</p><p class="education-description">${esc(item.description)}</p></article>`).join('');
-  $('#skills-list').innerHTML = `<h4 class="toolkit-heading">My toolkit</h4>${data.skillGroups.map(group => `<div class="skill-group"><h5>${esc(group.title)}</h5>${tagList(group.items)}</div>`).join('')}`;
-  $('#languages-list').innerHTML = `<h4 class="toolkit-heading">Languages</h4>${data.languages.map(item => `<div class="language-row"><span>${esc(item.name)}</span><span>${esc(item.level)}</span></div>`).join('')}`;
-  $('#community-grid').innerHTML = data.communities.map((item, i) => `<article class="community-card"><div class="community-image ${url(item.imageSrc) ? '' : 'sample-image sample-community-' + i}">${imageMarkup(item)}${url(item.imageSrc) ? '' : '<span class="sample-label">Sample image / Your photo here</span>'}</div><div class="community-body"><p class="entry-date">${esc(item.date)}</p><h4>${esc(item.title)}</h4><p class="community-role">${esc(item.role)}</p><p>${esc(item.description)}</p>${(item.links || []).some(link => url(link.url)) ? externalLinks(item.links) : `<button class="text-link" data-community="${i}">Read more <span aria-hidden="true">↗</span></button>`}</div></article>`).join('');
-  document.querySelectorAll('[data-community]').forEach(button => button.addEventListener('click', () => {
-    const item = data.communities[Number(button.dataset.community)];
-    showDialog(item.title, `${imageMarkup(item)}<p class="post-lead">${esc(item.description)}</p><div class="dialog-meta"><div><strong>My role</strong><span>${esc(item.role)}</span></div><div><strong>When</strong><span>${esc(item.date)}</span></div></div>${externalLinks(item.links)}`, 'COMMUNITY');
-  }));
-  $('#achievements-list').innerHTML = data.achievements.map((item, i) => `<article class="recognition-item"><span class="recognition-number">${numbered(i)}</span><div><h4>${esc(item.title)}</h4><p>${esc(item.organization)}</p></div><button class="recognition-open" data-achievement="${i}" aria-label="Read about ${esc(item.title)}">Details <span aria-hidden="true">↗</span></button></article>`).join('');
-  document.querySelectorAll('[data-achievement]').forEach(button => button.addEventListener('click', () => {
-    const item = data.achievements[Number(button.dataset.achievement)];
-    showDialog(item.title, `${imageMarkup(item)}<p class="post-lead">${esc(item.description)}</p><p>${esc(item.organization)} · ${esc(item.date)}</p>${externalLinks(item.links)}`, 'MILESTONE TO ADD');
-  }));
-  const photographs = data.photography || [];
-  $('#photo-gallery').innerHTML = photographs.map((item, i) => `<figure class="photo-tile${i === 0 ? ' photo-featured' : ''}"><button class="photo-open" data-photo="${i}" aria-label="Open ${esc(item.title)}" aria-haspopup="dialog"><span class="gallery-image${url(item.imageSrc) ? '' : ' sample-image sample-gallery-' + i}">${imageMarkup(item)}${url(item.imageSrc) ? '' : '<span class="gallery-placeholder">Sample image / Your photograph here</span>'}<span class="photo-view" aria-hidden="true">↗</span></span></button><figcaption><span class="photo-number">${numbered(i)} /</span><div><h3>${esc(item.title)}</h3><p>${esc(item.caption)}</p></div></figcaption></figure>`).join('');
-  document.querySelectorAll('[data-photo]').forEach(button => button.addEventListener('click', () => {
-    const item = photographs[Number(button.dataset.photo)];
-    showDialog(item.title, `${url(item.imageSrc) ? imageMarkup(item, 'post-photograph') : '<div class="post-image-placeholder"><p>Your photograph will appear here.</p></div>'}<p class="post-lead">${esc(item.caption)}</p>`, url(item.imageSrc) ? 'THROUGH MY LENS' : 'PHOTOGRAPH TO ADD');
-  }));
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email || '');
-  const phone = String(profile.phone || '').replace(/[^\d+]/g, '');
-  const contacts = [
-    ['Email', emailValid ? profile.email : 'Email to be added', emailValid ? 'mailto:' + encodeURIComponent(profile.email) : ''],
-    ['Phone', phone || 'Number to be added', phone ? 'tel:' + phone : ''],
-    ['Based in', profile.location || 'Location to be added', '']
-  ];
-  $('#contact-methods').innerHTML = contacts.map(([label, value, href]) => `<div class="contact-row"><span class="contact-label">${label}</span>${href ? `<a href="${esc(href)}">${esc(value)} <span aria-hidden="true">↗</span></a>` : `<span class="contact-value">${esc(value)}</span>`}</div>`).join('');
-  const socials = [['GitHub', 'githubUrl'], ['LinkedIn', 'linkedinUrl'], ['Instagram', 'instagramUrl'], ['Telegram', 'telegramUrl']];
-  $('#social-links').innerHTML = socials.map(([label, key]) => url(profile[key]) ? `<a href="${esc(url(profile[key]))}" target="_blank" rel="noopener noreferrer">${label} <span aria-hidden="true">↗</span></a>` : `<button data-social="${label}">${label} <span aria-hidden="true">↗</span></button>`).join('');
-  document.querySelectorAll('[data-social]').forEach(button => button.addEventListener('click', () => placeholder(button.dataset.social, 'My profile link will be added here.')));
-  document.querySelectorAll('[data-cv-open]').forEach(button => button.addEventListener('click', () => {
-    if (url(profile.cvUrl)) { closeMenu(); window.open(url(profile.cvUrl), '_blank', 'noopener,noreferrer'); }
-    else placeholder('My CV', 'A downloadable CV will be available here once it is ready.');
-  }));
-  if (url(profile.portraitSrc)) {
-    $('.hero-portrait').innerHTML = `<img src="${esc(url(profile.portraitSrc))}" alt="${esc(profile.portraitAlt || 'Portrait of ' + profile.name)}"><div class="portrait-caption"><span>${esc(profile.name)}</span></div>`;
-  }
-  menu.addEventListener('click', () => {
-    const open = menu.getAttribute('aria-expanded') !== 'true';
-    nav.classList.toggle('menu-open', open);
-    menu.setAttribute('aria-expanded', String(open));
-    menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-  });
-  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && nav.classList.contains('menu-open') && !dialog.open) {
-      closeMenu(); menu.focus();
-    }
-  });
-  const desktop = window.matchMedia('(min-width: 768px)');
-  desktop.addEventListener('change', event => { if (event.matches) closeMenu(); });
-  let scrollQueued = false;
-  function updateNav() { nav.classList.toggle('scrolled', window.scrollY > 32); scrollQueued = false; }
-  window.addEventListener('scroll', () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(updateNav); } }, { passive: true });
-  updateNav();
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        document.querySelectorAll('.nav-links a').forEach(link => {
-          const active = link.hash === '#' + entry.target.id;
-          link.classList.toggle('active', active);
-          if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
-        });
-      });
-    }, { rootMargin: '-15% 0px -65% 0px' });
-    document.querySelectorAll('main section[id]').forEach(section => observer.observe(section));
-  }
+  document.addEventListener('visibilitychange', () => scene?.setPaused(document.hidden));
+  motionPreference.addEventListener('change', () => { finishOpening(); createScene(); });
+  window.addEventListener('pagehide', () => { cancelOpeningAnimations(); scene?.destroy(); });
+  window.addEventListener('pageshow', event => { if (event.persisted) { finishOpening(); createScene(); } });
 })();

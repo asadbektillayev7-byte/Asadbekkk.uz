@@ -3,79 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#171C27">
-  <meta name="description" content="Asadbek’s personal space for mechanical engineering, software, photography, and everything in between. A portfolio in progress.">
-  <title>Asadbek — Engineering & Everything Else</title>
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Asadbek. Student. Still exploring. A personal homepage in motion.">
+  <title>Asadbek — Personal Space</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="assets/photos/asadbek-laptop.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script defer src="content.js"></script>
+  <script defer src="portrait.js"></script>
   <script defer src="app.js"></script>
 </head>
-<body>
-  <a class="skip-link" href="#work">Skip to content</a>
-  <nav class="navigation" id="navigation" aria-label="Main navigation">
-    <div class="nav-inner">
-      <button class="brand" data-about-open aria-label="Asadbek — read About me" aria-haspopup="dialog"><span class="brand-mark" aria-hidden="true">a.</span><span data-profile-name>Asadbek</span><span class="brand-arrow" aria-hidden="true">↗</span></button>
-      <div class="nav-links" id="nav-links">
-        <a href="#work">Work</a><a href="#experience">Experience</a><a href="#photography">Photography</a><a href="#contact">Contact</a>
-        <button class="nav-cv" data-cv-open>View CV <span aria-hidden="true">↗</span></button>
-      </div>
-      <button class="menu-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation"><span></span><span></span></button>
+<body class="is-loading">
+  <main class="homepage" aria-label="Asadbek’s personal homepage">
+    <div class="atmosphere" aria-hidden="true"></div>
+    <canvas class="portrait-canvas" id="portrait-canvas" role="img" aria-label="Asadbek at a laptop, rendered as a portrait made of light particles"></canvas>
+    <img class="portrait-fallback" id="portrait-fallback" src="assets/photos/asadbek-laptop.jpg" alt="Asadbek at a laptop" aria-hidden="true">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Asadbek — home">ASADBEK</a>
+      <div class="header-right"><span class="home-label" aria-current="page">HOME</span><button class="intro-control" id="intro-control">Skip intro <span aria-hidden="true">↗</span></button></div>
+    </header>
+    <div class="opening-mark" aria-hidden="true"><span></span></div>
+    <div class="title-stage" id="title-stage">
+      <div class="name-word metal-word" id="name-word" aria-hidden="true"></div>
+      <h1 class="portfolio-word metal-word" id="portfolio-word" aria-label="Asadbek’s portfolio">PORTFOLIO</h1>
     </div>
-  </nav>
-  <main>
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Engineering & everything in between</p>
-          <h1 class="hero-title" id="hero-title"><button class="hero-name" id="hero-name" data-about-open aria-label="Asadbek — read About me" aria-haspopup="dialog">Asadbek<span>.</span></button></h1>
-          <p class="hero-summary" id="hero-line">Mechanical engineering. Software.<br>A little of everything else.</p>
-          <button class="hero-about-hint text-link" data-about-open>The person behind the projects <span aria-hidden="true">↗</span></button>
-          <div class="hero-actions"><a class="button primary-button" href="#work">Explore my work <span aria-hidden="true">↘</span></a><a class="text-link" href="#contact">Say hello <span aria-hidden="true">↗</span></a></div>
-        </div>
-        <div class="hero-visual" aria-label="Temporary visual collage. Personal photographs will replace these samples.">
-          <div class="collage-underlay" aria-hidden="true"></div>
-          <div class="hero-photo hero-photo--work sample-image"><span class="photo-label">01 / Making things</span></div>
-          <div class="hero-portrait"><span class="portrait-initials" aria-hidden="true">a.</span><div class="portrait-caption"><span>Your portrait here</span><small>A face to the name.</small></div></div>
-          <div class="hero-photo hero-photo--world sample-image"><span class="photo-label">02 / Looking closer</span></div>
-          <span class="collage-stamp">Sample imagery<br>Personal photos to come</span>
-        </div>
-      </div>
-      <div class="container hero-bottom"><span>Mechanics / Code / People / Places</span><a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a></div>
-    </section>
-    <section class="section work-section" id="work" aria-labelledby="work-title">
-      <div class="container">
-        <header class="section-heading"><p class="section-kicker">01 / Selected work</p><div class="heading-row"><h2 id="work-title">Ideas, taking shape<span class="accent-dot">.</span></h2><p>A space for the things I build, test, and learn along the way.</p></div></header>
-        <div class="projects-grid" id="projects-grid"></div>
-        <p class="section-footnote"><span class="status-dot" aria-hidden="true"></span> Project spaces reserved. Real builds, process, and results to come.</p>
-      </div>
-    </section>
-    <section class="section experience-section" id="experience" aria-labelledby="experience-title">
-      <div class="container">
-        <header class="section-heading"><p class="section-kicker">02 / Along the way</p><div class="heading-row"><h2 id="experience-title">Learning by doing<span class="accent-dot">.</span></h2><p>Work, research, learning, and the people I do it with.</p></div></header>
-        <div class="experience-layout"><div><h3 class="subsection-label">Experience</h3><div class="timeline" id="experience-list"></div></div><aside class="education-panel"><h3 class="subsection-label">Education & toolkit</h3><div id="education-list"></div><div class="skills-list" id="skills-list"></div><div class="languages-list" id="languages-list"></div></aside></div>
-        <div class="community-block"><div class="subsection-heading"><h3>With people, for people.</h3><p>Volunteering, leadership, and life beyond individual projects.</p></div><div class="community-grid" id="community-grid"></div></div>
-        <div class="recognition-block"><details class="recognition-disclosure"><summary><span>Milestones & recognition</span><span class="recognition-toggle" aria-hidden="true">+</span></summary><div class="recognition-list" id="achievements-list"></div></details></div>
-      </div>
-    </section>
-    <section class="section photography-section" id="photography" aria-labelledby="photography-title">
-      <div class="container">
-        <header class="section-heading"><p class="section-kicker">03 / Through my lens</p><div class="heading-row"><h2 id="photography-title">A different kind<br>of focus<span class="accent-dot">.</span></h2><p>Places, details, and moments that make me stop and look.</p></div></header>
-        <div class="photo-gallery" id="photo-gallery"></div>
-        <div class="photography-footer"><span>Photography / A personal collection</span><p>Sample imagery for now. My own photographs and their stories will live here.</p></div>
-      </div>
-    </section>
-    <section class="section contact-section" id="contact" aria-labelledby="contact-title">
-      <div class="container">
-        <header class="contact-heading"><p class="section-kicker">04 / A conversation starts here</p><h2 id="contact-title">Say hello<span>.</span></h2><p>Engineering, software, photography, or a good idea.<br>I’d like to hear about it.</p></header>
-        <div class="contact-layout"><div class="contact-methods" id="contact-methods"></div><div class="contact-aside"><p class="subsection-label">Elsewhere</p><div class="social-links" id="social-links"></div><button class="button lime-button" data-cv-open>View my CV <span aria-hidden="true">↗</span></button><small>Personal details and links to be added.</small></div></div>
-      </div>
-    </section>
+    <footer class="home-footer">
+      <p class="descriptor"><strong>Student.</strong> <em>Still exploring.</em></p>
+      <div class="photo-picker" aria-label="Choose a portrait"><div class="picker-label"><span>Different moments. Same me.</span><span id="photo-count">02 / 06</span></div><div class="photo-thumbnails" id="photo-thumbnails"></div></div>
+      <button class="next-photo" id="next-photo"><span class="next-icon" aria-hidden="true">↗</span><span>Next photo</span></button>
+    </footer>
+    <p class="sr-only" id="photo-status" aria-live="polite"></p>
+    <noscript><style>.is-loading .title-stage,.is-loading .site-header,.is-loading .home-footer{opacity:1}.portrait-fallback{opacity:.72}.photo-picker,.next-photo,.intro-control{display:none}</style></noscript>
   </main>
-  <footer class="footer"><div class="container footer-inner"><button class="footer-name" data-about-open aria-label="Asadbek — read About me" aria-haspopup="dialog">Asadbek<span>.</span></button><span>© 2026 Asadbek · Always a work in progress.</span><a href="#top">Back to top <span aria-hidden="true">↑</span></a></div></footer>
-  <dialog id="detail-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Close post">×</button><article class="dialog-content" id="dialog-content"></article></dialog>
 </body>
 </html>
