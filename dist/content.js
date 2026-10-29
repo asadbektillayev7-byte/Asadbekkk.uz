@@ -22,3 +22,15 @@ window.PERSONAL_CONTENT = {
     }
   ]
 };
+
+/* Add the actual PDF path and book list when supplied. No placeholder resume is served. */
+window.SITE_CONTENT = {
+  resumePdf: null,
+  contacts: {
+    email: 'asadbektillayev7@gmail.com',
+    twitter: 'https://x.com/AsadbekTillayev',
+    linkedin: 'https://www.linkedin.com/in/asadbek-tillayev-7540ab329',
+    telegram: 'https://t.me/asadbektillayev'
+  },
+  books: []
+};

@@ -1,4 +1,4 @@
-/* Navigation, project shelves, and personal-content dialogs. */
+/* Shared page navigation, project filters, and accessible dialogs. */
 (() => {
   'use strict';
 
@@ -12,10 +12,10 @@
     const header = document.querySelector('.site-header');
     const navToggle = document.querySelector('[data-nav-toggle]');
     const nav = document.getElementById('main-nav');
-    const sectionLinks = Array.from(document.querySelectorAll('[data-section-link]'));
-    const homeLink = header && header.querySelector('.brand[href="#home"]');
-    const dialogs = Array.from(document.querySelectorAll('dialog'));
+    const resumeLinks = Array.from(document.querySelectorAll('[data-resume-link]'));
     const dialogOpeners = new WeakMap();
+    let noticeTimer = 0;
+    let noticeFrame = 0;
     let scrollFrame = 0;
     let revealObserver = null;
 
@@ -26,8 +26,65 @@
       if (wasOpen && returnFocus && navToggle) navToggle.focus({ preventScroll: true });
     }
 
+    function announce(message) {
+      const notice = document.getElementById('site-notice');
+      if (!notice) return;
+      window.clearTimeout(noticeTimer);
+      window.cancelAnimationFrame(noticeFrame);
+      notice.textContent = '';
+      notice.classList.add('is-visible');
+      noticeFrame = window.requestAnimationFrame(() => {
+        notice.textContent = message;
+        noticeTimer = window.setTimeout(() => notice.classList.remove('is-visible'), 4200);
+      });
+    }
+
+    const configuredPdf = window.SITE_CONTENT && window.SITE_CONTENT.resumePdf;
+    const resumePdf = typeof configuredPdf === 'string' ? configuredPdf.trim() : '';
+    resumeLinks.forEach(link => {
+      if (resumePdf) {
+        link.setAttribute('href', resumePdf);
+        link.removeAttribute('aria-disabled');
+        link.removeAttribute('role');
+        link.removeAttribute('tabindex');
+        link.removeAttribute('title');
+      } else {
+        link.removeAttribute('href');
+        link.setAttribute('role', 'link');
+        link.setAttribute('tabindex', '0');
+        link.setAttribute('aria-disabled', 'true');
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          closeNav();
+          announce('Resume PDF coming soon.');
+        });
+        link.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          closeNav();
+          announce('Resume PDF coming soon.');
+        });
+      }
+    });
+
+    const page = body.dataset.page || 'home';
+    document.querySelectorAll('[data-page-link]').forEach(link => {
+      const destination = link.dataset.page || link.dataset.pageLink;
+      if (destination === page) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+    const homeLink = header && header.querySelector('.brand');
+    if (homeLink) {
+      if (page === 'home') homeLink.setAttribute('aria-current', 'page');
+      else homeLink.removeAttribute('aria-current');
+    }
+
+    function getDialogs() {
+      return Array.from(document.querySelectorAll('dialog'));
+    }
+
     function syncDialogLock() {
-      body.classList.toggle('dialog-open', dialogs.some(dialog => dialog.open));
+      body.classList.toggle('dialog-open', getDialogs().some(dialog => dialog.open));
     }
 
     function fillProject(id) {
@@ -56,38 +113,13 @@
       return true;
     }
 
-    const readingStates = {
-      current: {
-        title: 'Currently reading',
-        copy: 'No current title has been added yet. A book, its author, and a few thoughts will go here.'
-      },
-      finished: {
-        title: 'Finished reading',
-        copy: 'No finished titles have been added yet. This shelf is ready for books I have read and the ideas I took from them.'
-      },
-      next: {
-        title: 'Up next',
-        copy: 'The next-read list is empty for now. Books I want to pick up and the reasons they caught my attention will go here.'
-      }
-    };
-
-    function fillReading(status) {
-      const state = readingStates[status];
-      if (!state) return false;
-      const title = document.getElementById('reading-dialog-title');
-      const copy = document.getElementById('reading-dialog-copy');
-      if (title) title.textContent = state.title;
-      if (copy) copy.textContent = state.copy;
-      return true;
-    }
-
     function openDialog(dialog, opener) {
       if (!dialog || typeof dialog.showModal !== 'function') return;
       closeNav();
-      dialogs.forEach(other => {
+      getDialogs().forEach(other => {
         if (other !== dialog && other.open) other.close();
       });
-      dialogOpeners.set(dialog, opener);
+      if (opener) dialogOpeners.set(dialog, opener);
       if (!dialog.open) dialog.showModal();
       syncDialogLock();
     }
@@ -95,43 +127,27 @@
     document.addEventListener('click', event => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-
-      const printButton = target.closest('[data-print-resume]');
-      if (printButton) {
-        event.preventDefault();
-        body.classList.add('printing-resume');
-        try {
-          window.print();
-        } catch (error) {
-          body.classList.remove('printing-resume');
-        }
-        return;
-      }
-
       const trigger = target.closest('[data-open-dialog]');
       if (trigger) {
         const dialog = document.getElementById(trigger.dataset.openDialog);
         if (dialog && dialog.tagName === 'DIALOG') {
           event.preventDefault();
           if (trigger.dataset.project && !fillProject(trigger.dataset.project)) return;
-          if (trigger.dataset.readingStatus && !fillReading(trigger.dataset.readingStatus)) return;
           openDialog(dialog, trigger);
         }
         return;
       }
-
       const closeButton = target.closest('[data-close-dialog]');
       if (closeButton) {
         const dialog = closeButton.closest('dialog');
         if (dialog && dialog.open) dialog.close();
         return;
       }
-
       if (body.classList.contains('nav-open') && nav && navToggle &&
           !nav.contains(target) && !navToggle.contains(target)) closeNav();
     });
 
-    dialogs.forEach(dialog => {
+    getDialogs().forEach(dialog => {
       dialog.addEventListener('click', event => {
         if (event.target !== dialog) return;
         const bounds = dialog.getBoundingClientRect();
@@ -142,15 +158,19 @@
       dialog.addEventListener('close', () => {
         syncDialogLock();
         const opener = dialogOpeners.get(dialog);
-        if (!dialogs.some(other => other.open) && opener && opener.isConnected) {
+        if (!getDialogs().some(other => other.open) && opener && opener.isConnected) {
           opener.focus({ preventScroll: true });
         }
       });
+      if ('MutationObserver' in window) {
+        new MutationObserver(syncDialogLock).observe(dialog, {
+          attributes: true, attributeFilter: ['open']
+        });
+      }
     });
 
-    window.addEventListener('afterprint', () => body.classList.remove('printing-resume'));
-
     if (navToggle && nav) {
+      navToggle.setAttribute('aria-expanded', 'false');
       navToggle.addEventListener('click', () => {
         if (!mobile.matches) return;
         const open = body.classList.toggle('nav-open');
@@ -182,48 +202,12 @@
           const categoryName = category === 'all' ? '' : `${filter.textContent.trim().toLowerCase()} `;
           filterStatus.textContent = `${visibleCount} ${categoryName}project ${visibleCount === 1 ? 'slot' : 'slots'} shown.`;
         }
-        scheduleScrollSync();
       });
-    });
-
-    const sections = sectionLinks.map(link => {
-      const href = link.getAttribute('href');
-      return href && href.startsWith('#') ? document.getElementById(href.slice(1)) : null;
-    }).filter((section, index, all) => section && all.indexOf(section) === index);
-
-    function setActiveSection(id) {
-      sectionLinks.forEach(link => {
-        if (link.getAttribute('href') === `#${id}`) link.setAttribute('aria-current', 'location');
-        else link.removeAttribute('aria-current');
-      });
-      if (homeLink) {
-        if (id === 'home') homeLink.setAttribute('aria-current', 'location');
-        else homeLink.removeAttribute('aria-current');
-      }
-    }
-
-    sectionLinks.forEach(link => link.addEventListener('click', () => {
-      const href = link.getAttribute('href');
-      if (href && href.startsWith('#')) setActiveSection(href.slice(1));
-    }));
-    if (homeLink) homeLink.addEventListener('click', () => {
-      closeNav();
-      setActiveSection('home');
     });
 
     function syncScrollState() {
       scrollFrame = 0;
       if (header) header.classList.toggle('is-scrolled', window.scrollY > 35);
-      const line = Math.max(110, window.innerHeight * .30);
-      let currentId = 'home';
-      for (const section of sections) {
-        if (section.getBoundingClientRect().top <= line) currentId = section.id;
-      }
-      if (sections.length && window.scrollY > 0 &&
-          window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
-        currentId = sections[sections.length - 1].id;
-      }
-      setActiveSection(currentId);
     }
 
     function scheduleScrollSync() {
@@ -232,7 +216,7 @@
 
     window.addEventListener('scroll', scheduleScrollSync, { passive: true });
     window.addEventListener('resize', () => {
-      if (!mobile.matches) closeNav();
+      closeNav();
       scheduleScrollSync();
     }, { passive: true });
     window.addEventListener('pageshow', () => {

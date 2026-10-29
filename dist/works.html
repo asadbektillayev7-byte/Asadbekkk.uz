@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#020303">
+  <meta name="description" content="Works — Asadbek’s personal space."><title>Works — Asadbek</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=10"><link rel="stylesheet" href="sections.css?v=10"><link rel="stylesheet" href="pages.css?v=10">
+  
+  <script defer src="content.js?v=10"></script>
+  <script defer src="site.js?v=10"></script>
+
+</head>
+<body class="inner-page page-works" data-page="works">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Asadbek — homepage">Asadbek</a>
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+      <a href="works.html" data-page="works" data-page-link>Works</a>
+      <a href="reading.html" data-page="reading" data-page-link>Reading</a>
+      <a data-resume-link role="link" tabindex="0" aria-disabled="true" title="Resume PDF coming soon">Resume</a>
+      <a href="personal.html" data-page="personal" data-page-link>Personal</a>
+      <a href="contact.html" data-page="contact" data-page-link>Reach</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="main-nav">Menu <span aria-hidden="true">＋</span></button>
+  </header>
+<main id="main-content">
+  <section class="work-section content-section" id="works" aria-labelledby="work-title">
+    <div class="section-kicker reveal"><span>01 / Works</span><span class="status-tag"><i></i> A work in progress</span></div>
+    <div class="section-heading reveal"><h1 id="work-title">Things in<br><span class="soft-type">progress.</span></h1><p>Mechanical things, small software ideas, and questions I want to follow. This is where their stories will live.</p></div>
+    <div class="work-toolbar reveal"><div class="project-filters" aria-label="Filter projects"><button data-project-filter="all" aria-pressed="true">All <sup>03</sup></button><button data-project-filter="mechanical" aria-pressed="false">Mechanical</button><button data-project-filter="software" aria-pressed="false">Software</button><button data-project-filter="research" aria-pressed="false">Research</button></div><span class="slot-note">Project details coming soon</span></div>
+    <p id="filter-status" class="sr-only" aria-live="polite"></p>
+    <div class="project-grid">
+      <button class="project-card mechanical-card reveal" data-category="mechanical" data-project="mechanical" data-open-dialog="project-dialog">
+        <div class="project-art mechanism-art" aria-hidden="true"><div class="art-coordinate">FIG. 01 / AN IDEA IN MOTION</div><svg viewBox="0 0 600 360" fill="none"><g stroke="currentColor"><ellipse cx="300" cy="180" rx="121" ry="121"/><ellipse cx="300" cy="180" rx="89" ry="89"/><ellipse cx="300" cy="180" rx="37" ry="37"/><ellipse cx="300" cy="180" rx="16" ry="16"/><path d="M300 59v84m0 74v84M179 180h84m74 0h84M214 94l60 60m52 52 60 60M214 266l60-60m52-52 60-60"/><path d="m300 36 10 17 20-14 6 20 23-8 1 21 24-1-5 22 24 7-12 18 21 14-17 14 16 21-21 7 8 24-23 1 1 23-23-6-7 22-19-12-14 20-14-18-21 15-7-22-24 8-1-23-23 1 6-23-22-7 12-19-20-14 18-14-15-21 22-7-8-24 23-1-1-23 23 6 7-22 19 12 14-20Z" transform="translate(-1 -1)"/><path d="M80 180h85m270 0h85M300 19v25m0 275v25" stroke-dasharray="3 7"/><path d="M179 322h242m-242-8v16m242-16v16" opacity=".45"/></g><text x="300" y="348" fill="currentColor" text-anchor="middle" font-size="10" letter-spacing="3">CURIOUS HOW IT WORKS</text></svg><span class="art-plus plus-one">+</span><span class="art-plus plus-two">+</span></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Mechanical / 01</span><span class="placeholder-label">Content to add</span></div><h3>Something<br>that moves.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Sketches, experiments, and lessons from making.</p></div>
+      </button>
+      <button class="project-card software-card reveal" data-category="software" data-project="software" data-open-dialog="project-dialog">
+        <div class="project-art software-art" aria-hidden="true"><div class="art-coordinate">FIG. 02 / FROM “WHAT IF” TO “IT WORKS”</div><div class="code-window"><div class="code-window-top"><i></i><i></i><i></i><span>A LITTLE EXPERIMENT</span></div><div class="code-symbol">{<span>✳</span>}</div><div class="code-lines"><i></i><i></i><i></i><i></i></div></div><div class="software-sticker">try.<br>break.<br>learn.</div></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Software / 02</span><span class="placeholder-label">Content to add</span></div><h3>An idea,<br>on screen.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Small builds. Some vibe-coding. Plenty to learn.</p></div>
+      </button>
+      <button class="project-card research-card reveal" data-category="research" data-project="research" data-open-dialog="project-dialog">
+        <div class="research-art" aria-hidden="true"><span>?</span><i></i><i></i><small>THE NEXT QUESTION</small></div><div class="project-card-copy"><div class="card-topline"><span>Research / 03</span><span class="placeholder-label">In preparation</span></div><h3>A question worth following.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Research is on the way. The story will grow with the work.</p></div>
+      </button>
+    </div>
+  </section>
+
+</main>
+  <dialog class="personal-dialog project-dialog" id="project-dialog" aria-labelledby="project-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close project">✕</button><div class="dialog-body"><span class="eyebrow" id="project-dialog-kind">Project slot</span><h2 id="project-dialog-title">A story to add.</h2><span class="draft-badge">CONTENT PLACEHOLDER</span><p id="project-dialog-summary"></p><h3>What will go here</h3><ul id="project-dialog-prompts"></ul><p class="draft-note">No project results or achievements have been filled in yet.</p></div></dialog>
+  <div class="site-notice" id="site-notice" role="status" aria-live="polite"></div>
+</body></html>
