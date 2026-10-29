@@ -1,0 +1,35 @@
+/* Shared dark surfaces and a normal, vertical landing page. */
+:root{color-scheme:dark}
+.page-home{height:auto;overflow-x:clip;overflow-y:visible}
+.page-home main.home-stack{height:auto;overflow:visible}
+.page-home .homepage{height:100svh}
+.page-home .landing-about{min-height:100svh;height:auto;padding:clamp(110px,18vh,180px) var(--edge) 110px;border-top:1px solid #1c2a3e;scroll-margin-top:0;background:#080d14}
+.page-home .landing-about-space{position:static;min-height:calc(100svh - 260px);display:grid;grid-template-columns:1fr 1fr;gap:10%;align-items:start}
+.about-scroll-link{position:absolute;z-index:6;left:50%;bottom:17px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;width:max-content;padding:5px 8px;color:#a1b4cd;font-size:10px;text-shadow:0 1px 8px #000}
+.about-scroll-link>span{font-size:19px}.about-scroll-link:hover{color:#eef5ff}
+.page-personal,.personal-section,.page-reading{background:#080d14;color:#dce5ef;color-scheme:dark}
+.personal-section .section-kicker{color:#8398b3}
+.personal-photo-intro h1 em{color:#a7b9d0}.personal-photo-intro>p{color:#97abc3}
+.photography-heading{border-color:#30435d}.photography-heading>span{color:#8397b3}
+.photo-slot{background:#111c29;border-color:#344861;box-shadow:4px 7px 16px #0003}
+.slot-two{background:#172330}.slot-three{background:#0d1825}
+.frame-number{color:#91a5bf}.photo-slot em{color:#9eb6d1}.photo-slot>div:last-child span{color:#839ab6}.viewfinder{color:#536d8c}
+.photo-slot:before,.photo-slot:after{border-color:#8ba6c140}
+.page-reading .site-header{background:#080d14ed;color:#dce5ef;border-color:#26354b}
+.page-reading .brand{color:#f3f6fb}.page-reading .main-nav>a{color:#a5b5ca}
+.page-reading .main-nav>a[aria-current],.page-reading .main-nav>a:hover{color:#f3f7fd}
+.page-reading .main-nav>a[aria-current]:after{background:#a7bedb}.page-reading .main-nav>[aria-disabled=true]{color:#61718a}
+.page-reading .book-shelf-track::after{background:#34465f}
+.page-reading #book-title{color:#dce5ef}.page-reading #book-author{color:#8a9fbd}.page-reading #book-note{color:#8297b5}.page-reading #book-counter{color:#a3b9d5}
+.page-reading .shelf-instructions{color:#69819f}
+.page-reading .book-controls button{border-color:#415673;color:#c3d5eb;background:transparent}
+.page-reading .book-controls button:hover{color:#152237;background:#c5d5eb}.page-reading .book-controls button:focus-visible,.page-reading .shelf-book:focus-visible{outline-color:#c6d9f1}
+.page-reading #book-detail-dialog{background:#111a25;color:#e3ecf6;border-color:#3a4f6a}
+.page-reading #book-detail-dialog p{color:#9bafc9}.page-reading #book-detail-dialog .dialog-close{border-color:#526b8a}.page-reading .book-detail-dialog .eyebrow{color:#849fbe}
+.site-notice{background:#182638;color:#d1dff1;border-color:#425975}
+@media(max-width:767px){
+ .page-home .landing-about{padding-top:125px;padding-bottom:80px}
+ .page-home .landing-about-space{display:block;min-height:calc(100svh - 205px)}
+ .about-scroll-link{bottom:17px;padding:5px 11px;background:#050a1299;border-radius:20px}
+ .page-reading .main-nav{background:#0a111cf7;border-color:#2b3b52}.page-reading .nav-toggle{color:#b8cce5}
+}

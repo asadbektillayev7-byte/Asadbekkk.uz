@@ -1,10 +1,10 @@
 # Asadbek — Personal Space
 
-A static personal website with a two-screen landing and separate Works, Reading, Personal, and Reach pages.
+A static personal website with a two-section landing and separate Works, Reading, Personal, and Reach pages.
 
 ## Landing
 
-`dist/index.html` contains only the Asadbek / Portfolio opening and a neighboring screen titled **Little about me**. Arrows, swipe, and keyboard move horizontally between them. Neither screen adds vertical page length. Only the original first portrait (`cutout-2.webp`, white collared shirt) is used. The name links back to the landing.
+`dist/index.html` contains only the Asadbek / Portfolio opening and a section below titled **Little about me**. Scroll down normally, or use the downward link, to reach Little about me. The two sections are stacked vertically; there are no horizontal screen controls. Only the original first portrait (`cutout-2.webp`, white collared shirt) is used. The name links back to the landing.
 
 ## Navigation
 
@@ -39,15 +39,17 @@ Ratings are author-supplied display data on a 1–5 scale, including half stars.
 
 ## Files
 
-- `index.html`, `landing.js`, `app.js`, `portrait.js`: landing screens and opening.
+- `index.html`, `app.js`, `portrait.js`: landing screens and opening.
 - `works.html`, `personal.html`, `reading.html`, `contact.html`: separate destinations.
 - `site.js`: shared menu, direct-PDF configuration, notices, project dialogs.
 - `bookshelf.js`, `bookshelf.css`: book models, accordion interaction and ratings.
 - `content.js`: name, portrait, project slots, resume path, contacts and books.
-- `styles.css`, `sections.css`, `pages.css`: shared appearance and responsive layouts.
+- `styles.css`, `sections.css`, `pages.css`, `theme.css`: shared appearance and responsive layouts.
 
 Preview with `python3 -m http.server 4173 --directory dist`. No build or database.
 
 Hosted private preview: https://asadbek-in-motion.fuzzybetta33.chatgpt.site
 
 Design references: https://demo.codeandchill.store/portfolio/#home and https://dribbble.com/shots/23071484-Artspace-Book-Slider-Animation. Reference media, template branding, and actual book covers are not included.
+
+All page backgrounds, navigation, photography placeholders, and book details use the dark theme. Book covers keep their individual colors.
