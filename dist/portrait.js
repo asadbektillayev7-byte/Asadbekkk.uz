@@ -1,4 +1,4 @@
-/* Asadbekkk's real cutout supplies a regular mosaic and its faint detail layer.
+/* Asadbek's real cutout supplies a regular mosaic and its faint detail layer.
    The tiles retain the photograph's shadows instead of adding white noise. */
 (() => {
   'use strict';

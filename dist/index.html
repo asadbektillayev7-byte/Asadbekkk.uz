@@ -4,49 +4,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#020303">
-  <meta name="description" content="Asadbekkk. Student. Still exploring. A personal homepage in motion.">
-  <title>Asadbekkk — Personal Space</title>
+  <meta name="description" content="Asadbek. Student. Still exploring. A personal homepage in motion.">
+  <title>Asadbek — Personal Space</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preload" as="image" href="assets/cutouts/cutout-5.webp">
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="content.js"></script>
-  <script defer src="portrait.js"></script>
-  <script defer src="visit-opening.js"></script>
-  <script defer src="app.js"></script>
-  <script defer src="home.js"></script>
+  <link rel="preload" as="image" href="assets/cutouts/cutout-2.webp">
+  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="sections.css?v=8">
+  <script defer src="content.js?v=8"></script>
+  <script defer src="portrait.js?v=8"></script>
+  <script defer src="visit-opening.js?v=8"></script>
+  <script defer src="app.js?v=8"></script>
+  <script defer src="site.js?v=8"></script>
 </head>
 <body class="is-loading">
-  <main class="homepage" id="home" aria-label="Asadbekkk’s personal homepage">
+  <a class="skip-link" href="#works">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Asadbek — homepage">Asadbek</a>
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+      <a href="#works" data-section-link>Works</a><a href="#resume" data-section-link>Resume</a><a href="#personal" data-section-link>Personal</a><a href="#reading" data-section-link>Reading</a><a href="#contact" data-section-link>Contact</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="main-nav">Menu <span aria-hidden="true">＋</span></button>
+  </header>
+  <main>
+  <section class="homepage" id="home" aria-label="Asadbek’s personal homepage">
     <div class="atmosphere" aria-hidden="true"></div>
-    <canvas class="portrait-canvas" id="portrait-canvas" role="img" aria-label="Asadbekkk facing the camera in a school T-shirt, rendered in a fine grayscale mosaic"></canvas>
-    <img class="portrait-fallback" id="portrait-fallback" src="assets/cutouts/cutout-5.webp" alt="Asadbekkk facing the camera in a school T-shirt" aria-hidden="true">
+    <canvas class="portrait-canvas" id="portrait-canvas" role="img" aria-label="Asadbek facing the camera in a white collared shirt, rendered in a fine grayscale mosaic"></canvas>
+    <img class="portrait-fallback" id="portrait-fallback" src="assets/cutouts/cutout-2.webp" alt="Asadbek facing the camera in a white collared shirt" aria-hidden="true">
     <div class="portrait-shade" aria-hidden="true"></div>
-    <header class="site-header">
-      <button class="brand" data-open-dialog="about-dialog" aria-label="About Asadbekkk">Asadbekkk</button>
-      <nav class="header-right" aria-label="Homepage controls">
-        <a class="home-label" href="#home" aria-current="page">Home</a>
-        <button class="portraits-control" id="portraits-control" aria-controls="photo-panel" aria-expanded="false">Portraits <span aria-hidden="true">＋</span></button>
-        <button class="contact-nav" data-open-dialog="contact-dialog">Contact</button>
-        <button class="intro-control" id="intro-control">Skip intro <span aria-hidden="true">↗</span></button>
-      </nav>
-    </header>
     <div class="opening-mark" aria-hidden="true"><span></span></div>
     <div class="title-stage" id="title-stage">
       <div class="name-word metal-word" id="name-word" aria-hidden="true"></div>
-      <h1 class="portfolio-word metal-word" id="portfolio-word" aria-label="Asadbekkk’s portfolio">PORTFOLIO</h1>
-      <div class="hero-details">
-        <p class="descriptor"><strong>Student.</strong> <em>Still exploring.</em></p>
-        <button class="contact-action" data-open-dialog="contact-dialog"><span class="contact-icon" aria-hidden="true">↙</span><span>Contact</span></button>
+      <h1 class="portfolio-word metal-word" id="portfolio-word" aria-label="Asadbek’s portfolio">PORTFOLIO</h1>
+      <div class="hero-details"><p class="descriptor"><strong>Student.</strong> <em>Still exploring.</em></p><a class="contact-action" href="#contact"><span class="contact-icon" aria-hidden="true">↙</span><span>Contact</span></a></div>
+    </div>
+    <div class="hero-bottom"><a class="scroll-cue" href="#works"><span aria-hidden="true">↓</span> A little more below</a><button class="intro-control" id="intro-control">Skip intro <span aria-hidden="true">↗</span></button></div>
+    <p class="sr-only" id="photo-status" aria-live="polite"></p>
+    <noscript><style>.title-stage,.site-header,.hero-details{opacity:1!important}.portrait-fallback{opacity:.8!important}.intro-control{display:none}</style></noscript>
+  </section>
+  <div class="interest-strip" aria-label="Interests"><span>Mechanical things</span><b aria-hidden="true">✳</b><span>Software experiments</span><b aria-hidden="true">✳</b><span>Looking closer</span><b aria-hidden="true">✳</b><span>Still learning</span></div>
+  <section class="work-section content-section" id="works" aria-labelledby="work-title">
+    <div class="section-kicker reveal"><span>01 / Works</span><span class="status-tag"><i></i> A work in progress</span></div>
+    <div class="section-heading reveal"><h2 id="work-title">Things in<br><span class="soft-type">progress.</span></h2><p>Mechanical things, small software ideas, and questions I want to follow. This is where their stories will live.</p></div>
+    <div class="work-toolbar reveal"><div class="project-filters" aria-label="Filter projects"><button data-project-filter="all" aria-pressed="true">All <sup>03</sup></button><button data-project-filter="mechanical" aria-pressed="false">Mechanical</button><button data-project-filter="software" aria-pressed="false">Software</button><button data-project-filter="research" aria-pressed="false">Research</button></div><span class="slot-note">Project details coming soon</span></div>
+    <p id="filter-status" class="sr-only" aria-live="polite"></p>
+    <div class="project-grid">
+      <button class="project-card mechanical-card reveal" data-category="mechanical" data-project="mechanical" data-open-dialog="project-dialog">
+        <div class="project-art mechanism-art" aria-hidden="true"><div class="art-coordinate">FIG. 01 / AN IDEA IN MOTION</div><svg viewBox="0 0 600 360" fill="none"><g stroke="currentColor"><ellipse cx="300" cy="180" rx="121" ry="121"/><ellipse cx="300" cy="180" rx="89" ry="89"/><ellipse cx="300" cy="180" rx="37" ry="37"/><ellipse cx="300" cy="180" rx="16" ry="16"/><path d="M300 59v84m0 74v84M179 180h84m74 0h84M214 94l60 60m52 52 60 60M214 266l60-60m52-52 60-60"/><path d="m300 36 10 17 20-14 6 20 23-8 1 21 24-1-5 22 24 7-12 18 21 14-17 14 16 21-21 7 8 24-23 1 1 23-23-6-7 22-19-12-14 20-14-18-21 15-7-22-24 8-1-23-23 1 6-23-22-7 12-19-20-14 18-14-15-21 22-7-8-24 23-1-1-23 23 6 7-22 19 12 14-20Z" transform="translate(-1 -1)"/><path d="M80 180h85m270 0h85M300 19v25m0 275v25" stroke-dasharray="3 7"/><path d="M179 322h242m-242-8v16m242-16v16" opacity=".45"/></g><text x="300" y="348" fill="currentColor" text-anchor="middle" font-size="10" letter-spacing="3">CURIOUS HOW IT WORKS</text></svg><span class="art-plus plus-one">+</span><span class="art-plus plus-two">+</span></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Mechanical / 01</span><span class="placeholder-label">Content to add</span></div><h3>Something<br>that moves.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Sketches, experiments, and lessons from making.</p></div>
+      </button>
+      <button class="project-card software-card reveal" data-category="software" data-project="software" data-open-dialog="project-dialog">
+        <div class="project-art software-art" aria-hidden="true"><div class="art-coordinate">FIG. 02 / FROM “WHAT IF” TO “IT WORKS”</div><div class="code-window"><div class="code-window-top"><i></i><i></i><i></i><span>A LITTLE EXPERIMENT</span></div><div class="code-symbol">{<span>✳</span>}</div><div class="code-lines"><i></i><i></i><i></i><i></i></div></div><div class="software-sticker">try.<br>break.<br>learn.</div></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Software / 02</span><span class="placeholder-label">Content to add</span></div><h3>An idea,<br>on screen.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Small builds. Some vibe-coding. Plenty to learn.</p></div>
+      </button>
+      <button class="project-card research-card reveal" data-category="research" data-project="research" data-open-dialog="project-dialog">
+        <div class="research-art" aria-hidden="true"><span>?</span><i></i><i></i><small>THE NEXT QUESTION</small></div><div class="project-card-copy"><div class="card-topline"><span>Research / 03</span><span class="placeholder-label">In preparation</span></div><h3>A question worth following.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Research is on the way. The story will grow with the work.</p></div>
+      </button>
+    </div>
+  </section>
+
+  <section class="resume-section content-section" id="resume" aria-labelledby="resume-title">
+    <div class="section-kicker reveal"><span>02 / Resume</span><span class="status-tag">Details to be added</span></div>
+    <div class="resume-layout"><div class="resume-intro reveal"><h2 id="resume-title">The story,<br><span class="soft-type">so far.</span></h2><p>A space for my education, experience, and the things I’ve been part of.</p><button class="text-link" data-open-dialog="resume-dialog">View resume draft <span aria-hidden="true">↗</span></button><div class="resume-mark" aria-hidden="true">↳</div></div>
+      <div class="resume-list reveal">
+        <article class="resume-row"><span>01</span><div><h3>Education</h3><p>School, academic details, and the next chapter.</p><small>School and dates to add</small></div></article>
+        <article class="resume-row"><span>02</span><div><h3>Experience & internships</h3><p>The work, my contribution, and what I learned.</p><small>Roles and details to add</small></div></article>
+        <article class="resume-row"><span>03</span><div><h3>Leadership & activities</h3><p>Teams, extracurriculars, and things I helped move forward.</p><small>Activities and contributions to add</small></div></article>
+        <article class="resume-row"><span>04</span><div><h3>Volunteering</h3><p>Where I contributed, and why it mattered to me.</p><small>Experiences and details to add</small></div></article>
       </div>
     </div>
-    <aside class="home-footer" id="photo-panel" aria-label="Portrait selection" hidden>
-      <div class="photo-picker"><div class="picker-label"><span>Different moments. Same me.</span><span id="photo-count">03 / 04</span></div><div class="photo-thumbnails" id="photo-thumbnails"></div></div>
-      <button class="next-photo" id="next-photo">Next photo <span aria-hidden="true">↗</span></button>
-    </aside>
-    <p class="sr-only" id="photo-status" aria-live="polite"></p>
-    <noscript><style>.title-stage,.site-header,.hero-details{opacity:1!important}.portrait-fallback{opacity:.8!important}.portraits-control,.intro-control{display:none}</style></noscript>
+  </section>
+  <section class="personal-section content-section" id="personal" aria-labelledby="personal-title">
+    <div class="section-kicker reveal"><span>03 / Personal</span><span>A little less formal.</span></div>
+    <div class="personal-heading reveal"><h2 id="personal-title">Just<br><span class="soft-type">Asadbek.</span><span class="personal-asterisk" aria-hidden="true">✳</span></h2><div class="personal-intro"><p class="personal-lead">A student. A curious person.<br>Still figuring things out.</p><p>I’m interested in mechanical engineering, I mess around with software and a little vibe-coding, and I’m into photography.</p><p>I’m preparing for undergraduate study. This space is for the things I try, the things I learn, and the parts of life in between.</p><div class="interest-tags"><span>Mechanical engineering</span><span>Software experiments</span><span>Photography</span></div></div></div>
+    <div class="photography-heading reveal"><h3>Things that catch my eye.</h3><span>PHOTOGRAPHY / TO BE ADDED</span></div>
+    <div class="contact-sheet reveal" aria-label="Photography collection placeholders. Photographs will be added later.">
+      <div class="photo-slot slot-one"><span class="frame-number">FRAME / 001</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A place.</em><span>Photograph to come</span></div></div>
+      <div class="photo-slot slot-two"><span class="frame-number">FRAME / 002</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A detail.</em><span>Photograph to come</span></div></div>
+      <div class="photo-slot slot-three"><span class="frame-number">FRAME / 003</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A moment.</em><span>Photograph to come</span></div></div>
+    </div>
+  </section>
+  <section class="reading-section content-section" id="reading" aria-labelledby="reading-title">
+    <div class="section-kicker reveal"><span>04 / Reading</span><span>Books, articles, and things to revisit.</span></div>
+    <div class="reading-layout"><div class="reading-intro reveal"><h2 id="reading-title">One more<br><span class="soft-type">page.</span></h2><p>A little shelf for what I’m reading, what stayed with me, and what I want to pick up next.</p><div class="open-book" aria-hidden="true"><div><i></i><i></i><i></i><i></i><i></i></div><div><i></i><i></i><i></i><i></i><i></i></div><span>TO BE CONTINUED</span></div></div>
+      <div class="reading-shelf reveal">
+        <button class="reading-row" data-reading-status="current" data-open-dialog="reading-dialog"><span class="shelf-index">01</span><div><span class="shelf-label">Currently reading</span><h3>On my desk.</h3><p>My current book or article will go here.</p></div><span class="shelf-arrow" aria-hidden="true">↗</span></button>
+        <button class="reading-row" data-reading-status="finished" data-open-dialog="reading-dialog"><span class="shelf-index">02</span><div><span class="shelf-label">Finished</span><h3>Worth keeping.</h3><p>A place for the reads I want to remember.</p></div><span class="shelf-arrow" aria-hidden="true">↗</span></button>
+        <button class="reading-row" data-reading-status="next" data-open-dialog="reading-dialog"><span class="shelf-index">03</span><div><span class="shelf-label">Up next</span><h3>The next page.</h3><p>Books and articles on my list.</p></div><span class="shelf-arrow" aria-hidden="true">↗</span></button>
+        <p class="shelf-note">The shelf is ready. Reading titles haven’t been added yet.</p>
+      </div>
+    </div>
+  </section>
+  <section class="contact-section content-section" id="contact" aria-labelledby="contact-title">
+    <div class="section-kicker reveal"><span>05 / Contact</span><span>For an idea, a question, or a hello.</span></div>
+    <div class="contact-heading reveal"><h2 id="contact-title">Say hello.<span aria-hidden="true">↗</span></h2><div class="contact-details"><div><span>Email</span><p>Coming soon</p></div><div><span>Elsewhere</span><p>Social links to add</p></div><p class="contact-note">My contact details will appear here once they’re ready to share.</p></div></div>
+    <footer class="site-footer"><a class="brand" href="#home">Asadbek</a><span>A personal space. Still becoming.</span><a href="#home">Back to the top <span aria-hidden="true">↑</span></a></footer>
+  </section>
   </main>
-  <dialog class="personal-dialog" id="about-dialog" aria-labelledby="about-title"><button class="dialog-close" data-close-dialog aria-label="Close introduction">✕</button><span class="eyebrow">A little introduction</span><h2 id="about-title">Just Asadbekkk.</h2><p>I’m a student, interested in mechanical engineering, experimenting with a little software and vibe-coding, and into photography.</p><p>Still learning. Still figuring things out.</p><p class="draft-note">More of my story will go here.</p></dialog>
-  <dialog class="personal-dialog" id="contact-dialog" aria-labelledby="contact-title"><button class="dialog-close" data-close-dialog aria-label="Close contact">✕</button><span class="eyebrow">Keep in touch</span><h2 id="contact-title">Hello, soon.</h2><p>My email and social links will go here. Contact details haven’t been added yet.</p><button class="dialog-back" data-close-dialog>Back to the homepage <span aria-hidden="true">↗</span></button></dialog>
+  <dialog class="personal-dialog project-dialog" id="project-dialog" aria-labelledby="project-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close project">✕</button><div class="dialog-body"><span class="eyebrow" id="project-dialog-kind">Project slot</span><h2 id="project-dialog-title">A story to add.</h2><span class="draft-badge">CONTENT PLACEHOLDER</span><p id="project-dialog-summary"></p><h3>What will go here</h3><ul id="project-dialog-prompts"></ul><p class="draft-note">No project results or achievements have been filled in yet.</p></div></dialog>
+  <dialog class="personal-dialog resume-dialog" id="resume-dialog" aria-labelledby="resume-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close resume draft">✕</button><div class="resume-document dialog-body"><span class="eyebrow">Resume / working draft</span><h2 id="resume-dialog-title">Asadbek.</h2><p class="cv-subtitle">Student · Prospective undergraduate</p><div class="cv-block"><h3>Academic interests</h3><p>Mechanical engineering, software, and research.</p></div><div class="cv-block"><h3>Education</h3><p class="draft-note">School, dates, and academic details to add.</p></div><div class="cv-block"><h3>Projects & research</h3><p class="draft-note">Project titles, my contributions, and evidence to add.</p></div><div class="cv-block"><h3>Experience & community</h3><p class="draft-note">Work, internships, extracurriculars, leadership, and volunteering details to add.</p></div><div class="cv-block"><h3>Other interests</h3><p>Photography.</p></div><div class="cv-block"><h3>Contact</h3><p class="draft-note">Contact details and links to add.</p></div><p class="cv-draft-warning">This is a content draft. Fill in the details before using it for applications.</p></div><div class="dialog-actions"><button class="solid-button" data-print-resume>Print / save as PDF <span aria-hidden="true">↗</span></button></div></dialog>
+  <dialog class="personal-dialog reading-dialog" id="reading-dialog" aria-labelledby="reading-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close reading shelf">✕</button><span class="eyebrow">Reading shelf</span><h2 id="reading-dialog-title">On my desk.</h2><p id="reading-dialog-copy">Reading titles will be added here.</p><p class="draft-note">No reading titles have been filled in yet.</p><button class="dialog-back" data-close-dialog>Back to the shelf <span aria-hidden="true">↗</span></button></dialog>
 </body>
 </html>

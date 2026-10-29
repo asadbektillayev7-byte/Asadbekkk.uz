@@ -10,8 +10,7 @@
   const mark = document.querySelector('.opening-mark');
   const canvas = document.querySelector('#portrait-canvas');
   const fallback = document.querySelector('#portrait-fallback');
-  const thumbnails = document.querySelector('#photo-thumbnails');
-  const footer = document.querySelector('.home-footer');
+  const hero = document.querySelector('.homepage');
   const heroDetails = document.querySelector('.hero-details');
   const status = document.querySelector('#photo-status');
   const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -23,16 +22,15 @@
       || { photoIndex: data.initialPhoto || 0, variantId: 'tumble' };
   }
   let visitOpening = pickVisitOpening();
-  let currentPhoto = Math.max(0, Math.min(data.photos.length - 1, visitOpening.photoIndex));
+  const currentPhoto = 0;
   let scene = null;
-  let sceneReady = Promise.resolve(false);
   let openingFrame = null;
   let openingStarted = 0;
   let openingRun = 0;
   let openingFinished = false;
   let animations = [];
-  let photoRequest = 0;
   let resizeFrame = null;
+  let heroInView = !hero || (hero.getBoundingClientRect().bottom > 0 && hero.getBoundingClientRect().top < innerHeight);
   function setSceneFallback(active) {
     body.classList.toggle('scene-fallback', active);
     canvas.setAttribute('aria-hidden', String(active));
@@ -52,8 +50,6 @@
     portfolioWord.append(half);
   });
   portfolioLetters.forEach((letter, index) => titleHalves[index < 4 ? 0 : 1].append(letter));
-  const originalName = Array.from(data.introName || data.name.toUpperCase());
-  const finalTitle = Array.from(data.title || 'PORTFOLIO');
   function animate(element, keyframes, options) {
     const animation = element.animate(keyframes, { fill: 'forwards', ...options });
     animations.push(animation);
@@ -78,7 +74,6 @@
   function finishOpening() {
     cancelOpeningAnimations();
     openingFinished = true;
-    footer.inert = false;
     if (heroDetails) heroDetails.inert = false;
     body.classList.remove('is-loading', 'is-opening');
     body.classList.add('is-revealing', 'is-portrait-revealing', 'is-ready');
@@ -94,11 +89,10 @@
   }
   async function startOpening() {
     body.dataset.opening = visitOpening.variantId;
-    if (motionPreference.matches) { finishOpening(); return; }
+    if (motionPreference.matches || document.hidden || !heroInView) { finishOpening(); return; }
     cancelOpeningAnimations();
     const run = openingRun;
     openingFinished = false;
-    footer.inert = true;
     if (heroDetails) heroDetails.inert = true;
     body.classList.remove('is-loading', 'is-revealing', 'is-portrait-revealing', 'is-ready');
     body.classList.add('is-opening');
@@ -109,13 +103,11 @@
     mark.style.opacity = '0';
     titleHalves.forEach(half => { half.style.transform = 'none'; });
     portfolioWord.style.columnGap = '0px';
-    nameLetters.forEach((letter, index) => {
-      letter.textContent = originalName[index] || '';
-      letter.dataset.letter = originalName[index] || '';
+    nameLetters.forEach(letter => {
       letter.style.opacity = '0';
       letter.style.transform = 'none';
     });
-    portfolioLetters.forEach(letter => { letter.style.opacity = '1'; letter.style.transform = 'none'; });
+    portfolioLetters.forEach(letter => { letter.style.opacity = '0'; letter.style.transform = 'none'; });
     scene?.setProgress(0);
     scene?.setFormation(visitOpening.variantId);
     introControl.innerHTML = 'Skip intro <span aria-hidden="true">↗</span>';
@@ -190,6 +182,29 @@
     }
     toss(left, -1, 1810);
     toss(right, 1, 2490);
+    // The two words have different lengths. Each source glyph turns away while
+    // the complete title is already laid out, so the last two letters also
+    // arrive without mutating the name or changing its width mid-animation.
+    const titleRects = portfolioLetters.map(letter => letter.getBoundingClientRect());
+    nameLetters.forEach((letter, index) => {
+      const from = glyphRects[index];
+      const to = titleRects[index];
+      const dx = to.left + to.width / 2 - (from.left + from.width / 2);
+      animate(letter, [
+        { opacity: 1, transform: 'translateX(0) rotateX(0deg)' },
+        { opacity: 0, transform: `translateX(${dx}px) rotateX(90deg)` }
+      ], { delay: 3830 + index * 115, duration: 320, easing: 'cubic-bezier(.5,0,.8,.5)' });
+    });
+    portfolioWord.style.opacity = '1';
+    portfolioLetters.forEach((letter, index) => {
+      const source = glyphRects[Math.min(index, glyphRects.length - 1)];
+      const target = titleRects[index];
+      const dx = source.left + source.width / 2 - (target.left + target.width / 2);
+      animate(letter, [
+        { opacity: 0, transform: `translateX(${dx * .16}px) translateY(8px) rotateX(-90deg)` },
+        { opacity: 1, transform: 'translateX(0) translateY(0) rotateX(0deg)' }
+      ], { delay: 4000 + index * 115, duration: 420, easing: 'cubic-bezier(.18,.8,.2,1)' });
+    });
     const glideAt = 5200;
     const portraitAt = 5480;
     const separation = titleSeparation();
@@ -200,84 +215,41 @@
       { columnGap: `${separation}px` }
     ], { delay: glideAt + 320, duration: 1500, easing: 'cubic-bezier(.16,.7,.25,1)' });
     openingStarted = performance.now();
-    let changedLetters = 0;
-    let titleShown = false;
+    let nameHidden = false;
     function tick(now) {
       if (openingFinished || run !== openingRun) return;
       const elapsed = now - openingStarted;
-      const morphCount = Math.min(finalTitle.length, Math.max(0, Math.floor((elapsed - 3750) / 145)));
-      while (changedLetters < morphCount) {
-        const glyph = nameLetters[changedLetters];
-        if (glyph) { glyph.textContent = finalTitle[changedLetters]; glyph.dataset.letter = finalTitle[changedLetters]; }
-        ++changedLetters;
-      }
-      if (!titleShown && elapsed >= 5110) {
-        titleShown = true;
+      if (!nameHidden && elapsed >= 4880) {
+        nameHidden = true;
         nameWord.style.display = 'none';
-        portfolioWord.style.opacity = '1';
       }
       if (elapsed > portraitAt) body.classList.add('is-portrait-revealing');
-      if (elapsed > glideAt + 480) { body.classList.add('is-revealing'); footer.inert = false; if (heroDetails) heroDetails.inert = false; }
+      if (elapsed > glideAt + 480) { body.classList.add('is-revealing'); if (heroDetails) heroDetails.inert = false; }
       scene?.setProgress(clamp((elapsed - portraitAt) / 1950));
       if (elapsed >= 7650) { finishOpening(); return; }
       openingFrame = requestAnimationFrame(tick);
     }
     openingFrame = requestAnimationFrame(tick);
   }
-  function updatePicker(index, announce = true) {
-    const photo = data.photos[index];
-    document.querySelectorAll('.photo-thumb').forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
-    document.querySelector('#photo-count').textContent = `${String(index + 1).padStart(2, '0')} / ${String(data.photos.length).padStart(2, '0')}`;
-    fallback.src = photo.src;
-    fallback.alt = photo.alt;
-    canvas.setAttribute('aria-label', `${photo.alt}, rendered in a fine grayscale mosaic`);
-    if (announce) status.textContent = `${photo.label}. Photo ${index + 1} of ${data.photos.length}.`;
-  }
-  async function choosePhoto(index) {
-    if (!openingFinished) finishOpening();
-    const request = ++photoRequest;
-    currentPhoto = (index + data.photos.length) % data.photos.length;
-    updatePicker(currentPhoto);
-    const target = currentPhoto;
-    await sceneReady;
-    if (request !== photoRequest) return;
-    const selectedScene = scene;
-    if (selectedScene?.ready) {
-      const success = await selectedScene.setPhoto(target, { animate: !motionPreference.matches });
-      if (request !== photoRequest || scene !== selectedScene) return;
-      setSceneFallback(!success);
-    } else setSceneFallback(true);
-  }
-  thumbnails.innerHTML = data.photos.map((photo, index) => `<button class="photo-thumb" data-photo="${index}" aria-label="Show photo ${index + 1}: ${esc(photo.label)}" aria-pressed="${index === currentPhoto}"><img src="${esc(photo.src)}" alt="${esc(photo.alt)}" draggable="false"></button>`).join('');
-  thumbnails.addEventListener('click', event => {
-    const button = event.target.closest('[data-photo]');
-    if (button) choosePhoto(Number(button.dataset.photo));
-  });
-  thumbnails.addEventListener('keydown', event => {
-    if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
-    event.preventDefault();
-    let next = currentPhoto;
-    if (event.key === 'ArrowRight') next = (currentPhoto + 1) % data.photos.length;
-    if (event.key === 'ArrowLeft') next = (currentPhoto - 1 + data.photos.length) % data.photos.length;
-    if (event.key === 'Home') next = 0;
-    if (event.key === 'End') next = data.photos.length - 1;
-    choosePhoto(next);
-    thumbnails.children[next].focus();
-  });
-  document.querySelector('#next-photo').addEventListener('click', () => choosePhoto(currentPhoto + 1));
   introControl.addEventListener('click', () => openingFinished ? startOpening() : finishOpening());
-  updatePicker(currentPhoto, false);
+  fallback.src = data.photos[currentPhoto].src;
+  fallback.alt = data.photos[currentPhoto].alt;
+  canvas.setAttribute('aria-label', `${data.photos[currentPhoto].alt}, rendered in a fine grayscale mosaic`);
+  if (status) status.textContent = '';
+  function updateScenePause() {
+    scene?.setPaused(document.hidden || !heroInView);
+  }
   function createScene() {
-    ++photoRequest;
     scene?.destroy();
     try {
       const createdScene = new window.PortraitParticles({ canvas, photos: data.photos, initialIndex: currentPhoto, reducedMotion: motionPreference.matches });
       scene = createdScene;
       createdScene.setFormation(visitOpening.variantId);
       if (openingFinished) createdScene.setProgress(1);
-      sceneReady = createdScene.init().then(success => {
+      createdScene.init().then(success => {
         if (scene !== createdScene) return false;
         setSceneFallback(!success);
+        updateScenePause();
         return success;
       }).catch(() => {
         if (scene === createdScene) setSceneFallback(true);
@@ -285,29 +257,39 @@
       });
     } catch {
       scene = null;
-      sceneReady = Promise.resolve(false);
       setSceneFallback(true);
     }
   }
   createScene();
   startOpening();
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (link && link.hash && link.hash !== '#home' && !openingFinished) finishOpening();
+  });
+  if (hero && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      heroInView = entries[0].isIntersecting;
+      if (!heroInView && !openingFinished) finishOpening();
+      updateScenePause();
+    }, { threshold: 0 });
+    observer.observe(hero);
+  }
   window.addEventListener('pointermove', event => {
-    if (event.pointerType !== 'mouse' || motionPreference.matches) return;
-    scene?.setPointer(event.clientX / innerWidth * 2 - 1, event.clientY / innerHeight * 2 - 1);
+    if (event.pointerType !== 'mouse' || motionPreference.matches || !heroInView) return;
+    const bounds = hero?.getBoundingClientRect() || { left: 0, top: 0, width: innerWidth, height: innerHeight };
+    scene?.setPointer((event.clientX - bounds.left) / bounds.width * 2 - 1, (event.clientY - bounds.top) / bounds.height * 2 - 1);
   }, { passive: true });
   document.documentElement.addEventListener('pointerleave', () => scene?.setPointer(0, 0));
   window.addEventListener('resize', () => {
     if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
     resizeFrame = requestAnimationFrame(() => { scene?.resize(); if (openingFinished) { stage.style.top = finalTop(); setFinalTitle(); } });
   });
-  document.addEventListener('visibilitychange', () => scene?.setPaused(document.hidden));
+  document.addEventListener('visibilitychange', updateScenePause);
   motionPreference.addEventListener('change', () => { finishOpening(); createScene(); });
-  window.addEventListener('pagehide', () => { ++photoRequest; cancelOpeningAnimations(); scene?.destroy(); scene = null; });
+  window.addEventListener('pagehide', () => { cancelOpeningAnimations(); scene?.destroy(); scene = null; });
   window.addEventListener('pageshow', event => {
     if (!event.persisted) return;
     visitOpening = pickVisitOpening();
-    currentPhoto = Math.max(0, Math.min(data.photos.length - 1, visitOpening.photoIndex));
-    updatePicker(currentPhoto, false);
     createScene();
     startOpening();
   });

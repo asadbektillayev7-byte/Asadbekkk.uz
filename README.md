@@ -1,34 +1,32 @@
-# Asadbekkk’s homepage
+# Asadbek — Personal Space
 
-A homepage inspired by the original Code and Chill portfolio demo. It uses a black canvas, fine silver-blue mosaic portraits, and a bouncing-dot / flying-letter opening that changes ASADBEKKK into PORTFOLIO.
+A personal student portfolio with a video-inspired silver mosaic opening and five live sections: Works, Resume, Personal, Reading, Contact.
 
-Only the homepage is active. On desktop the large flat silver title sits over the lower portrait; on mobile it sits above the portrait, following the live demo’s composition. The supporting line is **Student. Still exploring.** Name-click opens a short personal introduction; Contact opens an honest placeholder until contact details are supplied. No service or professional-engineer claims are used.
+## Current content
 
-## Photographs
+Only the first photo from the previous set remains: `dist/assets/cutouts/cutout-2.webp`, the white collared-shirt portrait. Other deployed portrait assets were removed; original user files are untouched. The brand is **Asadbek** and links to the homepage. The Home and Portraits controls are removed.
 
-Only original cutouts **2, 3, 5, and 6** are active. Photos 1 and 4 remain excluded. Source files are unchanged in `dist/assets/cutouts/`; the renderer uses their alpha channels and preserves their aspect and alpha edges. Desktop contains the complete cutout; mobile enlarges frontal portraits like the demo, with shoulders allowed to extend past the screen. The wide pose stays contained so both hands remain visible.
+The opening supports the seven-letter ASADBEK → nine-letter PORTFOLIO transition. Each visit can choose one of three opening variations with the same selected portrait. Replay retains the current variation; Skip and reduced motion show the finished scene. The portrait pauses when the hero leaves the screen.
 
-The portrait uses a regular square mosaic lattice sampled from the actual photograph. Tile brightness follows source luminance, with dark gaps and a faint grayscale source layer to retain facial detail. It does not generate or replace the face. Original files are around 439–512 pixels, so their resolution limits fine detail.
+Works has three project slots with category filters and detail dialogs. Resume has education, work/internships, leadership/activities, and volunteering slots plus a printable draft. Personal contains a short introduction and photography placeholders. Reading has current, finished, and next shelves ready for real titles. Contact has clear placeholders for email and social links. No unsupplied achievements, books, employers, dates, or contact information are invented.
 
-Edit names, photo paths, descriptions, and fallback selection in `dist/content.js`. The **Portraits** control opens the four-photo picker, with Next photo and keyboard arrow controls.
+## Editing
 
-## Opening
+- `dist/content.js`: name, chosen photo, project titles/descriptions/prompts.
+- `dist/index.html`: section content, resume draft, personal text, photography slots, contact fields.
+- `dist/styles.css`: opening and base styles.
+- `dist/sections.css`: navigation, sections, responsive layouts, and resume print styles.
+- `dist/app.js`: intro and single-portrait lifecycle.
+- `dist/portrait.js`: source-sampled mosaic; real source shadows and alpha edges are preserved.
+- `dist/site.js`: menu, filters, dialogs, active section links, resume printing.
+- `dist/visit-opening.js`: browser-local opening selection.
 
-Each new visit selects a portrait and one of three variations of the same opening sequence. Browser-local shuffle bags cycle through the photos and formations without consecutive repeats. Replay keeps the current visit’s choice. Skip intro immediately finishes the scene; opening Portraits also skips to the assembled state.
+Replace clearly labeled placeholders with verified details before using the resume for applications. The Print / save as PDF button uses the browser's print dialog.
 
-The introduction lasts about eight seconds. Reduced-motion preferences show a static completed portrait. The renderer pauses when the page is hidden, rests after assembly, and falls back to the source photograph if Canvas cannot initialize.
+The inactive `drafts/full-site/` folder is retained from an earlier layout and is not served or deployed.
 
-## Files
-
-- `dist/index.html`, `dist/styles.css`: active homepage and responsive layout.
-- `dist/app.js`: opening, photo controls, and lifecycle handling.
-- `dist/portrait.js`: source-sampled mosaic renderer.
-- `dist/home.js`: portrait panel and small homepage dialogs.
-- `dist/visit-opening.js`: browser-local randomized selection.
-- `drafts/full-site/`: inactive section draft retained for a later request; not served or deployed.
-
-Static site, no build or database. Preview with `python3 -m http.server 4173 --directory dist`.
+Static site: preview with `python3 -m http.server 4173 --directory dist`.
 
 Hosted private preview: https://asadbek-in-motion.fuzzybetta33.chatgpt.site
 
-Reference for design study: https://demo.codeandchill.store/portfolio/#home. Its source assets and template branding are not included.
+Design reference: https://demo.codeandchill.store/portfolio/#home. Its source assets and branding are not included.
