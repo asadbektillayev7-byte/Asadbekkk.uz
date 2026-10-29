@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Asadbekkk’s personal space. A student exploring mechanical engineering, small software ideas, photography, and the things in between.">
+  <title>Asadbekkk — Personal Space</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="assets/cutouts/cutout-5.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="content.js"></script>
+  <script defer src="portrait.js"></script>
+  <script defer src="visit-opening.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="site.js"></script>
+</head>
+<body class="is-loading">
+  <a class="skip-link" href="#work">Skip to content</a>
+  <main>
+  <section class="homepage" id="home" aria-label="Asadbekkk’s personal homepage">
+    <div class="atmosphere" aria-hidden="true"></div>
+    <canvas class="portrait-canvas" id="portrait-canvas" role="img" aria-label="Asadbekkk facing the camera in a school T-shirt, rendered as a portrait made of light particles"></canvas>
+    <img class="portrait-fallback" id="portrait-fallback" src="assets/cutouts/cutout-5.webp" alt="Asadbekkk facing the camera in a school T-shirt" aria-hidden="true">
+    <header class="site-header">
+      <button class="brand" data-open-dialog="about-dialog" aria-label="About Asadbekkk">Asadbekkk<span class="brand-dot" aria-hidden="true">.</span></button>
+      <div class="header-right">
+        <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+          <a href="#home" data-section-link aria-current="location">Home</a><a href="#work" data-section-link>Projects</a><a href="#journey" data-section-link>Journey</a><a href="#life" data-section-link>Life</a><a href="#contact" data-section-link>Contact</a>
+        </nav>
+        <button class="intro-control" id="intro-control">Skip intro <span aria-hidden="true">↗</span></button>
+        <button class="nav-toggle" data-nav-toggle aria-controls="main-nav" aria-expanded="false">Menu <span aria-hidden="true">＋</span></button>
+      </div>
+    </header>
+    <div class="opening-mark" aria-hidden="true"><span></span></div>
+    <div class="title-stage" id="title-stage">
+      <div class="name-word metal-word" id="name-word" aria-hidden="true"></div>
+      <h1 class="portfolio-word metal-word" id="portfolio-word" aria-label="Asadbekkk’s portfolio">PORTFOLIO</h1>
+    </div>
+    <footer class="home-footer">
+      <div class="hero-caption"><p class="descriptor"><strong>Student.</strong> <em>Still exploring.</em></p><a class="explore-link" href="#work">A little more of me <span aria-hidden="true">↓</span></a></div>
+      <div class="photo-picker" aria-label="Choose a portrait"><div class="picker-label"><span>Different moments. Same me.</span><span id="photo-count">03 / 04</span></div><div class="photo-thumbnails" id="photo-thumbnails"></div></div>
+      <button class="next-photo" id="next-photo"><span class="next-icon" aria-hidden="true">↗</span><span>Next photo</span></button>
+    </footer>
+    <p class="sr-only" id="photo-status" aria-live="polite"></p>
+    <noscript><style>.is-loading .title-stage,.is-loading .site-header,.is-loading .home-footer{opacity:1}.portrait-fallback{opacity:.72}.photo-picker,.next-photo,.intro-control{display:none}</style></noscript>
+  </section>
+
+  <div class="interest-strip" aria-label="Interests"><span>Mechanical things</span><span aria-hidden="true">✳</span><span>Small software ideas</span><span aria-hidden="true">✳</span><span>Looking closer</span><span aria-hidden="true">✳</span><span>Still learning</span></div>
+
+  <section class="work-section content-section" id="work" aria-labelledby="work-title">
+    <div class="section-kicker reveal"><span>01 / Projects & questions</span><span class="status-tag"><i></i> A work in progress</span></div>
+    <div class="section-heading reveal"><h2 id="work-title">Things in<br><span class="soft-type">progress.</span></h2><p>Mechanical things, small software ideas, and questions I want to follow. This is where their stories will live.</p></div>
+    <div class="work-toolbar reveal"><div class="project-filters" aria-label="Filter projects"><button data-project-filter="all" aria-pressed="true">All <sup>03</sup></button><button data-project-filter="mechanical" aria-pressed="false">Mechanical</button><button data-project-filter="software" aria-pressed="false">Software</button><button data-project-filter="research" aria-pressed="false">Research</button></div><span class="slot-note">Real projects to be added</span></div>
+    <p id="filter-status" class="sr-only" aria-live="polite"></p>
+    <div class="project-grid">
+      <button class="project-card mechanical-card reveal" data-category="mechanical" data-project="mechanical" data-open-dialog="project-dialog">
+        <div class="project-art mechanism-art" aria-hidden="true"><div class="art-coordinate">FIG. 01 / AN IDEA IN MOTION</div><svg viewBox="0 0 600 360" fill="none"><g stroke="currentColor"><ellipse cx="300" cy="180" rx="121" ry="121"/><ellipse cx="300" cy="180" rx="89" ry="89"/><ellipse cx="300" cy="180" rx="37" ry="37"/><ellipse cx="300" cy="180" rx="16" ry="16"/><path d="M300 59v84m0 74v84M179 180h84m74 0h84M214 94l60 60m52 52 60 60M214 266l60-60m52-52 60-60"/><path d="m300 36 10 17 20-14 6 20 23-8 1 21 24-1-5 22 24 7-12 18 21 14-17 14 16 21-21 7 8 24-23 1 1 23-23-6-7 22-19-12-14 20-14-18-21 15-7-22-24 8-1-23-23 1 6-23-22-7 12-19-20-14 18-14-15-21 22-7-8-24 23-1-1-23 23 6 7-22 19 12 14-20Z" transform="translate(-1 -1)"/><path d="M80 180h85m270 0h85M300 19v25m0 275v25" stroke-dasharray="3 7"/><path d="M179 322h242m-242-8v16m242-16v16" opacity=".45"/></g><text x="300" y="348" fill="currentColor" text-anchor="middle" font-size="10" letter-spacing="3">CURIOUS HOW IT WORKS</text></svg><span class="art-plus plus-one">+</span><span class="art-plus plus-two">+</span></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Mechanical / 01</span><span class="placeholder-label">Content to add</span></div><h3>Something<br>that moves.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Sketches, experiments, and lessons from making.</p></div>
+      </button>
+      <button class="project-card software-card reveal" data-category="software" data-project="software" data-open-dialog="project-dialog">
+        <div class="project-art software-art" aria-hidden="true"><div class="art-coordinate">FIG. 02 / FROM “WHAT IF” TO “IT WORKS”</div><div class="code-window"><div class="code-window-top"><i></i><i></i><i></i><span>A LITTLE EXPERIMENT</span></div><div class="code-symbol">{<span>✳</span>}</div><div class="code-lines"><i></i><i></i><i></i><i></i></div></div><div class="software-sticker">try.<br>break.<br>learn.</div></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Software / 02</span><span class="placeholder-label">Content to add</span></div><h3>An idea,<br>on screen.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Small builds. Some vibe-coding. Plenty to learn.</p></div>
+      </button>
+      <button class="project-card research-card reveal" data-category="research" data-project="research" data-open-dialog="project-dialog">
+        <div class="research-art" aria-hidden="true"><span>?</span><i></i><i></i><small>THE NEXT QUESTION</small></div><div class="project-card-copy"><div class="card-topline"><span>Research / 03</span><span class="placeholder-label">In preparation</span></div><h3>A question worth following.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Research is on the way. The story will grow with the work.</p></div>
+      </button>
+    </div>
+  </section>
+
+  <section class="journey-section content-section" id="journey" aria-labelledby="journey-title">
+    <div class="section-kicker reveal"><span>02 / Along the way</span><span>People. Places. Experiences.</span></div>
+    <div class="journey-layout"><div class="journey-intro reveal"><h2 id="journey-title">Beyond<br>the <span class="soft-type">screen.</span></h2><p>There’s more to my story than what I make. A place for the work, people, and experiences that shape it.</p><button class="text-link" data-open-dialog="cv-dialog">Open my CV draft <span aria-hidden="true">↗</span></button><div class="journey-mark" aria-hidden="true">↳</div></div>
+      <div class="journey-list reveal">
+        <article class="journey-row"><span class="row-number">01</span><div><h3>Work & internships</h3><p>Roles, responsibilities, and what I learned.</p></div><span class="row-state">Details to add</span></article>
+        <article class="journey-row"><span class="row-number">02</span><div><h3>Leadership & activities</h3><p>Teams, extracurriculars, and things I helped move forward.</p></div><span class="row-state">Details to add</span></article>
+        <article class="journey-row"><span class="row-number">03</span><div><h3>Volunteering</h3><p>Where I contributed, and why it mattered to me.</p></div><span class="row-state">Details to add</span></article>
+        <article class="journey-row"><span class="row-number">04</span><div><h3>Learning & education</h3><p>My education, interests, and next steps.</p></div><span class="row-state">Details to add</span></article>
+        <p class="journey-footnote">The spaces are ready. The specifics come next.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="life-section content-section" id="life" aria-labelledby="life-title">
+    <div class="section-kicker reveal"><span>03 / Life, in frames</span><span>Not everything needs a purpose.</span></div>
+    <div class="life-heading reveal"><h2 id="life-title">Looking<br><span class="soft-type">closer.</span><span class="tiny-star" aria-hidden="true">✳</span></h2><div><p>I’m into photography, too. A place for things that catch my eye, and moments I want to keep.</p><span class="film-label">PHOTO COLLECTION / COMING SOON</span></div></div>
+    <div class="contact-sheet reveal" aria-label="Photography placeholders. Original photographs will be added later.">
+      <div class="photo-slot slot-one"><span class="frame-number">FRAME / 001</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A place.</em><span>Your photograph here</span></div></div>
+      <div class="photo-slot slot-two"><span class="frame-number">FRAME / 002</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A detail.</em><span>Your photograph here</span></div></div>
+      <div class="photo-slot slot-three"><span class="frame-number">FRAME / 003</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A moment.</em><span>Your photograph here</span></div></div>
+    </div>
+  </section>
+
+  <section class="contact-section content-section" id="contact" aria-labelledby="contact-title">
+    <div class="section-kicker reveal"><span>04 / Keep in touch</span><span>More soon.</span></div>
+    <div class="contact-heading reveal"><p>For a question, an idea, or just a hello.</p><button class="contact-title" data-open-dialog="contact-dialog"><span id="contact-title">Say hello.</span><span aria-hidden="true">↗</span></button><div class="contact-under"><span>Contact details will be added here.</span><span class="handwritten">Still a work in progress. Like me.</span></div></div>
+    <footer class="site-footer"><button class="brand" data-open-dialog="about-dialog">Asadbekkk<span class="brand-dot" aria-hidden="true">.</span></button><span>A personal space. Always becoming.</span><a href="#home">Back to the top <span aria-hidden="true">↑</span></a></footer>
+  </section>
+  </main>
+
+  <dialog class="personal-dialog" id="about-dialog" aria-labelledby="about-title"><button class="dialog-close" data-close-dialog aria-label="Close introduction">✕</button><div class="about-layout"><div class="about-photo"><img src="assets/cutouts/cutout-3.webp" alt="Asadbekkk smiling beside his laptop"><span>Just me.</span></div><div class="dialog-body"><span class="eyebrow">A little introduction</span><h2 id="about-title">Just<br>Asadbekkk.</h2><p>I’m a student, curious about how things work — on a screen and off it.</p><p>I’m interested in mechanical engineering, I experiment with software and a little vibe-coding, and I’m into photography. I’m still learning and figuring out what I want to make next.</p><p>I’m applying for undergraduate study in the USA, Hong Kong, and Korea.</p><div class="about-tags"><span>Student</span><span>Curious</span><span>Still exploring</span></div><p class="draft-note">More of my story will go here.</p></div></div></dialog>
+  <dialog class="personal-dialog project-dialog" id="project-dialog" aria-labelledby="project-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close project">✕</button><div class="dialog-body"><span class="eyebrow" id="project-dialog-kind">Project slot</span><h2 id="project-dialog-title">A story to add.</h2><span class="draft-badge">CONTENT PLACEHOLDER</span><p id="project-dialog-summary"></p><h3>What will go here</h3><ul id="project-dialog-prompts"></ul><p class="draft-note">No project results or achievements have been filled in yet.</p></div></dialog>
+  <dialog class="personal-dialog cv-dialog" id="cv-dialog" aria-labelledby="cv-title"><button class="dialog-close" data-close-dialog aria-label="Close CV draft">✕</button><div class="cv-document dialog-body"><span class="eyebrow">CV / working draft</span><h2 id="cv-title">Asadbekkk.</h2><p class="cv-subtitle">Student · Prospective undergraduate</p><div class="cv-block"><h3>Academic interests</h3><p>Mechanical engineering, software, and research.</p></div><div class="cv-block"><h3>Education</h3><p class="draft-note">School, dates, and academic details to add.</p></div><div class="cv-block"><h3>Projects & research</h3><p class="draft-note">Project titles, my contributions, and evidence to add.</p></div><div class="cv-block"><h3>Experience & community</h3><p class="draft-note">Work, internships, extracurriculars, leadership, and volunteering details to add.</p></div><div class="cv-block"><h3>Other interests</h3><p>Photography.</p></div><div class="cv-block"><h3>Contact</h3><p class="draft-note">Contact details and links to add.</p></div><p class="cv-draft-warning">This is a content draft. Fill in the details before using it for applications.</p></div><div class="dialog-actions"><button class="solid-button" data-print-cv>Print / save as PDF <span aria-hidden="true">↗</span></button></div></dialog>
+  <dialog class="personal-dialog contact-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close contact">✕</button><div class="dialog-body"><span class="eyebrow">Keep in touch</span><h2 id="contact-dialog-title">Hello,<br>soon.</h2><p>This space is ready for my email and social links. I’ll add them when the details are ready to share.</p><p class="draft-note">Contact information hasn’t been added yet.</p><button class="solid-button" data-close-dialog>Back to exploring <span aria-hidden="true">↗</span></button></div></dialog>
+</body>
+</html>

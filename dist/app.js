@@ -12,6 +12,7 @@
   const fallback = document.querySelector('#portrait-fallback');
   const thumbnails = document.querySelector('#photo-thumbnails');
   const footer = document.querySelector('.home-footer');
+  const heroDetails = document.querySelector('.hero-details');
   const status = document.querySelector('#photo-status');
   const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
@@ -27,6 +28,7 @@
   let sceneReady = Promise.resolve(false);
   let openingFrame = null;
   let openingStarted = 0;
+  let openingRun = 0;
   let openingFinished = false;
   let animations = [];
   let photoRequest = 0;
@@ -42,106 +44,182 @@
   }
   const nameLetters = letters(nameWord, data.introName || data.name.toUpperCase());
   const portfolioLetters = letters(portfolioWord, data.title || 'PORTFOLIO');
+  const titleHalves = [document.createElement('span'), document.createElement('span')];
+  titleHalves.forEach((half, index) => {
+    half.className = `word-half word-half-${index ? 'last' : 'first'}`;
+    half.style.display = 'flex';
+    half.setAttribute('aria-hidden', 'true');
+    portfolioWord.append(half);
+  });
+  portfolioLetters.forEach((letter, index) => titleHalves[index < 4 ? 0 : 1].append(letter));
+  const originalName = Array.from(data.introName || data.name.toUpperCase());
+  const finalTitle = Array.from(data.title || 'PORTFOLIO');
   function animate(element, keyframes, options) {
     const animation = element.animate(keyframes, { fill: 'forwards', ...options });
     animations.push(animation);
     return animation;
   }
   function cancelOpeningAnimations() {
+    ++openingRun;
     if (openingFrame !== null) cancelAnimationFrame(openingFrame);
     openingFrame = null;
     animations.forEach(animation => animation.cancel());
     animations = [];
   }
-  function finalTop() { return window.matchMedia('(max-width: 900px), (max-height: 650px)').matches ? '67%' : '72%'; }
+  function isCompact() { return window.matchMedia('(max-width: 767px)').matches; }
+  function finalTop() { return isCompact() ? '20%' : '74%'; }
+  function titleSeparation() {
+    return isCompact() ? 0 : Math.min(16, innerWidth * .01);
+  }
+  function setFinalTitle() {
+    const separation = titleSeparation();
+    portfolioWord.style.columnGap = `${separation}px`;
+  }
   function finishOpening() {
     cancelOpeningAnimations();
     openingFinished = true;
     footer.inert = false;
+    if (heroDetails) heroDetails.inert = false;
     body.classList.remove('is-loading', 'is-opening');
-    body.classList.add('is-revealing', 'is-ready');
+    body.classList.add('is-revealing', 'is-portrait-revealing', 'is-ready');
     nameWord.style.display = 'none';
     portfolioWord.style.opacity = '1';
     portfolioLetters.forEach(letter => { letter.style.opacity = '1'; letter.style.transform = 'none'; });
+    setFinalTitle();
     stage.style.top = finalTop();
     mark.style.opacity = '0';
     scene?.setProgress(1);
     introControl.innerHTML = motionPreference.matches ? 'Motion reduced' : 'Replay intro <span aria-hidden="true">↻</span>';
     introControl.disabled = motionPreference.matches;
   }
-  function startOpening() {
+  async function startOpening() {
     body.dataset.opening = visitOpening.variantId;
     if (motionPreference.matches) { finishOpening(); return; }
     cancelOpeningAnimations();
+    const run = openingRun;
     openingFinished = false;
     footer.inert = true;
-    body.classList.remove('is-loading', 'is-revealing', 'is-ready');
+    if (heroDetails) heroDetails.inert = true;
+    body.classList.remove('is-loading', 'is-revealing', 'is-portrait-revealing', 'is-ready');
     body.classList.add('is-opening');
     nameWord.style.display = 'flex';
-    portfolioWord.style.opacity = '1';
+    nameWord.style.opacity = '1';
+    portfolioWord.style.opacity = '0';
     stage.style.top = '50%';
     mark.style.opacity = '0';
+    titleHalves.forEach(half => { half.style.transform = 'none'; });
+    portfolioWord.style.columnGap = '0px';
+    nameLetters.forEach((letter, index) => {
+      letter.textContent = originalName[index] || '';
+      letter.dataset.letter = originalName[index] || '';
+      letter.style.opacity = '0';
+      letter.style.transform = 'none';
+    });
+    portfolioLetters.forEach(letter => { letter.style.opacity = '1'; letter.style.transform = 'none'; });
     scene?.setProgress(0);
+    scene?.setFormation(visitOpening.variantId);
     introControl.innerHTML = 'Skip intro <span aria-hidden="true">↗</span>';
     introControl.disabled = false;
-    animate(mark, [{ opacity: 0, transform: 'translate(-50%,-50%) scale(.1)' }, { opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .35 }, { opacity: 1, offset: .65 }, { opacity: 0, transform: 'translate(-50%,-50%) scale(.1)' }], { duration: 900, easing: 'ease-in-out' });
+    try { await document.fonts?.ready; } catch { /* System fonts remain usable. */ }
+    if (run !== openingRun || openingFinished) return;
+
     const variant = visitOpening.variantId;
-    scene?.setFormation(variant);
-    nameLetters.forEach((letter, index) => {
-      letter.style.opacity = '0';
-      const sign = index % 2 ? -1 : 1;
-      const middle = (nameLetters.length - 1) / 2;
-      let entrance = `translate3d(${sign * 110}px,${index % 3 ? -90 : 100}px,260px) rotateX(${sign * 110}deg) rotateY(${-sign * 120}deg) rotateZ(${sign * 15}deg)`;
-      let delay = 430 + index * 84;
-      let duration = 850;
-      let exit = `rotateY(${sign * 90}deg) rotateX(35deg) translateY(-25px)`;
-      if (variant === 'rise') {
-        entrance = 'translate3d(0,170px,-100px) rotateX(95deg) scale(.85)';
-        delay = 310 + index * 62;
-        duration = 850;
-        exit = 'translate3d(0,-90px,-80px) rotateX(-90deg)';
-      } else if (variant === 'scatter') {
-        const distance = Math.min(340, innerWidth * .28);
-        entrance = `translate3d(${sign * distance}px,${(index - middle) * 28}px,200px) rotateZ(${sign * 32}deg) scale(.35)`;
-        delay = 350 + Math.abs(index - middle) * 88;
-        duration = 1000;
-        exit = `translate3d(${sign * 150}px,-50px,100px) rotateZ(${sign * 35}deg) scale(.4)`;
-      }
-      animate(letter, [
-        { opacity: 0, transform: entrance },
-        { opacity: 1, transform: 'translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0) scale(1)' }
-      ], { delay, duration, easing: 'cubic-bezier(.16,.8,.23,1)' });
-      animate(letter, [
-        { opacity: 1, transform: 'translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0) scale(1)' },
-        { opacity: 0, transform: exit }
-      ], { delay: 1990 + index * 30, duration: 370, easing: 'cubic-bezier(.6,0,.9,.6)' });
-    });
-    portfolioLetters.forEach((letter, index) => {
-      letter.style.opacity = '0';
-      const sign = index % 2 ? -1 : 1;
-      let entrance = `translate3d(${sign * 28}px,60px,140px) rotateX(85deg) rotateY(${sign * 85}deg)`;
-      let delay = 2260 + index * 55;
-      if (variant === 'rise') {
-        entrance = 'translate3d(0,115px,-120px) rotateX(-90deg) scale(.9)';
-        delay = 2320 + Math.abs(index - (portfolioLetters.length - 1) / 2) * 70;
-      } else if (variant === 'scatter') {
-        entrance = `translate3d(${sign * 120}px,${sign * 65}px,160px) rotateZ(${sign * 18}deg) scale(1.3)`;
-        delay = 2300 + index * 50;
-      }
-      animate(letter, [
-        { opacity: 0, transform: entrance },
-        { opacity: 1, transform: 'translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0) scale(1)' }
-      ], { delay, duration: 650, easing: 'cubic-bezier(.16,.8,.23,1)' });
-    });
-    animate(stage, [{ top: '50%' }, { top: finalTop() }], { delay: 3270, duration: 1000, easing: 'cubic-bezier(.22,.65,.2,1)' });
+    const wordRect = nameWord.getBoundingClientRect();
+    const glyphRects = nameLetters.map(letter => letter.getBoundingClientRect());
+    const pivotIndex = Math.floor((nameLetters.length - 1) / 2);
+    const pivot = nameLetters[pivotIndex];
+    const pivotRect = glyphRects[pivotIndex];
+    const fontSize = parseFloat(getComputedStyle(nameWord).fontSize) || 120;
+    const landingX = pivotRect.left + pivotRect.width / 2;
+    const landingY = pivotRect.top + pivotRect.height * .92;
+    const dotSize = Math.max(16, Math.min(42, fontSize * .21));
+    mark.style.left = `${landingX}px`;
+    mark.style.top = `${landingY + fontSize * .1}px`;
+    mark.style.width = `${dotSize}px`;
+    mark.style.height = `${dotSize}px`;
+    const dot = mark.querySelector('span');
+    if (dot) { dot.style.width = '100%'; dot.style.height = '100%'; dot.style.margin = '0'; }
+    const fallingDistance = Math.max(300, wordRect.top + fontSize * 1.5);
+    animate(mark, [
+      { opacity: 0, transform: `translate(-50%,calc(-50% - ${fallingDistance}px)) scale(.9)` },
+      { opacity: 1, transform: `translate(-50%,calc(-50% - ${fallingDistance * .6}px)) scale(.82,1.2)`, offset: .25 },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1.35,.58)', offset: .43 },
+      { opacity: 1, transform: `translate(-50%,calc(-50% - ${fontSize * .3}px)) scale(.98,1.02)`, offset: .61 },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1.18,.78)', offset: .76 },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .9 },
+      { opacity: 0, transform: 'translate(-50%,-50%) scale(.2)' }
+    ], { duration: 1770, easing: 'linear' });
+    pivot.style.transformOrigin = '50% 92%';
+    animate(pivot, [
+      { opacity: 0, transform: `translateY(${-fallingDistance}px)` },
+      { opacity: 1, transform: `translateY(${-fontSize * .25}px) scale(.9,1.1)`, offset: .33 },
+      { opacity: 1, transform: 'translateY(0) scale(1.22,.76)', offset: .5 },
+      { opacity: 1, transform: `translateY(${-fontSize * .09}px) scale(1) rotate(-5deg)`, offset: .69 },
+      { opacity: 1, transform: 'translateY(0) scale(1) rotate(0deg)' }
+    ], { delay: 770, duration: 830, easing: 'cubic-bezier(.25,.5,.4,1)' });
+    animate(pivot, [
+      { transform: 'rotate(0deg)' },
+      { transform: 'rotate(-61deg)', offset: .19 },
+      { transform: 'rotate(-66deg)', offset: .25 },
+      { transform: 'rotate(-59deg)', offset: .34 },
+      { transform: 'rotate(61deg)', offset: .62 },
+      { transform: 'rotate(67deg)', offset: .69 },
+      { transform: 'rotate(58deg)', offset: .79 },
+      { transform: 'rotate(-4deg)', offset: .92 },
+      { transform: 'rotate(0deg)' }
+    ], { delay: 1580, duration: 1840, easing: 'cubic-bezier(.22,.7,.3,1)' });
+    const left = nameLetters.map((_, index) => index).filter(index => index < pivotIndex).reverse();
+    const right = nameLetters.map((_, index) => index).filter(index => index > pivotIndex);
+    function toss(indices, side, begins) {
+      indices.forEach((index, order) => {
+        const glyph = glyphRects[index];
+        const x = landingX + side * fontSize * .54 - (glyph.left + glyph.width / 2);
+        const y = landingY - fontSize * .48 - (glyph.top + glyph.height / 2);
+        const height = fontSize * (variant === 'rise' ? .95 : .6) + Math.abs(x) * .23;
+        const rotation = -side * (variant === 'scatter' ? 285 : 205) + order * 11;
+        const duration = 780 + Math.min(170, Math.abs(x) * .25);
+        const delay = begins + order * (variant === 'scatter' ? 85 : 110);
+        animate(nameLetters[index], [
+          { opacity: 0, transform: `translate(${x}px,${y}px) rotate(${rotation}deg) scale(.3)` },
+          { opacity: 1, transform: `translate(${x * .62}px,${Math.min(y, 0) - height}px) rotate(${rotation * .56}deg) scale(.88)`, offset: .38 },
+          { opacity: 1, transform: 'translate(0,0) rotate(0deg) scale(1)', offset: .82 },
+          { opacity: 1, transform: `translateY(${-fontSize * .035}px) rotate(0deg) scale(1)`, offset: .9 },
+          { opacity: 1, transform: 'translate(0,0) rotate(0deg) scale(1)' }
+        ], { delay, duration, easing: 'cubic-bezier(.2,.65,.35,1)' });
+      });
+    }
+    toss(left, -1, 1810);
+    toss(right, 1, 2490);
+    const glideAt = 5200;
+    const portraitAt = 5480;
+    const separation = titleSeparation();
+    animate(stage, [{ top: '50%' }, { top: finalTop() }], { delay: glideAt, duration: 1500, easing: 'cubic-bezier(.65,0,.2,1)' });
+    // Animate layout spacing instead of compositing transformed gradient glyphs.
+    animate(portfolioWord, [
+      { columnGap: '0px' },
+      { columnGap: `${separation}px` }
+    ], { delay: glideAt + 320, duration: 1500, easing: 'cubic-bezier(.16,.7,.25,1)' });
     openingStarted = performance.now();
+    let changedLetters = 0;
+    let titleShown = false;
     function tick(now) {
-      if (openingFinished) return;
+      if (openingFinished || run !== openingRun) return;
       const elapsed = now - openingStarted;
-      const progress = clamp((elapsed - 3480) / 2200);
-      scene?.setProgress(progress);
-      if (elapsed > 3570) { body.classList.add('is-revealing'); footer.inert = false; }
-      if (elapsed >= 5900) { finishOpening(); return; }
+      const morphCount = Math.min(finalTitle.length, Math.max(0, Math.floor((elapsed - 3750) / 145)));
+      while (changedLetters < morphCount) {
+        const glyph = nameLetters[changedLetters];
+        if (glyph) { glyph.textContent = finalTitle[changedLetters]; glyph.dataset.letter = finalTitle[changedLetters]; }
+        ++changedLetters;
+      }
+      if (!titleShown && elapsed >= 5110) {
+        titleShown = true;
+        nameWord.style.display = 'none';
+        portfolioWord.style.opacity = '1';
+      }
+      if (elapsed > portraitAt) body.classList.add('is-portrait-revealing');
+      if (elapsed > glideAt + 480) { body.classList.add('is-revealing'); footer.inert = false; if (heroDetails) heroDetails.inert = false; }
+      scene?.setProgress(clamp((elapsed - portraitAt) / 1950));
+      if (elapsed >= 7650) { finishOpening(); return; }
       openingFrame = requestAnimationFrame(tick);
     }
     openingFrame = requestAnimationFrame(tick);
@@ -152,7 +230,7 @@
     document.querySelector('#photo-count').textContent = `${String(index + 1).padStart(2, '0')} / ${String(data.photos.length).padStart(2, '0')}`;
     fallback.src = photo.src;
     fallback.alt = photo.alt;
-    canvas.setAttribute('aria-label', `${photo.alt}, rendered as a portrait made of light particles`);
+    canvas.setAttribute('aria-label', `${photo.alt}, rendered in a fine grayscale mosaic`);
     if (announce) status.textContent = `${photo.label}. Photo ${index + 1} of ${data.photos.length}.`;
   }
   async function choosePhoto(index) {
@@ -220,7 +298,7 @@
   document.documentElement.addEventListener('pointerleave', () => scene?.setPointer(0, 0));
   window.addEventListener('resize', () => {
     if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
-    resizeFrame = requestAnimationFrame(() => { scene?.resize(); if (openingFinished) stage.style.top = finalTop(); });
+    resizeFrame = requestAnimationFrame(() => { scene?.resize(); if (openingFinished) { stage.style.top = finalTop(); setFinalTitle(); } });
   });
   document.addEventListener('visibilitychange', () => scene?.setPaused(document.hidden));
   motionPreference.addEventListener('change', () => { finishOpening(); createScene(); });

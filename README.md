@@ -1,40 +1,34 @@
 # Asadbekkk’s homepage
 
-A single-screen personal homepage inspired by the supplied opening video. It uses a black background, rotating metallic letters, and a portrait assembled from particles sampled directly from Asadbekkk’s original photographs. The opening reads **ASADBEKKK → PORTFOLIO**. The supporting line is **Student. Still exploring.**
+A homepage inspired by the original Code and Chill portfolio demo. It uses a black canvas, fine silver-blue mosaic portraits, and a bouncing-dot / flying-letter opening that changes ASADBEKKK into PORTFOLIO.
 
-Only the homepage is implemented. There are no About, Projects, Experience, Contact, or other sections in this version. Previous versions remain in Git history.
+Only the homepage is active. On desktop the large flat silver title sits over the lower portrait; on mobile it sits above the portrait, following the live demo’s composition. The supporting line is **Student. Still exploring.** Name-click opens a short personal introduction; Contact opens an honest placeholder until contact details are supplied. No service or professional-engineer claims are used.
 
-## Personal photographs
+## Photographs
 
-Only the four requested cutouts are shown: original photos **2, 3, 5, and 6**. Photos 1 and 4 have been removed from the active selector and cutout assets. Supplied files remain unchanged in `dist/assets/cutouts/`; the particle renderer reads their actual alpha channels and preserves the entire silhouette and aspect ratio, including both hands in the wide pose.
+Only original cutouts **2, 3, 5, and 6** are active. Photos 1 and 4 remain excluded. Source files are unchanged in `dist/assets/cutouts/`; the renderer uses their alpha channels and preserves their aspect and alpha edges. Desktop contains the complete cutout; mobile enlarges frontal portraits like the demo, with shoulders allowed to extend past the screen. The wide pose stays contained so both hands remain visible.
 
-Edit their order, file paths, descriptions, and initial selection in `dist/content.js`. `initialPhoto` is zero-based. Every photo can be selected with its thumbnail, the Next photo button, or the arrow keys while a thumbnail is focused.
+The portrait uses a regular square mosaic lattice sampled from the actual photograph. Tile brightness follows source luminance, with dark gaps and a faint grayscale source layer to retain facial detail. It does not generate or replace the face. Original files are around 439–512 pixels, so their resolution limits fine detail.
 
-## Opening and accessibility
+Edit names, photo paths, descriptions, and fallback selection in `dist/content.js`. The **Portraits** control opens the four-photo picker, with Next photo and keyboard arrow controls.
 
-Each new visit chooses a portrait and one of three opening styles: tumbling letters with a spherical particle cloud, a rising reveal, or scattered letters with a spiral particle formation. Browser-local shuffle bags cycle through the four portraits and three styles, avoiding consecutive repeats. Replay keeps the current visit’s selection; returning via browser Back chooses a new opening. Blocked browser storage is handled gracefully.
+## Opening
 
-The opening lasts about six seconds. Skip intro jumps to the completed homepage. Replay intro restarts it. The operating system’s reduced-motion preference skips the opening and shows a static portrait; photo selection still works. The renderer pauses when the tab is hidden and falls back to an ordinary photograph if the particle scene cannot initialize.
+Each new visit selects a portrait and one of three variations of the same opening sequence. Browser-local shuffle bags cycle through the photos and formations without consecutive repeats. Replay keeps the current visit’s choice. Skip intro immediately finishes the scene; opening Portraits also skips to the assembled state.
 
-The site includes keyboard controls, visible focus indicators, a screen-reader description of the portrait, and selection announcements. It loads no animation framework or analytics.
+The introduction lasts about eight seconds. Reduced-motion preferences show a static completed portrait. The renderer pauses when the page is hidden, rests after assembly, and falls back to the source photograph if Canvas cannot initialize.
 
 ## Files
 
-- `dist/index.html`: the homepage only.
-- `dist/styles.css`: black-and-silver appearance and responsive layout.
-- `dist/content.js`: display name and four selected cutouts.
-- `dist/visit-opening.js`: browser-local visit selection and shuffle bags.
-- `dist/app.js`: opening, replay, selection, and input handling.
-- `dist/portrait.js`: live Canvas point-cloud portrait renderer.
+- `dist/index.html`, `dist/styles.css`: active homepage and responsive layout.
+- `dist/app.js`: opening, photo controls, and lifecycle handling.
+- `dist/portrait.js`: source-sampled mosaic renderer.
+- `dist/home.js`: portrait panel and small homepage dialogs.
+- `dist/visit-opening.js`: browser-local randomized selection.
+- `drafts/full-site/`: inactive section draft retained for a later request; not served or deployed.
 
-## Preview
+Static site, no build or database. Preview with `python3 -m http.server 4173 --directory dist`.
 
-```sh
-python3 -m http.server 8000 --directory dist
-```
+Hosted private preview: https://asadbek-in-motion.fuzzybetta33.chatgpt.site
 
-Open http://localhost:8000 and stop the server with Control+C. This is a static site with no build step or database.
-
-The existing private hosted preview is https://asadbek-in-motion.fuzzybetta33.chatgpt.site. Local changes appear there after publication through Sites. Preserve `.openai/hosting.json` and never put deployment credentials in website files.
-
-The supplied reference video is used only for design study. It is not included in the published website.
+Reference for design study: https://demo.codeandchill.store/portfolio/#home. Its source assets and template branding are not included.

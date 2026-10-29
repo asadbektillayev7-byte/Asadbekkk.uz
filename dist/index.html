@@ -3,41 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#020303">
   <meta name="description" content="Asadbekkk. Student. Still exploring. A personal homepage in motion.">
   <title>Asadbekkk — Personal Space</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="assets/cutouts/cutout-5.webp">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script defer src="content.js"></script>
   <script defer src="portrait.js"></script>
   <script defer src="visit-opening.js"></script>
   <script defer src="app.js"></script>
+  <script defer src="home.js"></script>
 </head>
 <body class="is-loading">
-  <main class="homepage" aria-label="Asadbekkk’s personal homepage">
+  <main class="homepage" id="home" aria-label="Asadbekkk’s personal homepage">
     <div class="atmosphere" aria-hidden="true"></div>
-    <canvas class="portrait-canvas" id="portrait-canvas" role="img" aria-label="Asadbekkk facing the camera in a school T-shirt, rendered as a portrait made of light particles"></canvas>
+    <canvas class="portrait-canvas" id="portrait-canvas" role="img" aria-label="Asadbekkk facing the camera in a school T-shirt, rendered in a fine grayscale mosaic"></canvas>
     <img class="portrait-fallback" id="portrait-fallback" src="assets/cutouts/cutout-5.webp" alt="Asadbekkk facing the camera in a school T-shirt" aria-hidden="true">
+    <div class="portrait-shade" aria-hidden="true"></div>
     <header class="site-header">
-      <a class="brand" href="./" aria-label="Asadbekkk — home">Asadbekkk</a>
-      <div class="header-right"><span class="home-label" aria-current="page">HOME</span><button class="intro-control" id="intro-control">Skip intro <span aria-hidden="true">↗</span></button></div>
+      <button class="brand" data-open-dialog="about-dialog" aria-label="About Asadbekkk">Asadbekkk</button>
+      <nav class="header-right" aria-label="Homepage controls">
+        <a class="home-label" href="#home" aria-current="page">Home</a>
+        <button class="portraits-control" id="portraits-control" aria-controls="photo-panel" aria-expanded="false">Portraits <span aria-hidden="true">＋</span></button>
+        <button class="contact-nav" data-open-dialog="contact-dialog">Contact</button>
+        <button class="intro-control" id="intro-control">Skip intro <span aria-hidden="true">↗</span></button>
+      </nav>
     </header>
     <div class="opening-mark" aria-hidden="true"><span></span></div>
     <div class="title-stage" id="title-stage">
       <div class="name-word metal-word" id="name-word" aria-hidden="true"></div>
       <h1 class="portfolio-word metal-word" id="portfolio-word" aria-label="Asadbekkk’s portfolio">PORTFOLIO</h1>
+      <div class="hero-details">
+        <p class="descriptor"><strong>Student.</strong> <em>Still exploring.</em></p>
+        <button class="contact-action" data-open-dialog="contact-dialog"><span class="contact-icon" aria-hidden="true">↙</span><span>Contact</span></button>
+      </div>
     </div>
-    <footer class="home-footer">
-      <p class="descriptor"><strong>Student.</strong> <em>Still exploring.</em></p>
-      <div class="photo-picker" aria-label="Choose a portrait"><div class="picker-label"><span>Different moments. Same me.</span><span id="photo-count">03 / 04</span></div><div class="photo-thumbnails" id="photo-thumbnails"></div></div>
-      <button class="next-photo" id="next-photo"><span class="next-icon" aria-hidden="true">↗</span><span>Next photo</span></button>
-    </footer>
+    <aside class="home-footer" id="photo-panel" aria-label="Portrait selection" hidden>
+      <div class="photo-picker"><div class="picker-label"><span>Different moments. Same me.</span><span id="photo-count">03 / 04</span></div><div class="photo-thumbnails" id="photo-thumbnails"></div></div>
+      <button class="next-photo" id="next-photo">Next photo <span aria-hidden="true">↗</span></button>
+    </aside>
     <p class="sr-only" id="photo-status" aria-live="polite"></p>
-    <noscript><style>.is-loading .title-stage,.is-loading .site-header,.is-loading .home-footer{opacity:1}.portrait-fallback{opacity:.72}.photo-picker,.next-photo,.intro-control{display:none}</style></noscript>
+    <noscript><style>.title-stage,.site-header,.hero-details{opacity:1!important}.portrait-fallback{opacity:.8!important}.portraits-control,.intro-control{display:none}</style></noscript>
   </main>
+  <dialog class="personal-dialog" id="about-dialog" aria-labelledby="about-title"><button class="dialog-close" data-close-dialog aria-label="Close introduction">✕</button><span class="eyebrow">A little introduction</span><h2 id="about-title">Just Asadbekkk.</h2><p>I’m a student, interested in mechanical engineering, experimenting with a little software and vibe-coding, and into photography.</p><p>Still learning. Still figuring things out.</p><p class="draft-note">More of my story will go here.</p></dialog>
+  <dialog class="personal-dialog" id="contact-dialog" aria-labelledby="contact-title"><button class="dialog-close" data-close-dialog aria-label="Close contact">✕</button><span class="eyebrow">Keep in touch</span><h2 id="contact-title">Hello, soon.</h2><p>My email and social links will go here. Contact details haven’t been added yet.</p><button class="dialog-back" data-close-dialog>Back to the homepage <span aria-hidden="true">↗</span></button></dialog>
 </body>
 </html>
