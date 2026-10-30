@@ -1,4 +1,4 @@
-/* Replace SITE_CONTENT.books with real titles and covers when the list is ready. */
+/* Asadbek’s reading list. Personal insights and ratings come from content.js. */
 (() => {
   'use strict';
 
@@ -32,12 +32,14 @@
       height: Number(book.height) || heights[index % heights.length],
       thickness: Number(book.thickness) || thicknesses[index % thicknesses.length],
       rating: normalizeRating(book.rating),
-      notes: book.notes || 'A few thoughts on this book are on the way.'
+      status: book.status === 'reading' ? 'reading' : 'finished',
+      insights: typeof book.insights === 'string' ? book.insights : (book.notes || '')
     }));
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const title = document.getElementById('book-title');
     const author = document.getElementById('book-author');
+    const status = document.getElementById('book-status');
     const note = document.getElementById('book-note');
     const counter = document.getElementById('book-counter');
     const live = document.getElementById('book-live');
@@ -47,7 +49,7 @@
     const buttons = [];
     const track = document.createElement('div');
     track.className = 'book-shelf-track';
-    let selectedIndex = Math.min(7, books.length - 1);
+    let selectedIndex = 0;
     let centerTimer = 0;
     let pointerStart = null;
     let wasDragging = false;
@@ -94,9 +96,14 @@
       button.type = 'button';
       button.dataset.bookIndex = String(index);
       button.dataset.bookId = book.id;
+      button.dataset.readingStatus = book.status;
       button.style.setProperty('--book-color', book.spineColor);
       button.style.setProperty('--book-ink', book.ink);
       button.style.setProperty('--book-height', `${Math.max(63, Math.min(100, book.height))}%`);
+      if (Number.isFinite(book.coverAspect) && book.coverAspect > 0) {
+        const scale = Math.max(63, Math.min(100, book.height)) / 100 * book.coverAspect;
+        button.style.setProperty('--book-cover-width', `calc(var(--shelf-height) * ${scale})`);
+      }
       button.style.setProperty('--book-thickness', `${Math.max(20, Math.min(60, book.thickness))}px`);
       button.style.setProperty('--book-lean', `${index === 8 ? 2 : index === 12 ? -3 : 0}deg`);
       button.setAttribute('aria-label', bookLabel(book, index, false));
@@ -162,7 +169,8 @@
       shelf.dataset.selected = String(selectedIndex);
       if (title) title.textContent = book.sample ? `Book ${String(selectedIndex + 1).padStart(2, '0')} · cover placeholder` : book.title;
       if (author) author.textContent = book.sample ? 'A space for a book I’ve read.' : book.author;
-      if (note) note.textContent = isSample ? 'Sample covers for now. My books and notes are coming soon.' : 'Choose a spine. Open the selected cover for my notes.';
+      if (status) status.textContent = book.status === 'reading' ? 'Reading now' : 'Finished';
+      if (note) note.textContent = isSample ? 'Sample covers for now. My books and notes are coming soon.' : 'Open the selected cover for my insights.';
       if (counter) counter.textContent = `${String(selectedIndex + 1).padStart(2, '0')} / ${String(books.length).padStart(2, '0')}`;
       if (announce && live) live.textContent = book.sample ? `Sample book ${selectedIndex + 1} selected. Its real title has not been added yet.` : `${book.title}${book.author ? ` by ${book.author}` : ''} selected.`;
       if (focus) buttons[selectedIndex].focus({ preventScroll: true });
@@ -173,7 +181,7 @@
 
     function bookLabel(book, index, active) {
       const name = book.sample ? `Sample book ${index + 1}` : `${book.title}${book.author ? ` by ${book.author}` : ''}`;
-      return `${name}. My rating: ${ratingText(book)}. ${active ? 'Cover selected. Open book notes.' : 'Show cover.'}`;
+      return `${name}. ${book.status === 'reading' ? 'Reading now' : 'Finished'}. My rating: ${ratingText(book)}. ${active ? 'Cover selected. Open my insights.' : 'Show cover.'}`;
     }
 
     function openBook(opener) {
@@ -182,13 +190,23 @@
       const fields = {
         'book-detail-title': book.sample ? `Book ${String(selectedIndex + 1).padStart(2, '0')} — a place on the shelf` : book.title,
         'book-detail-author': book.sample ? 'Title and author to add' : book.author,
+        'book-detail-status': book.status === 'reading' ? 'Reading now' : 'Finished',
         'book-detail-rating': `My rating: ${ratingText(book)}`,
-        'book-detail-notes': book.notes
+        'book-detail-notes': book.insights || 'My insights are coming soon.'
       };
       Object.entries(fields).forEach(([id, value]) => {
         const target = document.getElementById(id);
         if (target) target.textContent = value;
       });
+      const notes = document.getElementById('book-detail-notes');
+      if (notes) notes.classList.toggle('insights-pending', !book.insights);
+      const source = document.getElementById('book-detail-source');
+      if (source) {
+        const validSource = typeof book.source === 'string' && /^https:\/\//.test(book.source);
+        source.hidden = !validSource;
+        if (validSource) source.href = book.source;
+        else source.removeAttribute('href');
+      }
       if (!dialog.open) {
         dialog.showModal();
         document.body.classList.add('dialog-open');

@@ -18,7 +18,7 @@ Resume has no HTML page or generated placeholder PDF. Until the real PDF is supp
 
 The Reading page recreates the upright spine-to-cover accordion interaction of the Artspace reference. CSS 3D volumes have front covers, spines, page edges and thickness; selected books rotate open and their neighbors shift. It supports clicks, arrows, keyboard, horizontal swipes and wheel movement. Selected covers open a notes dialog. No large Reading Room header is shown.
 
-The fifteen current books are clearly marked sample covers, not reading-history claims. Real books belong in `SITE_CONTENT.books` in `dist/content.js`:
+The shelf contains Asadbek’s ten supplied titles, including two marked `reading`. Covers are local assets with provenance in `dist/assets/books/cover-sources.json`. Each cover keeps its original proportions. Add or update books in `SITE_CONTENT.books` in `dist/content.js`:
 
 ```js
 {
@@ -30,12 +30,14 @@ The fifteen current books are clearly marked sample covers, not reading-history 
   ink: '#f5efe0',
   height: 90,
   thickness: 32,
-  rating: 4.5,
-  notes: 'Asadbek’s supplied thoughts.'
+  status: 'finished', // or 'reading'
+  insights: '', // Asadbek’s own notes; paragraphs separated by newlines
+  rating: null, // fill only when supplied, e.g. 4.5
+  source: 'https://publisher.example/book-details'
 }
 ```
 
-Ratings are author-supplied display data on a 1–5 scale, including half stars. The badge sits in the upper-right cover corner. Unrated samples show **★ —**. There is no visitor voting or fabricated rating.
+Ratings are author-supplied display data on a 1–5 scale, including half stars. The badge sits in the upper-right cover corner. Unrated books show **★ —**. Each book opens a dedicated “My insights” section; empty notes show a coming-soon message. These are published author notes, not a visitor-editable input. There is no visitor voting or fabricated rating.
 
 ## Files
 

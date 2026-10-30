@@ -18,7 +18,7 @@
 .book-face { position: absolute; display: block; box-sizing: border-box; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .book-front { inset: 0; width: 100%; height: 100%; overflow: hidden; background: var(--book-color); transform: translateZ(calc(var(--book-thickness) * .5)); box-shadow: inset 5px 0 9px #00000015, inset 1px 0 #ffffff55, 2px 2px 2px #0000000c; border-radius: 1px 3px 3px 1px; }
 .book-front::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #0003, transparent 2%, #fff1 3%, #0001 4%, transparent 7%, transparent 95%, #fff1); }
-.book-front img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.book-front img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .book-rating { position: absolute; top: 11px; right: 10px; z-index: 4; display: block; padding: 6px 8px; background: #f6f2e6; color: #292b24; border: 1px solid #292b241a; border-radius: 2px; font: 600 10px/1.15 Arial, sans-serif; letter-spacing: .015em; white-space: nowrap; box-shadow: 0 2px 7px #00000012; }
 .book-spine { left: 0; top: 0; height: 100%; width: var(--book-thickness); padding: 17px 0 13px; background: var(--book-color); transform: translateX(calc(var(--book-thickness) * -.5)) rotateY(-90deg); box-shadow: inset -3px 0 6px #0002, inset 1px 0 2px #fff5; display: flex; align-items: center; justify-content: space-between; flex-direction: column; overflow: hidden; border-radius: 1px; }
 .book-spine-title { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; font-family: 'Times New Roman', serif; font-size: clamp(14px, 1.5vw, 21px); font-weight: 400; letter-spacing: .025em; white-space: nowrap; max-height: calc(100% - 45px); overflow: hidden; text-overflow: ellipsis; }
@@ -59,3 +59,11 @@
 @media (max-width: 370px) { .book-gallery { --book-cover-width: 205px; --shelf-height: 300px; } .book-gallery-bottom { padding-inline: 19px; gap: 16px 10px; } .book-controls { gap: 7px; } #book-counter { min-width: 34px; } }
 @media (max-height: 650px) and (min-width: 768px) { .book-gallery { --shelf-height: 300px; padding-top: 112px; padding-bottom: 25px; } }
 @media (prefers-reduced-motion: reduce) { .book-shelf { scroll-behavior: auto; } .shelf-book, .book-volume { transition: none; } .shelf-book:hover:not([aria-pressed='true']) .book-volume { transform: translateX(calc(var(--book-thickness) * .5)) rotateZ(var(--book-lean)) rotateY(90deg); } }
+/* A dedicated space for Asadbek’s notes, separate from book metadata. */
+.book-status{font-size:10px;line-height:1.5;letter-spacing:.06em;text-transform:uppercase;margin:8px 0 0;color:#a8bdd6}
+.book-detail-dialog .book-insights{margin:28px 0 20px;padding-top:22px;border-top:1px solid #3a4f6a;min-height:150px}
+.book-insights h3{font-size:15px;font-weight:500;letter-spacing:-.01em;margin:0 0 14px}
+#book-detail-notes{white-space:pre-line;overflow-wrap:anywhere}
+.book-detail-dialog .insights-pending{font-style:italic;opacity:.7}
+.book-source{font-size:11px;color:#9bafc9;text-decoration:underline;text-underline-offset:4px}
+.book-source:hover{color:#eef4fc}
