@@ -33,3 +33,6 @@
  .about-scroll-link{bottom:17px;padding:5px 11px;background:#050a1299;border-radius:20px}
  .page-reading .main-nav{background:#0a111cf7;border-color:#2b3b52}.page-reading .nav-toggle{color:#b8cce5}
 }
+/* Keep the face above the title, including the no-canvas fallback. */
+.page-home .portrait-fallback{transform:translateY(-5svh)}
+@media(max-width:767px){.page-home .portrait-fallback{transform:translateY(-3.5svh)}}

@@ -238,9 +238,10 @@
       );
       const pw = ph * aspect;
       const x0 = (w - pw) * .5;
-      const y0 = this.mobile
+      const portraitLift = h * (this.mobile ? .035 : .05);
+      const y0 = (this.mobile
         ? h * .98 - ph
-        : Math.min(h * .98 - ph, h * .42 - (focus?.[1] ?? .33) * ph);
+        : Math.min(h * .98 - ph, h * .42 - (focus?.[1] ?? .33) * ph)) - portraitLift;
       return { ph, pw, x0, y0 };
     }
 
