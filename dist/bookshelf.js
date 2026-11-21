@@ -189,8 +189,7 @@
       const fields = {
         'book-detail-title': book.sample ? `Book ${String(selectedIndex + 1).padStart(2, '0')} — a place on the shelf` : book.title,
         'book-detail-author': book.sample ? 'Title and author to add' : book.author,
-        'book-detail-status': book.status === 'reading' ? 'Reading now' : 'Finished',
-        'book-detail-notes': book.insights || 'My insights are coming soon.'
+        'book-detail-notes': book.insights || 'Coming soon.'
       };
       Object.entries(fields).forEach(([id, value]) => {
         const target = document.getElementById(id);

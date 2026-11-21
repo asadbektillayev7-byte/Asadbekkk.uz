@@ -108,3 +108,10 @@
 /* Declare dark support so phone browsers' auto-dark / night mode don't recolor the page or its animations */
 :root{color-scheme:dark}
 @media (prefers-color-scheme:dark){:root{color-scheme:dark}}
+/* Reading popup: just title, author and insights — compact */
+.page-reading .book-detail-dialog{padding:46px 40px 34px}
+.page-reading .book-detail-dialog h2{margin:0 0 8px;padding-right:40px}
+.page-reading .book-detail-dialog #book-detail-author{margin:0}
+.page-reading .book-detail-dialog .book-insights{min-height:0;margin:22px 0 0;padding-top:18px}
+.page-reading .book-detail-dialog #book-detail-notes{margin:0}
+@media(max-width:767px){.page-reading .book-detail-dialog{padding:52px 24px 26px}}

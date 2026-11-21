@@ -148,6 +148,58 @@
       });
       txt(g, tall ? "PLANNED METHOD" : "PLANNED METHOD · NO RESULTS YET", w - 16, tall ? H * 0.045 : 26, 10, C.faint, "right");
     },
+
+    /* Microneedles (generic illustration — not the lab's design): a patch over tissue, drug spreading from each needle */
+    spread(g, t, w, H) {
+      const top = H * 0.16, base = 12, skin = H * 0.44, bottom = H * 0.92, n = 5, x0 = w * 0.16, x1 = w * 0.84;
+      const tissue = new Path2D(); tissue.rect(14, skin, w - 28, bottom - skin);
+      g.fillStyle = "rgba(184,204,233,0.05)"; g.fill(tissue);
+      g.strokeStyle = C.line; g.lineWidth = 1; g.beginPath(); g.moveTo(14, skin); g.lineTo(w - 14, skin); g.stroke();
+      const c = (t % 8) / 8, tipY = skin + (bottom - skin) * 0.42;
+      g.save(); g.clip(tissue); g.globalCompositeOperation = "lighter";
+      for (let i = 0; i < n; i++) {
+        const x = lerp(x0, x1, i / (n - 1)), r = 10 + c * (x1 - x0) / (n - 1) * 0.95;
+        const grd = g.createRadialGradient(x, tipY, 2, x, tipY, r);
+        grd.addColorStop(0, "rgba(242,180,90," + (0.42 * (1 - c * 0.45)).toFixed(3) + ")"); grd.addColorStop(1, "rgba(242,180,90,0)");
+        g.fillStyle = grd; g.beginPath(); g.arc(x, tipY, r, 0, 7); g.fill();
+        for (let p = 0; p < 9; p++) {
+          const a = p * 2.399 + i, k = ((c + p * 0.11) % 1), d = k * r * 0.95;
+          g.fillStyle = "rgba(242,180,90," + (0.7 * (1 - k)).toFixed(3) + ")";
+          g.beginPath(); g.arc(x + Math.cos(a) * d, tipY + Math.sin(a) * d * 0.8, 1.6, 0, 7); g.fill();
+        }
+      }
+      g.restore();
+      for (let i = 0; i < n; i++) {
+        const x = lerp(x0, x1, i / (n - 1));
+        g.beginPath(); g.moveTo(x - 7, top + base); g.lineTo(x + 7, top + base); g.lineTo(x, tipY); g.closePath();
+        g.fillStyle = C.card; g.fill(); g.strokeStyle = C.fg; g.lineWidth = 1.3; g.stroke();
+      }
+      g.beginPath(); g.roundRect ? g.roundRect(x0 - 26, top, x1 - x0 + 52, base, 3) : g.rect(x0 - 26, top, x1 - x0 + 52, base);
+      g.fillStyle = C.card; g.fill(); g.strokeStyle = C.fg; g.lineWidth = 1.3; g.stroke();
+      txt(g, "PATCH", x0 - 26, top - 12, 10, C.dim);
+      txt(g, "TISSUE", 22, bottom - 12, 10, C.dim);
+      txt(g, "DRUG", w - 22, bottom - 12, 10, C.warm, "right");
+    },
+
+    /* Spacing (generic illustration): the same grid of needles, tight vs wide, and how the drug covers the tissue */
+    spacing(g, t, w, H) {
+      const c = clamp(((t % 7) / 7) * 1.25, 0, 1), pw = (w - 48) / 2, ph = H * 0.7, py = H * 0.1;
+      [["TIGHT SPACING", 0.2], ["WIDE SPACING", 0.32]].forEach(([label, sp], k) => {
+        const px = 16 + k * (pw + 16), cx = px + pw / 2, cy = py + ph / 2, step = pw * sp;
+        const box = new Path2D(); box.rect(px, py, pw, ph);
+        g.strokeStyle = C.line; g.lineWidth = 1; g.stroke(box);
+        g.save(); g.clip(box); g.globalCompositeOperation = "lighter";
+        const r = 6 + c * pw * 0.2;
+        for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+          const x = cx + a * step, y = cy + b * step, grd = g.createRadialGradient(x, y, 1, x, y, r);
+          grd.addColorStop(0, "rgba(242,180,90,0.34)"); grd.addColorStop(0.8, "rgba(242,180,90,0.16)"); grd.addColorStop(1, "rgba(242,180,90,0)");
+          g.fillStyle = grd; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+        }
+        g.restore();
+        for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) { g.fillStyle = C.fg; g.beginPath(); g.arc(cx + a * step, cy + b * step, 2.6, 0, 7); g.fill(); }
+        txt(g, label, cx, py + ph + 18, 10, C.dim, "center");
+      });
+    },
   };
 
   const scenes = canvases.map(canvas => ({ canvas, scene: canvas.dataset.rsxScene, visible: true }));
