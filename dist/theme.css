@@ -105,3 +105,6 @@
 .act-icons a:hover{color:#fff;border-color:#ffffff66;background:#ffffff0d}
 .act-icons svg{width:18px;height:18px;display:block}
 .work-dialog-icons{margin-top:24px}
+/* Declare dark support so phone browsers' auto-dark / night mode don't recolor the page or its animations */
+:root{color-scheme:dark}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark}}

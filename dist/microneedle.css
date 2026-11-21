@@ -124,3 +124,6 @@
 .mnx-shot figcaption { font-family: var(--rsx-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #3d4652; padding: 0 18px 14px; display: flex; justify-content: space-between; gap: 10px; }
 .mnx-shot figcaption span { color: #7a8591; }
 @media (max-width: 700px) { .mnx-pair { grid-template-columns: minmax(0, 1fr); } .mnx-shot img { height: 240px; } }
+
+/* Phone: give the picture a fixed height so the title and description show below it */
+@media (max-width: 767px) { .mnx-card-art { height: 220px; min-height: 0; } }
