@@ -6,7 +6,7 @@
   const stage = document.querySelector('#title-stage');
   const nameWord = document.querySelector('#name-word');
   const portfolioWord = document.querySelector('#portfolio-word');
-  const introControl = document.querySelector('#intro-control');
+  const introControl = document.querySelector('#intro-control') || document.createElement('button');
   const mark = document.querySelector('.opening-mark');
   const canvas = document.querySelector('#portrait-canvas');
   const fallback = document.querySelector('#portrait-fallback');
@@ -65,7 +65,7 @@
   function isCompact() { return window.matchMedia('(max-width: 767px)').matches; }
   function finalTop() { return isCompact() ? '20%' : '74%'; }
   function titleSeparation() {
-    return isCompact() ? 0 : Math.min(16, innerWidth * .01);
+    return 0;
   }
   function setFinalTitle() {
     const separation = titleSeparation();

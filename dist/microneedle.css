@@ -1,0 +1,126 @@
+/* Microneedle CAD research — Works page. Reuses the rsx tokens from research.css;
+   everything specific to this write-up starts with "mnx". */
+.mnx { --mnx-paper: #ffffff; --mnx-ink: #1d2733; }
+
+/* Card on the grid */
+.mnx-card { grid-column: 1 / -1; display: grid; grid-template-columns: .42fr 1fr; align-items: center; background: #101418; }
+.mnx-card-art { position: relative; min-height: 240px; height: 100%; background: #ffffff; border-right: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; }
+.mnx-card-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 18px; transition: transform .8s; }
+.mnx-card:hover .mnx-card-art img { transform: scale(1.04); }
+.mnx-card-art small { position: absolute; left: 19px; bottom: 16px; font-size: 7px; letter-spacing: .13em; color: #4c5b6d; }
+.mnx-card .project-card-copy { padding-inline: 40px; }
+.mnx-card h3 { font-size: clamp(28px, 3.5vw, 60px); margin-block: 20px 12px; }
+.mnx-card .placeholder-label.mnx-live { color: #b8cce9; border-color: rgba(184, 204, 233, 0.4); }
+@media (max-width: 767px) {
+  .mnx-card { display: block; }
+  .mnx-card-art { min-height: 220px; border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  .mnx-card .project-card-copy { padding: 23px; }
+  .mnx-card h3 { font-size: 34px; }
+}
+
+/* Status box: blue, because this one is real and ongoing */
+.mnx .rsx-status.mnx-on { background: var(--rsx-accent-bg); border-color: rgba(184, 204, 233, 0.3); }
+.mnx .rsx-status.mnx-on b { color: var(--rsx-accent); }
+.mnx .rsx-status.mnx-on p { color: #d3dbe6; }
+.mnx a { color: var(--rsx-accent); text-decoration: underline; text-decoration-color: rgba(184, 204, 233, 0.35); text-underline-offset: 3px; }
+.mnx a:hover { text-decoration-color: var(--rsx-accent); }
+
+/* Light "paper" stage for CAD renders */
+.mnx-paper { display: block; position: relative; background: var(--mnx-paper); }
+.mnx-paper img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.mnx-zoom { position: absolute; right: 10px; bottom: 10px; font-family: var(--rsx-mono); font-size: 10px; letter-spacing: .06em; color: var(--mnx-ink); background: rgba(255, 255, 255, .85); border: 1px solid rgba(29, 39, 51, .15); border-radius: 6px; padding: 4px 7px; opacity: 0; transition: opacity .2s; }
+.mnx-paper:hover .mnx-zoom, .mnx-paper:focus-visible .mnx-zoom { opacity: 1; }
+.mnx .rsx-fignum { z-index: 1; color: var(--rsx-fg); }
+
+/* FIG 01: needle + spec table */
+.mnx-needle { display: grid; grid-template-columns: minmax(180px, .5fr) 1fr; }
+.mnx-needle .mnx-paper { height: 460px; padding: 22px; border-right: 1px solid var(--rsx-line); }
+.mnx-spec { display: grid; align-content: center; padding: 26px 28px; gap: 0; margin: 0; }
+.mnx-spec div { display: flex; justify-content: space-between; gap: 18px; padding: 11px 0; border-top: 1px solid var(--rsx-line); font-size: 14px; }
+.mnx-spec div:last-child { border-bottom: 1px solid var(--rsx-line); }
+.mnx-spec dt { color: var(--rsx-dim); }
+.mnx-spec dd { margin: 0; font-family: var(--rsx-mono); font-size: 13px; color: var(--rsx-fg); text-align: right; }
+.mnx-spec-note { font-family: var(--rsx-mono); font-size: 11px; color: var(--rsx-faint); margin: 14px 0 0; line-height: 1.5; }
+
+.mnx-wide { grid-column: 1 / -1; }
+.mnx-wide .mnx-paper { padding: 26px 22px; }
+.mnx-fig-paper { aspect-ratio: 16 / 10; padding: 18px; }
+
+/* FIG 04: seven versions */
+.mnx-seven { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rsx-line); border-bottom: 1px solid var(--rsx-line); }
+.mnx-seven figure { margin: 0; background: var(--rsx-card); display: flex; flex-direction: column; }
+.mnx-seven .mnx-paper { aspect-ratio: 7 / 5; padding: 8px; }
+.mnx-seven figcaption { padding: 10px 12px 12px; display: grid; gap: 3px; }
+.mnx-seven figcaption b { font-family: var(--rsx-mono); font-size: 11px; font-weight: 500; color: var(--rsx-fg); letter-spacing: .02em; }
+.mnx-seven figcaption span { font-size: 12px; color: var(--rsx-dim); }
+.mnx-seven-key { background: var(--rsx-card); padding: 16px; display: grid; align-content: center; gap: 6px; font-size: 12px; color: var(--rsx-dim); line-height: 1.5; }
+.mnx-seven-key b { font-family: var(--rsx-mono); color: var(--rsx-accent); font-weight: 500; }
+
+/* Proof: FreeCAD screenshots */
+.mnx-shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.mnx-shot { margin: 0; display: grid; gap: 8px; }
+.mnx-shot a { display: block; border: 1px solid var(--rsx-line); border-radius: 10px; overflow: hidden; background: #1e1e1e; transition: border-color .2s; }
+.mnx-shot a:hover { border-color: var(--rsx-line-hover); }
+.mnx-shot img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.mnx-shot figcaption { font-size: 12px; color: var(--rsx-dim); line-height: 1.5; }
+
+/* Proof: email excerpts */
+.mnx-quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.mnx-quote { margin: 0; background: var(--rsx-card); border: 1px solid var(--rsx-line); border-radius: 14px; padding: 20px 22px; display: grid; gap: 14px; align-content: space-between; }
+.mnx-quote blockquote { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 19px; line-height: 1.45; letter-spacing: -.01em; color: var(--rsx-fg); }
+.mnx-quote blockquote::before { content: "“"; color: var(--rsx-accent); margin-right: 2px; }
+.mnx-quote blockquote::after { content: "”"; color: var(--rsx-accent); margin-left: 1px; }
+.mnx-quote figcaption { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--rsx-mono); font-size: 11px; letter-spacing: .04em; color: var(--rsx-dim); border-top: 1px solid var(--rsx-line); padding-top: 12px; }
+.mnx-quote figcaption span:last-child { color: var(--rsx-faint); }
+.mnx-quote.mnx-key { grid-column: 1 / -1; background: linear-gradient(180deg, rgba(184, 204, 233, .07), var(--rsx-card)); border-color: rgba(184, 204, 233, 0.28); }
+.mnx-quote.mnx-key blockquote { font-size: clamp(21px, 2.2vw, 28px); }
+.mnx-note { font-family: var(--rsx-mono); font-size: 11px; color: var(--rsx-faint); margin: -18px 0 0; line-height: 1.6; }
+
+/* Log dates */
+.mnx .rsx-steps .n { white-space: nowrap; }
+.mnx .rsx-steps li { grid-template-columns: 62px 1fr auto; }
+.mnx .rsx-steps .t small { display: block; font-size: 13px; color: var(--rsx-dim); margin-top: 4px; line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .mnx-needle { grid-template-columns: minmax(0, 1fr); }
+  .mnx-needle .mnx-paper { height: 340px; border-right: 0; border-bottom: 1px solid var(--rsx-line); }
+  .mnx-seven { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mnx-shots { grid-template-columns: minmax(0, 1fr); }
+  .mnx-quotes { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
+  .mnx .rsx-steps li { grid-template-columns: 54px 1fr; }
+  .mnx-spec { padding: 18px 20px; }
+  .mnx-quote blockquote { font-size: 17px; }
+  .mnx-zoom { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .mnx-card:hover .mnx-card-art img { transform: none; } }
+
+/* v2: short write-up — intro image, two points, model downloads */
+.mnx-intro { display: grid; gap: 22px; }
+.mnx-hero { border: 1px solid var(--rsx-line); border-radius: 14px; overflow: hidden; padding: 22px; }
+.mnx-hero img { max-height: 340px; }
+.mnx .mnx-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mnx-files { list-style: none; margin: 0; padding: 0; display: grid; max-width: 860px; }
+.mnx-files li { display: grid; grid-template-columns: 1fr auto auto; gap: 18px; align-items: center; padding: 14px 0; border-top: 1px solid var(--rsx-line); }
+.mnx-files li:last-child { border-bottom: 1px solid var(--rsx-line); }
+.mnx-file-name { font-size: 15px; color: var(--rsx-fg); }
+.mnx-file-name small { display: block; font-size: 13px; color: var(--rsx-dim); margin-top: 3px; }
+.mnx-file-type { font-family: var(--rsx-mono); font-size: 11px; letter-spacing: .04em; color: var(--rsx-faint); white-space: nowrap; }
+.mnx .mnx-files a { font-family: var(--rsx-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--rsx-accent); border: 1px solid rgba(184, 204, 233, 0.35); background: var(--rsx-accent-bg); border-radius: 999px; padding: 6px 12px; white-space: nowrap; transition: background .2s, color .2s; }
+.mnx .mnx-files a:hover { background: var(--rsx-accent); color: #10141a; }
+@media (max-width: 900px) { .mnx .mnx-two { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 767px) {
+  .mnx-hero { padding: 12px; }
+  .mnx-files li { grid-template-columns: 1fr auto; gap: 8px 14px; }
+  .mnx-file-type { grid-column: 1; grid-row: 2; }
+  .mnx .mnx-files a { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+/* Two pictures of the corrected design: one needle and the 4 × 4 patch */
+.mnx-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 16px; }
+.mnx-shot { margin: 0; border: 1px solid var(--rsx-line); border-radius: 14px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+.mnx-shot img { display: block; width: 100%; height: 300px; object-fit: contain; padding: 18px; box-sizing: border-box; }
+.mnx-shot figcaption { font-family: var(--rsx-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #3d4652; padding: 0 18px 14px; display: flex; justify-content: space-between; gap: 10px; }
+.mnx-shot figcaption span { color: #7a8591; }
+@media (max-width: 700px) { .mnx-pair { grid-template-columns: minmax(0, 1fr); } .mnx-shot img { height: 240px; } }

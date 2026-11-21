@@ -36,3 +36,72 @@
 /* Keep the face above the title, including the no-canvas fallback. */
 .page-home .portrait-fallback{transform:translateY(-5svh)}
 @media(max-width:767px){.page-home .portrait-fallback{transform:translateY(-3.5svh)}}
+/* After the intro, PORTFOLIO settles about two sizes smaller. Change .8 to adjust. */
+.page-home .title-stage{transition:font-size .9s cubic-bezier(.65,0,.2,1)}
+.page-home.is-ready .title-stage{font-size:calc(var(--title-size) * .8)}
+/* PORTFOLIO: even letter spacing. Tracking moves from letter-spacing (which shrank each
+   letter's box and crowded the T into its neighbours) to a small margin between letters. */
+.portfolio-word{letter-spacing:0}
+.portfolio-word .letter{letter-spacing:0;margin-right:-.012em}
+.portfolio-word .word-half-last .letter:last-child{margin-right:0}
+/* "Student. Still exploring." — moved from the landing page to the Works heading. */
+.works-tagline{display:block;font-size:clamp(22px,2.3vw,32px);line-height:1.15;letter-spacing:-.035em;color:#f3f4f6;margin-bottom:14px}
+.works-tagline strong{font-weight:700}.works-tagline em{font-weight:300;color:#c1c4cd}
+/* The T's wide arms need a touch more room on both sides. */
+.portfolio-word .word-half-first .letter:last-child{margin-left:.01em;margin-right:.008em}
+/* Works: "Things in progress." label above the ongoing projects */
+.works-group-title{font-size:clamp(26px,3vw,44px);font-weight:500;letter-spacing:-.055em;line-height:1.05;margin:0 0 24px;color:#e5e7e5;border-top:1px solid #ffffff1a;padding-top:28px}
+.works-group-title .soft-type{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.04em;color:#a4aaa7}
+.work-section h2.works-group-title{font-size:clamp(26px,3vw,44px)}
+@media(max-width:767px){.work-section h2.works-group-title{font-size:30px;margin-bottom:18px;padding-top:24px}}
+/* Works part 2 ("Things in progress.") — heading matches part 1's title */
+.work-section .section-heading h2{font-size:clamp(52px,7.1vw,124px);font-weight:600;letter-spacing:-.075em;line-height:.98;margin:0}
+@media(max-width:767px){.work-section .section-heading h2{font-size:clamp(48px,11vw,76px)}}
+.works-part2{border-top:1px solid #ffffff1a}
+/* Works part 1: six finished things — a little smaller than before */
+.works-done-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.works-done-grid .project-art{height:260px}
+.works-done-grid .project-card h3{font-size:clamp(26px,2.5vw,42px);margin:18px 0 12px}
+.works-done-grid .project-card-copy{padding:22px 24px 24px}
+@media(min-width:1500px){.works-done-grid .project-art{height:300px}}
+@media(max-width:767px){.works-done-grid{grid-template-columns:minmax(0,1fr)}.works-done-grid .project-art{height:220px}.works-done-grid .project-card h3{font-size:30px}}
+/* Activity cards on Works (drawn by activities.js) */
+[data-act-grid="works"]{--act-card:#101212;--act-stage:#0b0d0d;--act-line:rgba(255,255,255,.09);--act-fg:#e5e7e5;--act-dim:#8b948e;--act-faint:#4b524e;--act-accent:#b8cce9;--act-warm:#f2b45a;--act-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+.act-pcard-art{background:#0b0d0d}
+.act-pcard-art canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.act-pcard-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.act-pcard-links a{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#a4aaa7;border:1px solid #ffffff26;border-radius:999px;padding:6px 11px;transition:color .2s,border-color .2s}
+.act-pcard-links a:hover{color:#fff;border-color:#ffffff55}
+/* "Things in progress ↓" next to the Works title */
+.works-jump{font-size:15px;line-height:1.7;color:#a4aaa7;margin:0 0 7px;white-space:nowrap;border-bottom:1px solid #ffffff2e;transition:color .2s,border-color .2s}
+.works-jump:hover{color:#fff;border-color:#fff}
+.works-jump span{display:inline-block;margin-left:6px;transition:transform .2s}.works-jump:hover span{transform:translateY(3px)}
+@media(max-width:767px){.works-jump{display:inline-block;font-size:13px;margin-top:25px}}
+/* Works popups — open like the book insights on Reading */
+.work-dialog{width:min(760px,calc(100% - 32px));max-width:none;max-height:88svh;background:#101212;color:#e5e7e5;border:1px solid #ffffff24;padding:48px 44px 40px;--act-card:#101212;--act-stage:#0b0d0d;--act-line:rgba(255,255,255,.09);--act-fg:#e5e7e5;--act-dim:#8b948e;--act-faint:#4b524e;--act-accent:#b8cce9;--act-warm:#f2b45a;--act-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+.work-dialog[open]{animation:work-dialog-in .22s cubic-bezier(.2,.7,.2,1)}
+.work-dialog[open]::backdrop{animation:work-backdrop-in .22s ease-out}
+@keyframes work-dialog-in{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes work-backdrop-in{from{opacity:0}to{opacity:1}}
+.work-dialog .eyebrow{color:#8b948e}
+.work-dialog h2{margin:14px 0 22px}
+.work-dialog-stage{position:relative;aspect-ratio:16/9;background:#0b0d0d;border:1px solid #ffffff17;border-radius:10px;overflow:hidden;margin-bottom:26px}
+.work-dialog-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.work-dialog-body h3{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#8b948e;margin:22px 0 8px}
+.work-dialog-body h3:first-child{margin-top:0}
+.work-dialog-body p{font-size:15px;line-height:1.75;color:#c9cdcb;margin:0 0 10px}
+.work-dialog-wide{width:min(1180px,calc(100% - 32px));padding:40px 36px 36px}
+.work-dialog .dob{padding:0;color-scheme:dark}
+.work-dialog .dob-head{border-top:0;padding-top:0}
+@media(prefers-reduced-motion:reduce){.work-dialog[open],.work-dialog[open]::backdrop{animation:none}}
+@media(max-width:767px){.work-dialog{padding:52px 20px 26px;max-height:92svh}.work-dialog-wide{padding:52px 16px 24px}.work-dialog-body p{font-size:14px}}
+/* Clickable activity cards */
+.act-pcard{cursor:pointer}
+.act-pcard:focus-visible{outline:2px solid #b8cce9;outline-offset:3px}
+.act-pcard:hover .card-arrow{transform:translate(3px,-3px);color:var(--accent)}
+/* Icon links (Website / Telegram / Instagram) */
+.act-icons{display:flex;gap:10px;margin-top:16px}
+.act-icons a{display:grid;place-items:center;width:38px;height:38px;border:1px solid #ffffff26;border-radius:50%;color:#a4aaa7;transition:color .2s,border-color .2s,background .2s}
+.act-icons a:hover{color:#fff;border-color:#ffffff66;background:#ffffff0d}
+.act-icons svg{width:18px;height:18px;display:block}
+.work-dialog-icons{margin-top:24px}

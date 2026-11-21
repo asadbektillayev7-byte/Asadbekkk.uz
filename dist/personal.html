@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="styles.css?v=11"><link rel="stylesheet" href="sections.css?v=11"><link rel="stylesheet" href="pages.css?v=11">
   
   <link rel="stylesheet" href="theme.css?v=11">
-  <script defer src="content.js?v=13"></script>
+  <link rel="stylesheet" href="activities.css?v=1">
+  <script defer src="content.js?v=14"></script>
+  <script defer src="activities.js?v=9"></script>
   <script defer src="site.js?v=11"></script>
 
 </head>
@@ -31,6 +33,17 @@
       <div class="photo-slot slot-three"><span class="frame-number">FRAME / 003</span><div class="viewfinder" aria-hidden="true">+</div><div><em>A moment.</em><span>Photograph to come</span></div></div>
     </div>
 </section>
+
+  <!-- Activities: cards are generated from the ACTIVITIES list in activities.js -->
+  <section class="act" id="activities" aria-labelledby="act-title">
+    <div class="act-wrap">
+      <header class="act-head">
+        <p class="act-eyebrow">Activities</p>
+        <h2 class="act-title" id="act-title">Outside <em>the classroom.</em></h2>
+      </header>
+      <div class="act-grid" id="act-grid" data-act-grid="personal"></div>
+    </div>
+  </section>
 </main>
   <div class="site-notice" id="site-notice" role="status" aria-live="polite"></div>
 </body></html>

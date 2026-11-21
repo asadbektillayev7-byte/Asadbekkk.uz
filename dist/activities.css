@@ -1,0 +1,49 @@
+/* Activities — Personal page. Every class and token starts with "act".
+   Navy palette to match the Personal page (theme.css); fonts use the site's system stack. */
+.act {
+  --act-card: #111c29;
+  --act-stage: #0d1825;
+  --act-line: #26354b;
+  --act-line-hover: #415673;
+  --act-fg: #dce5ef;
+  --act-dim: #8398b3;
+  --act-faint: #4a5f7a;
+  --act-accent: #a7c4e6;
+  --act-warm: #f2b45a;
+  --act-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  background: #080d14; color: var(--act-fg);
+  padding: 30px var(--edge, 24px) 110px;
+  scroll-margin-top: 70px;
+}
+.act * { box-sizing: border-box; }
+.act-wrap { display: grid; gap: 30px; }
+.act-head { display: grid; gap: 12px; border-top: 1px solid #30435d; padding-top: 26px; }
+.act-eyebrow { font-family: var(--act-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--act-dim); margin: 0; }
+.act-title { font-weight: 500; font-size: clamp(40px, 6vw, 84px); line-height: 1; letter-spacing: -.06em; margin: 0; }
+.act-title em { font-family: Georgia, "Times New Roman", serif; font-weight: 400; letter-spacing: -.05em; color: #a7b9d0; }
+
+.act-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; }
+.act-card { grid-column: span 2; display: flex; flex-direction: column; background: var(--act-card); border: 1px solid var(--act-line); border-radius: 14px; overflow: hidden; transition: border-color .25s; }
+.act-card.is-featured { grid-column: span 3; }
+.act-card:hover { border-color: var(--act-line-hover); }
+.act-stage { position: relative; aspect-ratio: 16 / 9; background: var(--act-stage); border-bottom: 1px solid var(--act-line); }
+.act-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.act-when { position: absolute; top: 12px; left: 12px; font-family: var(--act-mono); font-size: 11px; letter-spacing: .06em; background: var(--act-card); border: 1px solid var(--act-line); border-radius: 8px; padding: 5px 9px; color: var(--act-fg); }
+.act-info { display: grid; gap: 6px; padding: 16px 20px 18px; flex: 1; align-content: start; }
+.act-role { font-family: var(--act-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--act-accent); margin: 0; }
+.act-name { font-weight: 600; font-size: 21px; letter-spacing: -.03em; margin: 0; }
+.act-line { font-size: 14px; line-height: 1.55; color: var(--act-dim); margin: 0; }
+.act-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.act-links a { font-family: var(--act-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--act-dim); border: 1px solid var(--act-line); border-radius: 999px; padding: 6px 11px; text-decoration: none; transition: color .2s, border-color .2s; }
+.act-links a:hover { color: var(--act-fg); border-color: var(--act-line-hover); }
+.act-links a:focus-visible { outline: 2px solid var(--act-accent); outline-offset: 2px; }
+
+@media (max-width: 1000px) { .act-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .act-card, .act-card.is-featured { grid-column: span 1; } }
+@media (max-width: 600px) { .act { padding-bottom: 80px; } .act-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .act-card, .act-links a { transition: none; } }
+
+/* Icon links on the Personal page cards */
+.act .act-icons { display: flex; gap: 10px; margin-top: 8px; }
+.act .act-icons a { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--act-line); border-radius: 50%; color: var(--act-dim); }
+.act .act-icons a:hover { color: var(--act-fg); border-color: var(--act-line-hover); }
+.act .act-icons svg { width: 17px; height: 17px; }

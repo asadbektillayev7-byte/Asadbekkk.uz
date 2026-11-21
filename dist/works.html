@@ -6,9 +6,16 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=11"><link rel="stylesheet" href="sections.css?v=11"><link rel="stylesheet" href="pages.css?v=11">
   
-  <link rel="stylesheet" href="theme.css?v=11">
-  <script defer src="content.js?v=13"></script>
+  <link rel="stylesheet" href="theme.css?v=19">
+  <link rel="stylesheet" href="research.css?v=2">
+  <link rel="stylesheet" href="builds.css?v=3">
+  <link rel="stylesheet" href="microneedle.css?v=4">
+  <script defer src="content.js?v=14"></script>
+  <script defer src="activities.js?v=9"></script>
   <script defer src="site.js?v=11"></script>
+  <script defer src="research.js?v=2"></script>
+  <script defer src="builds.js?v=5"></script>
+  <script defer src="microneedle.js?v=1"></script>
 
 </head>
 <body class="inner-page page-works" data-page="works">
@@ -25,26 +32,122 @@
   </header>
 <main id="main-content">
   <section class="work-section content-section" id="works" aria-labelledby="work-title">
-    <div class="section-kicker reveal"><span>01 / Works</span><span class="status-tag"><i></i> A work in progress</span></div>
-    <div class="section-heading reveal"><h1 id="work-title">Things in<br><span class="soft-type">progress.</span></h1><p>Mechanical things, small software ideas, and questions I want to follow. This is where their stories will live.</p></div>
-    <div class="work-toolbar reveal"><div class="project-filters" aria-label="Filter projects"><button data-project-filter="all" aria-pressed="true">All <sup>03</sup></button><button data-project-filter="mechanical" aria-pressed="false">Mechanical</button><button data-project-filter="software" aria-pressed="false">Software</button><button data-project-filter="research" aria-pressed="false">Research</button></div><span class="slot-note">Project details coming soon</span></div>
-    <p id="filter-status" class="sr-only" aria-live="polite"></p>
+    <div class="section-heading reveal"><h1 id="work-title">Student.<br><span class="soft-type">Still exploring.</span></h1><a class="works-jump" href="#in-progress">Things in progress <span aria-hidden="true">↓</span></a></div>
+    <div class="project-grid works-done-grid" data-act-grid="works">
+      <button type="button" class="project-card software-card reveal" data-category="software" data-open-dialog="work-builds" aria-haspopup="dialog">
+        <div class="project-art dob-card-art" aria-hidden="true"><canvas data-dob-art></canvas><div class="art-coordinate">ONE BUILD A DAY</div></div>
+        <div class="project-card-copy"><div class="card-topline"><span>Software</span><span class="placeholder-label" id="dob-card-count">19 / 30 built</span></div><h3>30 Days<br>of Builds.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>A small Python project every day.</p></div>
+      </button>
+    </div>
+  </section>
+
+
+  <!-- Part 2: things in progress (research) -->
+  <section class="work-section content-section works-part2" id="in-progress" aria-labelledby="progress-title">
+    <div class="section-heading reveal"><h2 id="progress-title">Things in<br><span class="soft-type">progress.</span></h2><p>Research I’m part of right now. Unfinished, and updated as it moves.</p></div>
     <div class="project-grid">
-      <button class="project-card mechanical-card reveal" data-category="mechanical" data-project="mechanical" data-open-dialog="project-dialog">
-        <div class="project-art mechanism-art" aria-hidden="true"><div class="art-coordinate">FIG. 01 / AN IDEA IN MOTION</div><svg viewBox="0 0 600 360" fill="none"><g stroke="currentColor"><ellipse cx="300" cy="180" rx="121" ry="121"/><ellipse cx="300" cy="180" rx="89" ry="89"/><ellipse cx="300" cy="180" rx="37" ry="37"/><ellipse cx="300" cy="180" rx="16" ry="16"/><path d="M300 59v84m0 74v84M179 180h84m74 0h84M214 94l60 60m52 52 60 60M214 266l60-60m52-52 60-60"/><path d="m300 36 10 17 20-14 6 20 23-8 1 21 24-1-5 22 24 7-12 18 21 14-17 14 16 21-21 7 8 24-23 1 1 23-23-6-7 22-19-12-14 20-14-18-21 15-7-22-24 8-1-23-23 1 6-23-22-7 12-19-20-14 18-14-15-21 22-7-8-24 23-1-1-23 23 6 7-22 19 12 14-20Z" transform="translate(-1 -1)"/><path d="M80 180h85m270 0h85M300 19v25m0 275v25" stroke-dasharray="3 7"/><path d="M179 322h242m-242-8v16m242-16v16" opacity=".45"/></g><text x="300" y="348" fill="currentColor" text-anchor="middle" font-size="10" letter-spacing="3">CURIOUS HOW IT WORKS</text></svg><span class="art-plus plus-one">+</span><span class="art-plus plus-two">+</span></div>
-        <div class="project-card-copy"><div class="card-topline"><span>Mechanical / 01</span><span class="placeholder-label">Content to add</span></div><h3>Something<br>that moves.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Sketches, experiments, and lessons from making.</p></div>
-      </button>
-      <button class="project-card software-card reveal" data-category="software" data-project="software" data-open-dialog="project-dialog">
-        <div class="project-art software-art" aria-hidden="true"><div class="art-coordinate">FIG. 02 / FROM “WHAT IF” TO “IT WORKS”</div><div class="code-window"><div class="code-window-top"><i></i><i></i><i></i><span>A LITTLE EXPERIMENT</span></div><div class="code-symbol">{<span>✳</span>}</div><div class="code-lines"><i></i><i></i><i></i><i></i></div></div><div class="software-sticker">try.<br>break.<br>learn.</div></div>
-        <div class="project-card-copy"><div class="card-topline"><span>Software / 02</span><span class="placeholder-label">Content to add</span></div><h3>An idea,<br>on screen.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Small builds. Some vibe-coding. Plenty to learn.</p></div>
-      </button>
-      <button class="project-card research-card reveal" data-category="research" data-project="research" data-open-dialog="project-dialog">
-        <div class="research-art" aria-hidden="true"><span>?</span><i></i><i></i><small>THE NEXT QUESTION</small></div><div class="project-card-copy"><div class="card-topline"><span>Research / 03</span><span class="placeholder-label">In preparation</span></div><h3>A question worth following.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Research is on the way. The story will grow with the work.</p></div>
-      </button>
+      <a class="project-card research-card reveal" data-category="research" href="#engine-audio">
+        <div class="rsx-card-art" aria-hidden="true"><canvas data-rsx-scene="pair"></canvas><small>LISTENING FOR FAULTS</small></div><div class="project-card-copy"><div class="card-topline"><span>Research</span><span class="placeholder-label rsx-live">In progress · not complete</span></div><h3>Can a phone hear what’s wrong with an engine?<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Engine faults from sound alone. Early stage.</p></div>
+      </a>
+      <a class="project-card mnx-card reveal" data-category="research" href="#microneedles">
+        <div class="mnx-card-art" aria-hidden="true"><img src="assets/research/microneedle/patch-w300-r90.webp" alt="" loading="lazy"><small>16 NEEDLES · 128 SLOTS · 9 × 9 MM</small></div><div class="project-card-copy"><div class="card-topline"><span>Research</span><span class="placeholder-label mnx-live">Ongoing · University of Victoria</span></div><h3>Microneedles for brain-tumour drug delivery.<span class="card-arrow" aria-hidden="true">↗</span></h3><p>Remote CAD work for a microengineering lab in Canada. I design the 3D models.</p></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Research write-up: figures are drawn by research.js -->
+  <section class="rsx" id="engine-audio" aria-labelledby="rsx-title">
+    <div class="rsx-wrap">
+      <header class="rsx-head">
+        <p class="rsx-eyebrow">Research · Engine sound</p>
+        <h2 class="rsx-title" id="rsx-title">Can a phone hear what’s wrong <em>with an engine?</em></h2>
+        <div class="rsx-status" role="note">
+          <b>In progress</b>
+          <p>Not complete. Early stage: framing the question and reading related work. No data or results yet. The figures show the plan.</p>
+        </div>
+        <ul class="rsx-tags" aria-label="Type of research">
+          <li><span>Purpose</span> · Applied</li>
+          <li><span>Approach</span> · Computational</li>
+          <li><span>Format</span> · Original research</li>
+        </ul>
+      </header>
+
+      <div class="rsx-points">
+        <div class="rsx-point"><h3>The question</h3><p>Can a phone recording tell a healthy engine from a faulty one, and come close to sensor-based diagnosis?</p></div>
+        <div class="rsx-point"><h3>Why it matters</h3><p>Sensor diagnosis needs a scan tool and an expert. Many garages have neither, but everyone has a phone. Sound may also catch mechanical faults sensors miss.</p></div>
+        <div class="rsx-point"><h3>What’s different</h3><p>Most public datasets use faults staged in test rigs. I’ll record real cars at a garage, diagnosed by a mechanic, before and after repair.</p></div>
+      </div>
+
+      <div class="rsx-figs">
+        <figure class="rsx-fig">
+          <div class="rsx-stage"><canvas data-rsx-scene="pair" aria-hidden="true"></canvas></div>
+          <figcaption><b>Same car, before and after the repair</b><span>A misfire leaves a missing beat in the engine’s rhythm. Recording the same car before and after the fix isolates the fault.</span><i>Illustration, not real data</i></figcaption>
+        </figure>
+        <figure class="rsx-fig">
+          <div class="rsx-stage rsx-tall"><canvas data-rsx-scene="pipeline" aria-hidden="true"></canvas></div>
+          <figcaption><b>From sound to a diagnosis</b><span>Sound becomes a spectrogram, then features (MFCCs, wavelets). A classifier learns which patterns match each fault.</span><i>Planned method, not trained yet</i></figcaption>
+        </figure>
+      </div>
+
+      <h3 class="rsx-sub">Where it stands</h3>
+      <ol class="rsx-steps">
+        <li><span class="n">01</span><span class="t">Frame the question</span><span class="s done">Done</span></li>
+        <li><span class="n">02</span><span class="t">Read related work</span><span class="s now">In progress</span></li>
+        <li><span class="n">03</span><span class="t">Record faults at the garage</span><span class="s">Next</span></li>
+        <li><span class="n">04</span><span class="t">Train and compare with sensor data</span><span class="s">Later</span></li>
+        <li><span class="n">05</span><span class="t">Write the paper</span><span class="s">Later</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Microneedle CAD research: styles in microneedle.css, files in assets/research/microneedle/ -->
+  <section class="rsx mnx" id="microneedles" aria-labelledby="mnx-title">
+    <div class="rsx-wrap">
+      <header class="rsx-head">
+        <p class="rsx-eyebrow">Research · Remote research assistant · Nov 2026 – now</p>
+        <h2 class="rsx-title" id="mnx-title">Microneedles for brain-tumour <em>drug delivery.</em></h2>
+        <div class="rsx-status mnx-on" role="note">
+          <b>Ongoing</b>
+          <p>Laboratory for Innovations in Microengineering (LiME), University of Victoria, Canada. Working remotely with <a href="https://www.uvic.ca/ecs/mechanical/faculty-staff/faculty-profiles/akbari-mohsen.php" target="_blank" rel="noopener">Prof. Mohsen Akbari</a>’s group.</p>
+        </div>
+      </header>
+
+      <div class="mnx-intro">
+        <div class="mnx-pair">
+          <figure class="mnx-paper mnx-shot"><img src="assets/research/microneedle/single-w300-r90.webp" alt="One hollow microneedle with a pointed tip and side ports, on a 3 by 3 millimetre base" loading="lazy"><figcaption>One needle <span>3 × 3 mm base</span></figcaption></figure>
+          <figure class="mnx-paper mnx-shot"><img src="assets/research/microneedle/patch-w300-r90.webp" alt="A 4 by 4 patch of sixteen hollow microneedles on a 9 by 9 millimetre plate" loading="lazy"><figcaption>4 × 4 patch <span>16 needles · 9 × 9 mm</span></figcaption></figure>
+        </div>
+        <div class="rsx-points mnx-two">
+          <div class="rsx-point"><h3>What the research is about</h3><p>After a brain tumour is removed, some cancer cells can stay in the tissue around it. The lab is developing a patch of tiny hollow needles that delivers drug straight into that tissue, and studying how the needles’ layout and spacing change how evenly the drug spreads.</p></div>
+          <div class="rsx-point"><h3>My role</h3><p>I design the 3D CAD models of the needles and patches. The lab uses them for simulations and 3D printing. Every size is a parameter, so a change to spacing or slot width updates the whole model.</p></div>
+        </div>
+      </div>
+
     </div>
   </section>
 
 </main>
   <dialog class="personal-dialog project-dialog" id="project-dialog" aria-labelledby="project-dialog-title"><button class="dialog-close" data-close-dialog aria-label="Close project">✕</button><div class="dialog-body"><span class="eyebrow" id="project-dialog-kind">Project slot</span><h2 id="project-dialog-title">A story to add.</h2><span class="draft-badge">CONTENT PLACEHOLDER</span><p id="project-dialog-summary"></p><h3>What will go here</h3><ul id="project-dialog-prompts"></ul><p class="draft-note">No project results or achievements have been filled in yet.</p></div></dialog>
+<dialog class="personal-dialog work-dialog work-dialog-wide" id="work-builds" aria-labelledby="dob-title"><button class="dialog-close" data-close-dialog aria-label="Close">✕</button>
+<!-- 30 Days of Builds: cards and progress are generated by builds.js -->
+  <section class="dob" id="builds" aria-labelledby="dob-title">
+    <div class="dob-wrap">
+      <header class="dob-head">
+        <p class="dob-eyebrow">Software · Python</p>
+        <h2 class="dob-title" id="dob-title">30 Days of Builds. <em>One a day.</em></h2>
+        <div class="dob-progress">
+          <div class="dob-days" id="dob-days" aria-hidden="true"></div>
+          <span class="dob-count"><b id="dob-done">19</b> / 30</span>
+        </div>
+      </header>
+
+      <div class="dob-bar">
+        <a class="dob-all" href="https://github.com/asadbektillayev7-byte/30daychallenge" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+
+      <div class="dob-grid" id="dob-grid"></div>
+    </div>
+  </section>
+</dialog>
   <div class="site-notice" id="site-notice" role="status" aria-live="polite"></div>
 </body></html>

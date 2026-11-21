@@ -107,7 +107,7 @@
       button.style.setProperty('--book-thickness', `${Math.max(20, Math.min(60, book.thickness))}px`);
       button.style.setProperty('--book-lean', `${index === 8 ? 2 : index === 12 ? -3 : 0}deg`);
       button.setAttribute('aria-label', bookLabel(book, index, false));
-      button.title = `${book.sample ? `Sample book ${index + 1}` : book.title} · My rating: ${ratingText(book)}`;
+      button.title = book.sample ? `Sample book ${index + 1}` : book.title;
       button.setAttribute('aria-pressed', 'false');
       const volume = element('span', 'book-volume');
       volume.setAttribute('aria-hidden', 'true');
@@ -118,10 +118,9 @@
         cover.alt = '';
         cover.loading = index === selectedIndex ? 'eager' : 'lazy';
         cover.decoding = 'async';
-        cover.addEventListener('error', () => front.replaceChildren(placeholderArt(book, index), ratingBadge(book)), { once: true });
+        cover.addEventListener('error', () => front.replaceChildren(placeholderArt(book, index)), { once: true });
         front.append(cover);
       } else front.append(placeholderArt(book, index));
-      front.append(ratingBadge(book));
       const spine = element('span', 'book-face book-spine');
       spine.append(element('span', 'book-spine-title', book.sample ? `BOOK ${String(index + 1).padStart(2, '0')}` : book.title), element('span', 'book-spine-number', book.sample ? 'COVER TO COME' : book.author));
       volume.append(front, spine, element('span', 'book-face book-pages'), element('span', 'book-face book-top'));
@@ -181,7 +180,7 @@
 
     function bookLabel(book, index, active) {
       const name = book.sample ? `Sample book ${index + 1}` : `${book.title}${book.author ? ` by ${book.author}` : ''}`;
-      return `${name}. ${book.status === 'reading' ? 'Reading now' : 'Finished'}. My rating: ${ratingText(book)}. ${active ? 'Cover selected. Open my insights.' : 'Show cover.'}`;
+      return `${name}. ${book.status === 'reading' ? 'Reading now' : 'Finished'}. ${active ? 'Cover selected. Open my insights.' : 'Show cover.'}`;
     }
 
     function openBook(opener) {
@@ -191,7 +190,6 @@
         'book-detail-title': book.sample ? `Book ${String(selectedIndex + 1).padStart(2, '0')} — a place on the shelf` : book.title,
         'book-detail-author': book.sample ? 'Title and author to add' : book.author,
         'book-detail-status': book.status === 'reading' ? 'Reading now' : 'Finished',
-        'book-detail-rating': `My rating: ${ratingText(book)}`,
         'book-detail-notes': book.insights || 'My insights are coming soon.'
       };
       Object.entries(fields).forEach(([id, value]) => {

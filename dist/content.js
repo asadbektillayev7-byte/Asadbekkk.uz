@@ -1,7 +1,7 @@
 /* Display name, chosen photograph, and editable project slots. */
 window.HOME_CONTENT = {
   name: 'Asadbek', introName: 'ASADBEK', title: 'PORTFOLIO', initialPhoto: 0,
-  photos: [{src: 'assets/cutouts/cutout-2.webp', alt: 'Asadbek facing the camera in a white collared shirt', label: 'A portrait', focus: [.51,.34,.25,.30]}]
+  photos: [{src: 'assets/cutouts/cutout-3.png', alt: 'Asadbek facing the camera in glasses and a dark coat', label: 'A portrait', focus: [.51,.34,.25,.30]}]
 };
 window.PERSONAL_CONTENT = {
   projects: [

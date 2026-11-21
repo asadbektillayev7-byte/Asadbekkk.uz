@@ -1,0 +1,4 @@
+# Local leftovers — not part of the site
+_snippets/
+*.backup-*.html
+.DS_Store
