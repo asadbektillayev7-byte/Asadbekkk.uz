@@ -7,6 +7,7 @@
      scene: the name of a drawing function in DRAW (320×200 stage, t = seconds).
      links: [["website" | "telegram" | "instagram", "https://..."], ...] — shown as icons.
      about / did: paragraphs for the popup ("What it is" / "What I did").
+     video (optional): {title, src, poster, transcript: [lines]}, shown under "What I did".
 
    This script must load BEFORE site.js so site.js can wire up the popups it creates. */
 (function () {
@@ -18,6 +19,21 @@
       about: ["A platform that makes engineering accessible in Uzbek. We translate and publish engineering articles, run hackathons and online challenges for young people, and record podcasts with working engineers."],
       did: ["I co-founded Muhandiss.uz and manage the project. I lead a team of 20 translators; together we have published 40+ articles read by 9k+ people.",
             "Once a month we host an interview with an expert, online or in person."],
+      video: {
+        title: "Launch video",
+        src: "assets/video/muhandiss-launch.mp4?v=2",
+        poster: "assets/video/muhandiss-launch-poster.jpg?v=2",
+        transcript: [
+          "Read. Test. Build. Ask.",
+          "Muhandiss.uz: engineering for young minds. Free.",
+          "Pick a field, open an article, dive in.",
+          "Then test yourself. Real answers, instant feedback.",
+          "Join hackathons with young engineers.",
+          "Take on challenges. Build real things.",
+          "Stuck? Ask The Fixy, our AI guide. It answers in seconds.",
+          "Muhandiss.uz. Discover. Learn. Create.",
+        ],
+      },
     },
     {
       id: "pizik", name: "Pizik", page: "works", role: "Science communicator", when: "2025", scene: "lab",
@@ -99,9 +115,15 @@
           '<h2 id="' + dlg + '-title">' + esc(a.name) + "</h2>" +
           '<div class="work-dialog-stage" aria-hidden="true"><canvas></canvas></div>' +
           '<section class="work-dialog-body"><h3>What it is</h3>' + a.about.map(p => "<p>" + esc(p) + "</p>").join("") +
-          "<h3>What I did</h3>" + a.did.map(p => "<p>" + esc(p) + "</p>").join("") + "</section>" +
+          "<h3>What I did</h3>" + a.did.map(p => "<p>" + esc(p) + "</p>").join("") +
+          (a.video ? "<h3>" + esc(a.video.title) + "</h3>" +
+            '<video class="work-dialog-video" controls playsinline preload="none" poster="' + esc(a.video.poster) + '" src="' + esc(a.video.src) + '"></video>' +
+            '<details class="work-dialog-transcript"><summary>Transcript</summary>' + a.video.transcript.map(p => "<p>" + esc(p) + "</p>").join("") + "</details>" : "") +
+          "</section>" +
           iconLinks(a, "act-icons work-dialog-icons");
         document.body.appendChild(d);
+        const vid = d.querySelector("video");
+        if (vid) d.addEventListener("close", () => vid.pause());
         addScene(d.querySelector("canvas"), a.scene, colors);
       } else {
         card.className = "act-card" + (a.featured ? " is-featured" : "");

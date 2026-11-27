@@ -115,3 +115,10 @@
 .page-reading .book-detail-dialog .book-insights{min-height:0;margin:22px 0 0;padding-top:18px}
 .page-reading .book-detail-dialog #book-detail-notes{margin:0}
 @media(max-width:767px){.page-reading .book-detail-dialog{padding:52px 24px 26px}}
+
+/* Popup video (Muhandiss.uz launch video) */
+.work-dialog-video{display:block;width:100%;aspect-ratio:16/9;background:#f4f5f7;border:1px solid #ffffff17;border-radius:10px;margin:4px 0 10px}
+.work-dialog-transcript{margin:0 0 6px;font-size:13px;color:#8b948e}
+.work-dialog-transcript summary{cursor:pointer;width:max-content;letter-spacing:.04em}
+.work-dialog-transcript summary:focus-visible{outline:2px solid #b8cce9;outline-offset:3px}
+.work-dialog-transcript p{font-size:14px;line-height:1.65;color:#a4aaa7;margin:6px 0 0}
