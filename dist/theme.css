@@ -34,8 +34,8 @@
  .page-reading .main-nav{background:#0a111cf7;border-color:#2b3b52}.page-reading .nav-toggle{color:#b8cce5}
 }
 /* Keep the face above the title, including the no-canvas fallback. */
-.page-home .portrait-fallback{transform:translateY(-5svh)}
-@media(max-width:767px){.page-home .portrait-fallback{transform:translateY(-3.5svh)}}
+.page-home .portrait-fallback{top:auto;bottom:0;transform:none}
+@media(max-width:767px){.page-home .portrait-fallback{transform:none}}
 /* After the intro, PORTFOLIO settles about two sizes smaller. Change .8 to adjust. */
 .page-home .title-stage{transition:font-size .9s cubic-bezier(.65,0,.2,1)}
 .page-home.is-ready .title-stage{font-size:calc(var(--title-size) * .8)}

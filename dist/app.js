@@ -68,7 +68,7 @@
     animations = [];
   }
   function isCompact() { return window.matchMedia('(max-width: 767px)').matches; }
-  function finalTop() { return isCompact() ? '20%' : '74%'; }
+  function finalTop() { return isCompact() ? '20%' : '78%'; }
   function titleSeparation() {
     return 0;
   }

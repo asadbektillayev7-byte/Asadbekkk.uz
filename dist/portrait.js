@@ -236,13 +236,22 @@
         w * widthRatio / aspect,
         this.mobile ? Infinity : h * .28 / Math.max(.01, focus?.[1] ?? .33)
       );
-      const pw = ph * aspect;
-      const x0 = (w - pw) * .5;
       const portraitLift = h * (this.mobile ? .035 : .05);
-      const y0 = (this.mobile
+      const baseY = (this.mobile
         ? h * .98 - ph
         : Math.min(h * .98 - ph, h * .42 - (focus?.[1] ?? .33) * ph)) - portraitLift;
-      return { ph, pw, x0, y0 };
+      // Grow the cutout around its face so the cut-off bottom edge lands on the
+      // hero's bottom edge (where the next section starts) instead of floating
+      // above it. A few px of overshoot hides the pointer parallax.
+      const fy = focus?.[1] ?? .33;
+      const faceY = baseY + fy * ph;
+      const edge = h + 8;
+      const grown = Math.max(ph, (edge - faceY) / Math.max(.01, 1 - fy));
+      const fit = Math.min(grown, w * 1.6 / aspect);
+      const y0 = fit === grown ? faceY - fy * fit : edge - fit;
+      const pw = fit * aspect;
+      const x0 = (w - pw) * .5;
+      return { ph: fit, pw, x0, y0 };
     }
 
     _requestFrame() {
