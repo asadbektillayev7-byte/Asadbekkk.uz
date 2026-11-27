@@ -50,8 +50,13 @@
     portfolioWord.append(half);
   });
   portfolioLetters.forEach((letter, index) => titleHalves[index < 4 ? 0 : 1].append(letter));
+  // One knob for the whole intro: 1 = original pace, lower = faster.
+  const PACE = .68;
   function animate(element, keyframes, options) {
-    const animation = element.animate(keyframes, { fill: 'forwards', ...options });
+    const timed = { ...options };
+    if (timed.delay) timed.delay *= PACE;
+    if (timed.duration) timed.duration *= PACE;
+    const animation = element.animate(keyframes, { fill: 'forwards', ...timed });
     animations.push(animation);
     return animation;
   }
@@ -218,7 +223,7 @@
     let nameHidden = false;
     function tick(now) {
       if (openingFinished || run !== openingRun) return;
-      const elapsed = now - openingStarted;
+      const elapsed = (now - openingStarted) / PACE;
       if (!nameHidden && elapsed >= 4880) {
         nameHidden = true;
         nameWord.style.display = 'none';

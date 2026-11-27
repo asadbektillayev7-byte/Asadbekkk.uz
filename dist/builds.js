@@ -31,6 +31,12 @@
     [17, "DutyGlow", "Slide a duty cycle, watch an LED dim.", "signals", "17-dutyglow", "pwm"],
     [18, "DepthPaint", "Webcam paints depth like a thermal camera.", "signals", "18-depthpaint", "depth"],
     [19, "BusTalk", "Watch chips talk over I2C.", "signals", "19-bustalk", "i2c"],
+    [20, "SenseDeck", "Mic, camera, CPU and network, live.", "signals", "20-sensedeck", "sensedeck"],
+    [21, "WaveCast", "A wave sent over UDP to a live scope.", "signals", "21-wavecast", "wavecast"],
+    [22, "SketchNet", "Photo of a drawn circuit, solved by local AI.", "ai", "22-sketchnet", "sketchnet"],
+    [23, "HueHunter", "Click a color, the webcam tracks it.", "body", "23-huehunter", "huehunter"],
+    [24, "PinPoint", "Datasheet answers with the exact page.", "ai", "24-pinpoint", "pinpoint"],
+    [25, "HexHound", "Sniffs out what hides in firmware bytes.", "signals", "25-hexhound", "hexhound"],
   ];
   const GROUPS = [["all", "All"], ["body", "Body"], ["ai", "Local AI"], ["signals", "Signals"]];
   const GH = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
@@ -295,6 +301,95 @@
       txt(g, "LOG", 24, 124, 8, C.faint);
       const log = ["START · 0x68 · WRITE", "0xA5 · ACK", "STOP"], shown = idx >= 5 ? 3 : idx >= 3 ? 2 : idx >= 1 ? 1 : 0;
       for (let i = 0; i < shown; i++) txt(g, ">  " + log[i], 24, 144 + i * 16, 9, C.fg);
+    },
+    sensedeck(g, t) {
+      const panels = [["MIC", 100, v => 18 + 14 * Math.abs(Math.sin(v * 2.1)) + (((v % 5) > 3.6 && (v % 5) < 4.1) ? 62 : 0)],
+        ["CAM", 255, v => 150 + 40 * Math.sin(v * 0.7)], ["CPU %", 100, v => 34 + 20 * Math.sin(v * 0.9) + 8 * Math.sin(v * 3.3)], ["NET kB/s", 900, v => 300 + 260 * Math.abs(Math.sin(v * 0.5))]];
+      panels.forEach(([label, max, f], i) => {
+        const x = 20 + (i % 2) * 144, y = 38 + Math.floor(i / 2) * 78, now = f(t), hot = i === 0 && now > 70;
+        rr(g, x, y, 136, 70, 6); g.strokeStyle = hot ? "rgba(230,90,90,0.9)" : C.line; g.lineWidth = 1; g.stroke();
+        txt(g, label, x + 8, y + 12, 8, C.faint); txt(g, String(Math.round(now)), x + 128, y + 14, 14, hot ? "rgba(230,90,90,0.95)" : C.fg, "right");
+        g.strokeStyle = i === 0 ? C.accent : C.dim; g.lineWidth = 1.2; g.beginPath();
+        for (let k = 0; k <= 40; k++) { const v = f(t - (40 - k) * 0.1), px = x + 8 + k * 3, py = y + 62 - clamp(v / max, 0, 1) * 34; k ? g.lineTo(px, py) : g.moveTo(px, py); } g.stroke();
+      });
+      if ((t % 2) < 1) { g.fillStyle = "rgba(230,90,90,0.9)"; g.beginPath(); g.arc(24, 194, 3, 0, 7); g.fill(); } txt(g, "REC · log.csv", 32, 194, 8, C.dim);
+    },
+    wavecast(g, t) {
+      rr(g, 20, 70, 60, 46, 6); g.strokeStyle = C.fg; g.lineWidth = 1.3; g.stroke(); txt(g, "SENDER", 50, 86, 8, C.fg, "center");
+      g.strokeStyle = C.dim; g.lineWidth = 1.2; g.beginPath(); for (let x = 30; x <= 70; x++) { const y = 102 + Math.sin((x - 30) / 6.4 + t * 3) * 6; x === 30 ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke();
+      g.strokeStyle = C.faint; g.setLineDash([2, 5]); g.beginPath(); g.moveTo(84, 93); g.lineTo(156, 93); g.stroke(); g.setLineDash([]);
+      for (let i = 0; i < 4; i++) { const k = ((t * 0.9 + i / 4) % 1), lost = i === 2 && (Math.floor(t * 0.9) % 3 === 0);
+        if (lost && k > 0.5) continue; g.fillStyle = lost ? "rgba(230,90,90,0.85)" : C.accent; rr(g, 84 + k * 64, 87, 9, 12, 2); g.fill(); }
+      txt(g, "UDP", 120, 76, 8, C.faint, "center");
+      const sx = 164, sy = 40, sw = 136, sh = 106;
+      g.strokeStyle = C.line; g.lineWidth = 1; rr(g, sx, sy, sw, sh, 6); g.stroke();
+      for (let i = 1; i < 6; i++) { g.beginPath(); g.moveTo(sx + i * sw / 6, sy); g.lineTo(sx + i * sw / 6, sy + sh); g.stroke(); }
+      for (let i = 1; i < 4; i++) { g.beginPath(); g.moveTo(sx, sy + i * sh / 4); g.lineTo(sx + sw, sy + i * sh / 4); g.stroke(); }
+      g.strokeStyle = C.accent; g.lineWidth = 1.6; g.beginPath();
+      for (let x = 0; x <= sw; x += 1.5) { const y = sy + sh / 2 + Math.sin(x / 11 - t * 3) * 30; x ? g.lineTo(sx + x, y) : g.moveTo(sx + x, y); } g.stroke();
+      txt(g, "SCOPE", sx, 160, 8, C.faint); txt(g, "LOST " + (Math.floor(t * 0.3) % 4) + "  ·  DELAY " + (12 + Math.round(3 * Math.sin(t))) + " ms", sx + sw, 160, 8, C.fg, "right");
+    },
+    sketchnet(g, t) {
+      const c = t % 6, wob = (x, y, i) => [x + Math.sin(i * 1.7) * 2.2, y + Math.cos(i * 2.3) * 2.2];
+      g.strokeStyle = C.dim; g.lineWidth = 1.5; g.beginPath();
+      [[30, 60], [120, 58], [122, 150], [28, 152], [30, 60]].forEach(([x, y], i) => { const [a, b] = wob(x, y, i); i ? g.lineTo(a, b) : g.moveTo(a, b); }); g.stroke();
+      g.fillStyle = C.stage; g.fillRect(20, 92, 22, 26); g.fillRect(64, 50, 34, 18); g.fillRect(112, 92, 22, 26);
+      g.strokeStyle = C.dim; g.beginPath(); g.moveTo(22, 100); g.lineTo(38, 99); g.moveTo(25, 108); g.lineTo(35, 108); g.stroke();
+      g.beginPath(); g.moveTo(64, 59); for (let i = 0; i < 6; i++) g.lineTo(68 + i * 5.5, i % 2 ? 53 : 65); g.lineTo(98, 59); g.stroke();
+      g.beginPath(); g.moveTo(114, 96); g.lineTo(130, 96); g.lineTo(122, 110); g.closePath(); g.moveTo(114, 111); g.lineTo(130, 111); g.stroke();
+      txt(g, "10V", 14, 120, 8, C.dim); txt(g, "220", 81, 44, 8, C.dim, "center");
+      const k = clamp((c - 0.8) / 1.2, 0, 1);
+      g.strokeStyle = C.faint; g.setLineDash([3, 4]); g.beginPath(); g.moveTo(146, 104); g.lineTo(146 + 26 * k, 104); g.stroke(); g.setLineDash([]);
+      if (k > 0.95) txt(g, "AI", 158, 94, 8, C.accent, "center");
+      if (c > 2) {
+        g.strokeStyle = C.fg; g.lineWidth = 1.4; g.strokeRect(190, 58, 100, 92);
+        g.fillStyle = C.stage; g.fillRect(184, 92, 14, 24); g.fillRect(226, 52, 30, 12); g.fillRect(284, 92, 14, 24);
+        g.strokeStyle = C.fg; g.beginPath(); g.moveTo(183, 100); g.lineTo(197, 100); g.moveTo(186, 108); g.lineTo(194, 108); g.stroke();
+        rr(g, 226, 53, 30, 10, 2); g.stroke();
+        g.beginPath(); g.moveTo(284, 97); g.lineTo(296, 97); g.lineTo(290, 108); g.closePath(); g.moveTo(284, 110); g.lineTo(296, 110); g.stroke();
+      }
+      if (c > 2.8) { const d = ((t * 40) % 384); const p = d < 100 ? [190 + d, 58] : d < 192 ? [290, 58 + d - 100] : d < 292 ? [290 - (d - 192), 150] : [190, 150 - (d - 292)];
+        g.fillStyle = C.accent; g.beginPath(); g.arc(p[0], p[1], 2.6, 0, 7); g.fill(); txt(g, "34.8 mA", 240, 166, 10, C.fg, "center"); }
+      if (c > 3.6) txt(g, "⚠ LED gets too much current", 240, 184, 8, C.warm, "center");
+    },
+    huehunter(g, t) {
+      g.strokeStyle = C.line; g.setLineDash([2, 5]); g.strokeRect(20, 36, 280, 140); g.setLineDash([]);
+      g.strokeStyle = C.faint; g.lineWidth = 1; g.beginPath(); g.moveTo(150, 111); g.lineTo(170, 111); g.moveTo(160, 101); g.lineTo(160, 121); g.stroke();
+      g.fillStyle = C.faint; rr(g, 186, 92, 40, 60, 4); g.fill();
+      const pos = s => [160 + Math.cos(s * 0.9) * 100, 106 + Math.sin(s * 1.8) * 42];
+      const [bx, by] = pos(t), hidden = bx > 182 && bx < 230 && by > 88 && by < 156;
+      g.fillStyle = C.dim; for (let i = 1; i < 26; i++) { const [x, y] = pos(t - i * 0.06); g.globalAlpha = 1 - i / 26; g.beginPath(); g.arc(x, y, 1.6, 0, 7); g.fill(); } g.globalAlpha = 1;
+      if (!hidden) { g.fillStyle = C.warm; g.beginPath(); g.arc(bx, by, 11, 0, 7); g.fill(); }
+      g.strokeStyle = hidden ? C.dim : C.accent; g.lineWidth = 1.4; if (hidden) g.setLineDash([3, 3]); g.strokeRect(bx - 16, by - 16, 32, 32); g.setLineDash([]);
+      txt(g, hidden ? "predicted" : (90 + Math.round(6 * Math.abs(Math.sin(t)))) + "%", bx - 16, by - 22, 8, hidden ? C.dim : C.accent);
+      const dx = bx - 160, dy = by - 111, steer = (Math.abs(dx) < 18 && Math.abs(dy) < 14) ? "CENTERED" : [dx < -18 ? "LEFT" : dx > 18 ? "RIGHT" : "", dy < -14 ? "UP" : dy > 14 ? "DOWN" : ""].filter(Boolean).join(" ");
+      txt(g, "STEER · " + steer, 20, 188, 8, C.fg);
+    },
+    pinpoint(g, t) {
+      const c = t % 7, q = "What's the max GPIO current?";
+      rr(g, 64, 38, 236, 24, 5); g.strokeStyle = C.line; g.lineWidth = 1; g.stroke();
+      txt(g, "ask ›", 72, 50, 9, C.accent); txt(g, q.slice(0, Math.floor(clamp(c, 0, 1.6) / 1.6 * q.length)), 102, 50, 8.5, C.fg);
+      if (c > 1.8) { txt(g, "BM25 · best 4 of 8 passages", 20, 78, 8, C.faint);
+        [0.92, 0.71, 0.55, 0.38].forEach((w, i) => { const y = 90 + i * 13; g.fillStyle = C.line; rr(g, 20, y, 200, 6, 3); g.fill();
+          g.fillStyle = i === 0 ? C.accent : C.dim; rr(g, 20, y, 200 * w * clamp((c - 1.8) * 1.5, 0, 1), 6, 3); g.fill(); txt(g, "§6.3." + (16 - i * 3), 230, y + 3, 8, C.dim); }); }
+      if (c > 3.2) txt(g, "Max GPIO source current is 25 mA. [1]", 20, 156, 10, C.fg);
+      if (c > 3.9) { g.strokeStyle = C.accent; g.lineWidth = 1; rr(g, 20, 168, 178, 18, 4); g.stroke(); txt(g, "[1] orca-m4 · §6.3.16 · pg 14", 28, 177, 8, C.accent); }
+    },
+    hexhound(g, t) {
+      const cols = 12, rows = 6, cw = 20.5, chh = 14, ox = 70, oy = 46, scan = Math.floor(t * 6) % (cols * rows);
+      for (let r = 0; r < rows; r++) {
+        txt(g, "0x" + (r * 16).toString(16).toUpperCase().padStart(4, "0"), 28, oy + r * chh + 7, 7, C.faint);
+        for (let c = 0; c < cols; c++) {
+          const i = r * cols + c, magic = r === 2 && c >= 3 && c < 7, pad = r === 4, txtb = r === 3 && c > 5;
+          const b = magic ? [0x7A, 0x3C, 0xE1, 0x01][c - 3] : pad ? 0xFF : ((i * 73 + 41) % 256);
+          const col = i === scan ? C.fg : magic ? C.warm : txtb ? C.accent : pad ? C.faint : C.dim;
+          if (magic) { g.fillStyle = "rgba(242,180,90,0.14)"; g.fillRect(ox + c * cw - 2, oy + r * chh, cw, chh - 2); }
+          txt(g, b.toString(16).toUpperCase().padStart(2, "0"), ox + c * cw + 8, oy + r * chh + 7, 8, col, "center");
+        }
+      }
+      txt(g, "ENTROPY", 28, 156, 7, C.faint);
+      for (let i = 0; i < 24; i++) { const e = [0.3, 0.6, 0.62, 0.6, 0.05, 0.3, 0.95, 0.9, 0.05][Math.floor(i / 3)] || 0.5; g.fillStyle = e > 0.85 ? C.warm : e > 0.5 ? C.fg : e > 0.2 ? C.dim : C.faint; const h = 4 + e * 16; g.fillRect(72 + i * 9.2, 162 - h, 6.5, h); }
+      txt(g, "magic 7A 3C E1 01", 28, 178, 8, C.warm); txt(g, "CRC32 ✓ valid", 292, 178, 8, C.accent, "right");
     },
   };
 
